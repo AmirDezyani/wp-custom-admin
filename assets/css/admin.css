@@ -203,7 +203,7 @@ body.wpca-admin .button-primary:focus {
 	box-shadow: 0 0 0 2px #fff, 0 0 0 4px var(--wpca-primary);
 }
 
-body.wpca-admin .button,
+body.wpca-admin .button:not(.button-primary),
 body.wpca-admin .button-secondary {
 	border-radius: var(--wpca-radius-sm);
 	border-color: var(--wpca-border);
@@ -211,7 +211,7 @@ body.wpca-admin .button-secondary {
 	background: #fff;
 }
 
-body.wpca-admin .button:hover {
+body.wpca-admin .button:not(.button-primary):hover {
 	border-color: var(--wpca-primary);
 	color: var(--wpca-primary);
 }

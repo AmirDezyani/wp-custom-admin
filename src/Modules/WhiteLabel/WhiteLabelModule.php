@@ -47,10 +47,17 @@ final class WhiteLabelModule extends AbstractModule {
 		if ( $this->settings->flag( 'hide_screen_options' ) ) {
 			add_filter( 'screen_options_show_screen', array( $this, 'maybe_hide_screen_options' ) );
 		}
+
+		if ( $this->settings->flag( 'replace_howdy' ) ) {
+			// Filtering the source string is reliable across WP versions; rewriting the
+			// toolbar node did not take effect on WP 7.0. The early domain check keeps
+			// this cheap despite gettext firing often.
+			add_filter( 'gettext', array( $this, 'filter_greeting' ), 10, 3 );
+		}
 	}
 
 	/**
-	 * Remove the WP logo node and strip the "Howdy," greeting.
+	 * Remove the WordPress logo node from the toolbar.
 	 *
 	 * @param WP_Admin_Bar $wp_admin_bar Toolbar instance.
 	 */
@@ -58,33 +65,21 @@ final class WhiteLabelModule extends AbstractModule {
 		if ( $this->settings->flag( 'hide_wp_logo' ) ) {
 			$wp_admin_bar->remove_node( 'wp-logo' );
 		}
+	}
 
-		if ( $this->settings->flag( 'replace_howdy' ) ) {
-			$node = $wp_admin_bar->get_node( 'my-account' );
-
-			if ( is_object( $node ) && isset( $node->title ) ) {
-				$title = (string) $node->title;
-
-				// The greeting is whatever precedes the display-name span. Stripping by
-				// that marker is locale-agnostic and robust to wording changes ("Howdy,").
-				$pos = strpos( $title, '<span class="display-name">' );
-
-				if ( false !== $pos ) {
-					$title = substr( $title, $pos );
-				} else {
-					/* translators: %s: user display name (core string, reused to derive the prefix). */
-					$title = str_replace( sprintf( __( 'Howdy, %s' ), '' ), '', $title ); // phpcs:ignore WordPress.WP.I18n.MissingArgDomain -- core string.
-				}
-
-				$wp_admin_bar->add_node(
-					array(
-						'id'     => 'my-account',
-						'title'  => $title,
-						'parent' => $node->parent,
-					)
-				);
-			}
+	/**
+	 * Drop the "Howdy, " greeting by replacing the core format string with just the name.
+	 *
+	 * @param string $translation Translated text.
+	 * @param string $text        Original (untranslated) text.
+	 * @param string $domain      Text domain.
+	 */
+	public function filter_greeting( string $translation, string $text, string $domain ): string {
+		if ( 'default' === $domain && 'Howdy, %s' === $text ) {
+			return '%s';
 		}
+
+		return $translation;
 	}
 
 	/**
