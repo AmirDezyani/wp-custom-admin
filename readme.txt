@@ -4,7 +4,7 @@ Tags: admin, white-label, branding, admin-theme, login
 Requires at least: 6.5
 Tested up to: 6.5
 Requires PHP: 7.4
-Stable tag: 0.5.0
+Stable tag: 0.6.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -41,6 +41,16 @@ No. Deactivation is non-destructive. Data is only removed on uninstall, and only
 Yes. Network admin is left untouched by default; a network-level default can be set with per-site overrides.
 
 == Changelog ==
+
+= 0.6.0 =
+* Premium redesign: a tokenized design system (one neutral ramp, 8pt spacing,
+  radius ladder, layered shadows, motion + focus tokens) across the reskin.
+* Home dashboard upgraded to KPI cards with trend deltas and server-rendered
+  inline-SVG sparklines (cached, no JS), an activity feed, a refined hero, and
+  stroke icons.
+* Self-hosted Inter (UI) and Vazirmatn (Persian) fonts — no CDN.
+* Dark mode (auto / light / dark) via Settings → Branding.
+* Accessibility: focus-visible rings, prefers-reduced-motion, higher contrast.
 
 = 0.5.0 =
 * New: a custom branded "Home" dashboard (hero, stat cards, quick actions, recent

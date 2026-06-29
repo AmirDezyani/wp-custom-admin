@@ -8,6 +8,7 @@
  */
 
 :root {
+	/* Brand tokens — overridden per site via the inline :root block. */
 	--wpca-primary: #4f46e5;
 	--wpca-primary-hover: #4338ca;
 	--wpca-accent: #06b6d4;
@@ -15,17 +16,63 @@
 	--wpca-menu-text: #cbd5e1;
 	--wpca-menu-highlight: #4f46e5;
 	--wpca-adminbar-bg: #111827;
-	--wpca-font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+	--wpca-font: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
 
-	/* Derived surface tokens (not user-configurable in v0.1.0). */
-	--wpca-content-bg: #f1f5f9;
+	/* One tinted-slate neutral ramp — every surface/border/text derives from it. */
+	--wpca-n-50: #f8fafc;
+	--wpca-n-100: #f1f5f9;
+	--wpca-n-200: #e2e8f0;
+	--wpca-n-300: #cbd5e1;
+	--wpca-n-400: #94a3b8;
+	--wpca-n-500: #64748b;
+	--wpca-n-600: #475569;
+	--wpca-n-700: #334155;
+	--wpca-n-800: #1e293b;
+	--wpca-n-900: #0f172a;
+
+	/* Semantic surface tokens (these flip in dark mode). */
+	--wpca-content-bg: var(--wpca-n-50);
 	--wpca-card-bg: #ffffff;
-	--wpca-border: #e2e8f0;
-	--wpca-text: #1e293b;
-	--wpca-text-muted: #64748b;
-	--wpca-radius: 10px;
-	--wpca-radius-sm: 7px;
-	--wpca-shadow: 0 1px 2px rgba(15, 23, 42, 0.06), 0 1px 3px rgba(15, 23, 42, 0.08);
+	--wpca-surface-2: var(--wpca-n-100);
+	--wpca-border: var(--wpca-n-200);
+	--wpca-border-strong: var(--wpca-n-300);
+	--wpca-text: var(--wpca-n-900);
+	--wpca-text-muted: var(--wpca-n-500);
+	--wpca-text-faint: var(--wpca-n-400);
+
+	/* Status colors (tinted surface + solid). */
+	--wpca-pos: #16a34a;
+	--wpca-pos-bg: #e7f6ee;
+	--wpca-neg: #dc2626;
+	--wpca-neg-bg: #fcebeb;
+	--wpca-warn: #b45309;
+	--wpca-warn-bg: #fbf3d9;
+
+	/* Radius ladder (nested elements step down). */
+	--wpca-radius-xs: 6px;
+	--wpca-radius-sm: 8px;
+	--wpca-radius: 12px;
+	--wpca-radius-lg: 16px;
+
+	/* Layered low-alpha elevation — flat at rest, lift on hover. */
+	--wpca-shadow-xs: 0 1px 2px rgba(15, 23, 42, 0.04);
+	--wpca-shadow-sm: 0 1px 2px rgba(15, 23, 42, 0.04), 0 1px 3px rgba(15, 23, 42, 0.06);
+	--wpca-shadow-md: 0 4px 6px -1px rgba(15, 23, 42, 0.08), 0 2px 4px -2px rgba(15, 23, 42, 0.05);
+	--wpca-shadow-lg: 0 12px 28px -8px rgba(15, 23, 42, 0.18);
+	--wpca-shadow: var(--wpca-shadow-sm);
+
+	/* Motion. */
+	--wpca-dur-fast: 120ms;
+	--wpca-dur: 160ms;
+	--wpca-ease: cubic-bezier(0.2, 0, 0, 1);
+
+	/* Focus ring (derived from brand so it follows a rebrand). */
+	--wpca-focus: 0 0 0 2px var(--wpca-card-bg), 0 0 0 4px var(--wpca-primary);
+}
+
+/* Persian/Arabic UI font on RTL locales. */
+body.rtl.wpca-admin {
+	--wpca-font: "Vazirmatn", "Inter", Tahoma, system-ui, sans-serif;
 }
 
 /* ---------------------------------------------------------------- Base ---- */
@@ -227,7 +274,9 @@ body.wpca-admin input[type="number"],
 body.wpca-admin select,
 body.wpca-admin textarea {
 	border-radius: var(--wpca-radius-sm);
-	border-color: #cbd5e1;
+	border-color: var(--wpca-border-strong);
+	background: var(--wpca-card-bg);
+	color: var(--wpca-text);
 }
 
 body.wpca-admin input[type="text"]:focus,
@@ -239,7 +288,7 @@ body.wpca-admin input[type="number"]:focus,
 body.wpca-admin select:focus,
 body.wpca-admin textarea:focus {
 	border-color: var(--wpca-primary);
-	box-shadow: 0 0 0 2px rgba(79, 70, 229, 0.18);
+	box-shadow: 0 0 0 2px color-mix(in srgb, var(--wpca-primary) 22%, transparent);
 }
 
 body.wpca-admin input[type="checkbox"]:checked::before {
@@ -259,16 +308,18 @@ body.wpca-admin .wp-list-table {
 	border-radius: var(--wpca-radius);
 	overflow: hidden;
 	box-shadow: var(--wpca-shadow);
+	background: var(--wpca-card-bg);
+	color: var(--wpca-text);
 }
 
 body.wpca-admin .wp-list-table thead th,
 body.wpca-admin .wp-list-table tfoot th {
-	background: #f8fafc;
+	background: var(--wpca-surface-2);
 	border-bottom: 1px solid var(--wpca-border);
 }
 
 body.wpca-admin .wp-list-table tbody tr:hover {
-	background: #f8fafc;
+	background: var(--wpca-surface-2);
 }
 
 /* --------------------------------------------------------------- Notices --- */
@@ -314,4 +365,83 @@ body.rtl.wpca-admin .wrap {
 
 body.rtl.wpca-admin #adminmenuwrap::before {
 	background-position: right center;
+}
+
+/* ------------------------------------------------------- Text & numerals --- */
+
+/* Drive content text from the token so it flips correctly in dark mode. */
+body.wpca-admin #wpbody-content {
+	color: var(--wpca-text);
+}
+
+body.wpca-admin .wp-list-table td,
+body.wpca-admin .wp-list-table th {
+	font-variant-numeric: tabular-nums;
+}
+
+/* ---------------------------------------------------------- Focus (a11y) --- */
+
+body.wpca-admin .button:not(.button-primary):focus-visible,
+body.wpca-admin a.page-title-action:focus-visible {
+	outline: none;
+	box-shadow: var(--wpca-focus);
+	border-radius: var(--wpca-radius-sm);
+}
+
+body.wpca-admin .button-primary:focus-visible {
+	box-shadow: var(--wpca-focus);
+}
+
+/* ---------------------------------------------------- Reduced motion ------- */
+
+@media (prefers-reduced-motion: reduce) {
+	body.wpca-admin *,
+	body.wpca-admin *::before,
+	body.wpca-admin *::after {
+		transition-duration: 0.01ms !important;
+		animation-duration: 0.01ms !important;
+		scroll-behavior: auto !important;
+	}
+}
+
+/* -------------------------------------------------------------- Dark mode --- */
+
+/* Dark = a token flip; the chrome is already dark, so this recolors the content
+   surfaces, cards, inputs and tables (all of which read from these tokens). */
+body.wpca-admin.wpca-scheme-dark {
+	--wpca-content-bg: #0c0d10;
+	--wpca-card-bg: #16181d;
+	--wpca-surface-2: #1c1f25;
+	--wpca-border: #262a31;
+	--wpca-border-strong: #363b44;
+	--wpca-text: #edeef0;
+	--wpca-text-muted: #9aa0a8;
+	--wpca-text-faint: #6f757d;
+	--wpca-pos-bg: rgba(22, 163, 74, 0.18);
+	--wpca-neg-bg: rgba(220, 38, 38, 0.18);
+	--wpca-warn-bg: rgba(180, 83, 9, 0.22);
+	--wpca-shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.4);
+	--wpca-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.45);
+	--wpca-shadow: 0 1px 2px rgba(0, 0, 0, 0.45);
+	--wpca-shadow-md: 0 6px 16px -6px rgba(0, 0, 0, 0.6);
+}
+
+@media (prefers-color-scheme: dark) {
+	body.wpca-admin.wpca-scheme-auto {
+		--wpca-content-bg: #0c0d10;
+		--wpca-card-bg: #16181d;
+		--wpca-surface-2: #1c1f25;
+		--wpca-border: #262a31;
+		--wpca-border-strong: #363b44;
+		--wpca-text: #edeef0;
+		--wpca-text-muted: #9aa0a8;
+		--wpca-text-faint: #6f757d;
+		--wpca-pos-bg: rgba(22, 163, 74, 0.18);
+		--wpca-neg-bg: rgba(220, 38, 38, 0.18);
+		--wpca-warn-bg: rgba(180, 83, 9, 0.22);
+		--wpca-shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.4);
+		--wpca-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.45);
+		--wpca-shadow: 0 1px 2px rgba(0, 0, 0, 0.45);
+		--wpca-shadow-md: 0 6px 16px -6px rgba(0, 0, 0, 0.6);
+	}
 }

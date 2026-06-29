@@ -1,0 +1,22 @@
+/**
+ * WP Custom Admin — self-hosted UI fonts (zero-build, no CDN).
+ *
+ * Inter (Latin) is the product typeface; Vazirmatn covers Persian/Arabic on RTL
+ * locales. Both are variable woff2 (weight axis 100–900), subset to keep them small.
+ */
+
+@font-face {
+	font-family: "Inter";
+	font-style: normal;
+	font-weight: 100 900;
+	font-display: swap;
+	src: url("../fonts/inter-latin.woff2") format("woff2");
+}
+
+@font-face {
+	font-family: "Vazirmatn";
+	font-style: normal;
+	font-weight: 100 900;
+	font-display: swap;
+	src: url("../fonts/vazirmatn-arabic.woff2") format("woff2");
+}

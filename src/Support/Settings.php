@@ -213,7 +213,8 @@ final class Settings {
 			'product_name'           => '',
 			'logo_id'                => 0,
 			'login_logo_id'          => 0,
-			'font_family'            => 'system',
+			'font_family'            => 'inter',
+			'color_scheme'           => 'auto',
 
 			// Color palette (admin).
 			'primary_color'          => '#4f46e5',

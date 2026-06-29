@@ -73,6 +73,16 @@ $wpca_notice = isset( $_GET['wpca_notice'] ) ? sanitize_key( wp_unslash( $_GET['
 				);
 				$this->field_toggle( 'dashboard_enabled', __( 'Custom Home dashboard', 'wp-custom-admin' ), __( 'Adds a branded Home screen in place of the default WordPress dashboard.', 'wp-custom-admin' ) );
 				$this->field_toggle( 'dashboard_landing', __( 'Land on Home after login', 'wp-custom-admin' ), __( 'Redirect the default dashboard to the branded Home screen.', 'wp-custom-admin' ) );
+				$this->field_select(
+					'color_scheme',
+					__( 'Color scheme', 'wp-custom-admin' ),
+					array(
+						'auto'  => __( 'Auto (match the system)', 'wp-custom-admin' ),
+						'light' => __( 'Light', 'wp-custom-admin' ),
+						'dark'  => __( 'Dark', 'wp-custom-admin' ),
+					),
+					__( 'Applies a dark theme to the admin content and the Home dashboard.', 'wp-custom-admin' )
+				);
 				?>
 			</div>
 		</section>

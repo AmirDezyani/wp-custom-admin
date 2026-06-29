@@ -43,7 +43,8 @@ final class Assets {
 	 * @param string $hook_suffix Current admin page hook (unused; always-load is intentional).
 	 */
 	public function enqueue_admin( string $hook_suffix = '' ): void {
-		wp_enqueue_style( 'wpca-admin', WPCA_URL . 'assets/css/admin.css', array(), WPCA_VERSION );
+		wp_enqueue_style( 'wpca-fonts', WPCA_URL . 'assets/css/fonts.css', array(), WPCA_VERSION );
+		wp_enqueue_style( 'wpca-admin', WPCA_URL . 'assets/css/admin.css', array( 'wpca-fonts' ), WPCA_VERSION );
 		wp_add_inline_style( 'wpca-admin', $this->root_css( false ) );
 	}
 
@@ -51,7 +52,8 @@ final class Assets {
 	 * Enqueue the login reskin and inject the brand tokens.
 	 */
 	public function enqueue_login(): void {
-		wp_enqueue_style( 'wpca-login', WPCA_URL . 'assets/css/login.css', array(), WPCA_VERSION );
+		wp_enqueue_style( 'wpca-fonts', WPCA_URL . 'assets/css/fonts.css', array(), WPCA_VERSION );
+		wp_enqueue_style( 'wpca-login', WPCA_URL . 'assets/css/login.css', array( 'wpca-fonts' ), WPCA_VERSION );
 		wp_add_inline_style( 'wpca-login', $this->root_css( true ) );
 	}
 
@@ -63,7 +65,9 @@ final class Assets {
 	 * @param string $classes Existing class string.
 	 */
 	public function body_class( string $classes ): string {
-		return $classes . ' wpca-admin ';
+		$scheme = sanitize_html_class( (string) $this->settings->get( 'color_scheme', 'auto' ) );
+
+		return $classes . ' wpca-admin wpca-scheme-' . $scheme . ' ';
 	}
 
 	/**

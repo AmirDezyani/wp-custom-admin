@@ -78,8 +78,11 @@ final class Sanitizer {
 		$out['logo_id']       = absint( $input['logo_id'] ?? 0 );
 		$out['login_logo_id'] = absint( $input['login_logo_id'] ?? 0 );
 
-		$font               = sanitize_key( (string) ( $input['font_family'] ?? 'system' ) );
-		$out['font_family'] = in_array( $font, Settings::FONTS, true ) ? $font : 'system';
+		$font               = sanitize_key( (string) ( $input['font_family'] ?? 'inter' ) );
+		$out['font_family'] = in_array( $font, Settings::FONTS, true ) ? $font : 'inter';
+
+		$scheme              = sanitize_key( (string) ( $input['color_scheme'] ?? 'auto' ) );
+		$out['color_scheme'] = in_array( $scheme, array( 'light', 'auto', 'dark' ), true ) ? $scheme : 'auto';
 
 		$out['login_header_url'] = esc_url_raw( (string) ( $input['login_header_url'] ?? '' ) );
 
