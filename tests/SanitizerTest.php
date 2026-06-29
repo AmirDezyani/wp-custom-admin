@@ -94,7 +94,7 @@ final class SanitizerTest extends TestCase {
 	}
 
 	public function test_font_family_allowlist(): void {
-		$this->assertSame( 'inter', Sanitizer::sanitize( array( 'font_family' => 'inter' ) )['font_family'] );
-		$this->assertSame( 'system', Sanitizer::sanitize( array( 'font_family' => 'comic-sans' ) )['font_family'] );
+		$this->assertSame( 'system', Sanitizer::sanitize( array( 'font_family' => 'system' ) )['font_family'] );
+		$this->assertSame( 'inter', Sanitizer::sanitize( array( 'font_family' => 'comic-sans' ) )['font_family'] );
 	}
 }

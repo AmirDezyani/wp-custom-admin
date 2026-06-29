@@ -21,10 +21,22 @@ $wpca_product = $this->settings->product_name();
 $wpca_logo    = $this->settings->logo_url( 'medium' );
 
 $wpca_status_map = array(
-	'publish' => array( 'label' => __( 'Published', 'wp-custom-admin' ), 'tone' => 'pos' ),
-	'future'  => array( 'label' => __( 'Scheduled', 'wp-custom-admin' ), 'tone' => 'info' ),
-	'draft'   => array( 'label' => __( 'Draft', 'wp-custom-admin' ), 'tone' => 'muted' ),
-	'pending' => array( 'label' => __( 'Pending', 'wp-custom-admin' ), 'tone' => 'warn' ),
+	'publish' => array(
+		'label' => __( 'Published', 'wp-custom-admin' ),
+		'tone'  => 'pos',
+	),
+	'future'  => array(
+		'label' => __( 'Scheduled', 'wp-custom-admin' ),
+		'tone'  => 'info',
+	),
+	'draft'   => array(
+		'label' => __( 'Draft', 'wp-custom-admin' ),
+		'tone'  => 'muted',
+	),
+	'pending' => array(
+		'label' => __( 'Pending', 'wp-custom-admin' ),
+		'tone'  => 'warn',
+	),
 );
 ?>
 <div class="wrap wpca-dashboard">
@@ -103,7 +115,10 @@ $wpca_status_map = array(
 				<ul class="wpca-feed">
 					<?php foreach ( $wpca_items as $wpca_item ) : ?>
 						<?php
-						$wpca_st   = isset( $wpca_status_map[ $wpca_item['status'] ] ) ? $wpca_status_map[ $wpca_item['status'] ] : array( 'label' => $wpca_item['status'], 'tone' => 'muted' );
+						$wpca_st   = $wpca_status_map[ $wpca_item['status'] ] ?? array(
+							'label' => $wpca_item['status'],
+							'tone'  => 'muted',
+						);
 						$wpca_init = strtoupper( mb_substr( trim( (string) $wpca_item['author'] ), 0, 1 ) );
 						?>
 						<li>
