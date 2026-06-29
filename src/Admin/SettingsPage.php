@@ -99,7 +99,7 @@ final class SettingsPage {
 	 * @param mixed $input Raw posted value.
 	 * @return array<string,mixed>
 	 */
-	public function sanitize_option( mixed $input ): array {
+	public function sanitize_option( $input ): array {
 		return $this->settings->sparse_for_storage( Sanitizer::sanitize( $input ) );
 	}
 
@@ -213,7 +213,7 @@ final class SettingsPage {
 	/**
 	 * Current value for a setting key.
 	 */
-	private function value( string $key, mixed $fallback = '' ): mixed {
+	private function value( string $key, $fallback = '' ) {
 		return $this->settings->get( $key, $fallback );
 	}
 
@@ -372,7 +372,7 @@ final class SettingsPage {
 			$label = trim( wp_strip_all_tags( (string) $item[0] ) );
 
 			// Skip separators / empty rows.
-			if ( '' === $label || str_starts_with( $slug, 'separator' ) ) {
+			if ( '' === $label || 0 === strpos( $slug, 'separator' ) ) {
 				continue;
 			}
 

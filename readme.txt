@@ -3,8 +3,8 @@ Contributors: amirdezyani
 Tags: admin, white-label, branding, admin-theme, login
 Requires at least: 6.5
 Tested up to: 6.5
-Requires PHP: 8.0
-Stable tag: 0.4.2
+Requires PHP: 7.4
+Stable tag: 0.5.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -41,6 +41,11 @@ No. Deactivation is non-destructive. Data is only removed on uninstall, and only
 Yes. Network admin is left untouched by default; a network-level default can be set with per-site overrides.
 
 == Changelog ==
+
+= 0.5.0 =
+* New: a custom branded "Home" dashboard (hero, stat cards, quick actions, recent
+  posts) that replaces the default WordPress dashboard as the landing page.
+* Lower PHP requirement to 7.4 for much broader host compatibility.
 
 = 0.4.2 =
 * Fix: primary buttons and accent elements now use the brand color on WordPress 7.0

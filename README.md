@@ -33,7 +33,7 @@ It boots straight into the reskinned dashboard; open the **WP Custom Admin** men
 ## Requirements
 
 - WordPress **6.5+** (the bundled Persian translation uses the PHP `.l10n.php` format)
-- PHP **8.0+**
+- PHP **7.4+**
 
 ## Localization & RTL
 

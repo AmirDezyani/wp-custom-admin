@@ -28,6 +28,8 @@ final class Sanitizer {
 		'login_enabled',
 		'menu_enabled',
 		'whitelabel_enabled',
+		'dashboard_enabled',
+		'dashboard_landing',
 		'hide_wp_logo',
 		'replace_howdy',
 		'hide_welcome_panel',
@@ -59,7 +61,7 @@ final class Sanitizer {
 	 * @param mixed $input Raw input (POST array or decoded JSON).
 	 * @return array<string,mixed>
 	 */
-	public static function sanitize( mixed $input ): array {
+	public static function sanitize( $input ): array {
 		$input    = is_array( $input ) ? $input : array();
 		$defaults = Settings::defaults();
 		$out      = array();
@@ -116,7 +118,7 @@ final class Sanitizer {
 	 * @param mixed  $value    Raw color value.
 	 * @param string $fallback Default to use when invalid/empty.
 	 */
-	private static function color( mixed $value, string $fallback ): string {
+	private static function color( $value, string $fallback ): string {
 		$value = is_string( $value ) ? trim( $value ) : '';
 
 		if ( '' === $value ) {
@@ -138,7 +140,7 @@ final class Sanitizer {
 	 * @param mixed $value Raw value.
 	 * @return string[]
 	 */
-	private static function slug_list( mixed $value ): array {
+	private static function slug_list( $value ): array {
 		if ( is_string( $value ) ) {
 			$value = preg_split( '/[\r\n,]+/', $value );
 		}
@@ -166,7 +168,7 @@ final class Sanitizer {
 	 * @param mixed $value Raw value.
 	 * @return array<string,string>
 	 */
-	private static function rename_map( mixed $value ): array {
+	private static function rename_map( $value ): array {
 		if ( ! is_array( $value ) ) {
 			return array();
 		}

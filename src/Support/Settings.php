@@ -59,7 +59,7 @@ final class Settings {
 	 * @param string $key     Setting key.
 	 * @param mixed  $default Value to return when the key is absent.
 	 */
-	public function get( string $key, mixed $fallback = null ): mixed {
+	public function get( string $key, $fallback = null ) {
 		$all = $this->all();
 
 		return array_key_exists( $key, $all ) ? $all[ $key ] : $fallback;
@@ -206,6 +206,8 @@ final class Settings {
 			'login_enabled'          => true,
 			'menu_enabled'           => false,
 			'whitelabel_enabled'     => true,
+			'dashboard_enabled'      => true,
+			'dashboard_landing'      => true,
 
 			// Brand identity.
 			'product_name'           => '',

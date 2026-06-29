@@ -13,6 +13,7 @@ use WPCustomAdmin\Admin\NetworkSettings;
 use WPCustomAdmin\Admin\SettingsPage;
 use WPCustomAdmin\Contracts\Module;
 use WPCustomAdmin\Modules\Branding\BrandingModule;
+use WPCustomAdmin\Modules\Dashboard\DashboardModule;
 use WPCustomAdmin\Modules\Login\LoginModule;
 use WPCustomAdmin\Modules\Menu\MenuModule;
 use WPCustomAdmin\Modules\WhiteLabel\WhiteLabelModule;
@@ -110,6 +111,7 @@ final class Plugin {
 	private function modules(): array {
 		return array(
 			new BrandingModule( $this->settings, $this->assets ),
+			new DashboardModule( $this->settings, $this->assets ),
 			new LoginModule( $this->settings, $this->assets ),
 			new MenuModule( $this->settings, $this->assets ),
 			new WhiteLabelModule( $this->settings, $this->assets ),

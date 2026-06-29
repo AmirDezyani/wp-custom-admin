@@ -71,6 +71,8 @@ $wpca_notice = isset( $_GET['wpca_notice'] ) ? sanitize_key( wp_unslash( $_GET['
 						'monospace' => __( 'Monospace', 'wp-custom-admin' ),
 					)
 				);
+				$this->field_toggle( 'dashboard_enabled', __( 'Custom Home dashboard', 'wp-custom-admin' ), __( 'Adds a branded Home screen in place of the default WordPress dashboard.', 'wp-custom-admin' ) );
+				$this->field_toggle( 'dashboard_landing', __( 'Land on Home after login', 'wp-custom-admin' ), __( 'Redirect the default dashboard to the branded Home screen.', 'wp-custom-admin' ) );
 				?>
 			</div>
 		</section>
