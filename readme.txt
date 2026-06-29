@@ -8,7 +8,7 @@ Stable tag: 0.4.1
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
-Reskin wp-admin into a bespoke, branded control panel. Configurable logo, colors, login page, admin menu, and white-labeling — reusable across many sites.
+Reskin wp-admin into a bespoke, branded control panel: colors, logo, login, menu, and white-label. Persian + RTL ready. Reusable across sites.
 
 == Description ==
 

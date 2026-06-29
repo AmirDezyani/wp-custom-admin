@@ -23,8 +23,8 @@ final class SettingsTest extends TestCase {
 		parent::setUp();
 		Monkey\setUp();
 
-		// apply_filters returns the value (2nd arg, index 1) unchanged.
-		Functions\when( 'apply_filters' )->returnArg( 1 );
+		// apply_filters returns the value unchanged (Brain Monkey returnArg is 1-based: 2nd arg).
+		Functions\when( 'apply_filters' )->returnArg( 2 );
 		Functions\when( 'is_multisite' )->justReturn( false );
 		Functions\when( 'get_option' )->justReturn( array() );
 		Functions\when( 'get_site_option' )->justReturn( array() );
