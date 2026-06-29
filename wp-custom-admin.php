@@ -3,7 +3,7 @@
  * Plugin Name:       WP Custom Admin
  * Plugin URI:        https://github.com/AmirDezyani/wp-custom-admin
  * Description:       Reskin wp-admin into a bespoke, brandable control panel. Configurable logo, colors, login page, admin menu, and white-labeling — reusable across many sites.
- * Version:           0.4.1
+ * Version:           0.4.2
  * Requires at least: 6.5
  * Requires PHP:      8.0
  * Author:            Amir Dezyani
@@ -22,7 +22,7 @@ namespace WPCustomAdmin;
 
 defined( 'ABSPATH' ) || exit;
 
-define( 'WPCA_VERSION', '0.4.1' );
+define( 'WPCA_VERSION', '0.4.2' );
 define( 'WPCA_FILE', __FILE__ );
 define( 'WPCA_PATH', plugin_dir_path( __FILE__ ) );
 define( 'WPCA_URL', plugin_dir_url( __FILE__ ) );

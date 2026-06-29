@@ -44,8 +44,9 @@ admin, login, and settings styles include matching RTL rules. Other languages: d
 
 ## Install (client site)
 
-1. Copy this folder to `wp-content/plugins/wp-custom-admin/` (or clone the repo there).
-2. Activate **WP Custom Admin** in Plugins.
+1. Download the latest zip: **[wp-custom-admin.zip](https://github.com/AmirDezyani/wp-custom-admin/releases/latest/download/wp-custom-admin.zip)**
+2. In wp-admin: **Plugins → Add New → Upload Plugin** → choose the zip → **Install Now → Activate**.
+   (Or unzip into `wp-content/plugins/`, or clone the repo there.)
 3. Open the top-level **WP Custom Admin** menu and set the logo, colors, and toggles.
 
 It renders a sensible default skin immediately — configuration is optional.
