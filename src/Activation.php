@@ -9,8 +9,6 @@ declare( strict_types=1 );
 
 namespace WPCustomAdmin;
 
-use WPCustomAdmin\Support\Settings;
-
 defined( 'ABSPATH' ) || exit;
 
 /**
@@ -20,11 +18,16 @@ defined( 'ABSPATH' ) || exit;
 final class Activation {
 
 	/**
-	 * Seed defaults on first activation and record the settings version.
+	 * Record the settings version on first activation.
+	 *
+	 * The option is seeded EMPTY (not with full defaults): Settings::all() merges
+	 * defaults at read time, so the plugin is branded immediately, and an empty
+	 * per-site option means a fresh site inherits any network/default values
+	 * key-by-key instead of pinning a full snapshot.
 	 */
 	public static function activate(): void {
 		if ( false === get_option( 'wpca_settings' ) ) {
-			add_option( 'wpca_settings', Settings::defaults() );
+			add_option( 'wpca_settings', array() );
 		}
 
 		update_option( 'wpca_db_version', WPCA_VERSION );

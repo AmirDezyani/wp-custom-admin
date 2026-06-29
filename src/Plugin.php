@@ -9,6 +9,7 @@ declare( strict_types=1 );
 
 namespace WPCustomAdmin;
 
+use WPCustomAdmin\Admin\NetworkSettings;
 use WPCustomAdmin\Admin\SettingsPage;
 use WPCustomAdmin\Contracts\Module;
 use WPCustomAdmin\Modules\Branding\BrandingModule;
@@ -78,6 +79,11 @@ final class Plugin {
 		// The settings screen is always available to capable users in wp-admin.
 		if ( is_admin() ) {
 			( new SettingsPage( $this->settings ) )->register();
+
+			// Network-wide brand defaults live in Network Admin on multisite.
+			if ( is_multisite() ) {
+				( new NetworkSettings( $this->settings ) )->register();
+			}
 		}
 
 		$config = $this->settings->all();

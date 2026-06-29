@@ -32,11 +32,8 @@ $wpca_notice = isset( $_GET['wpca_notice'] ) ? sanitize_key( wp_unslash( $_GET['
 
 	<header class="wpca-header">
 		<div class="wpca-header-brand">
-			<?php if ( '' !== $wpca_logo ) : ?>
-				<img class="wpca-header-logo" src="<?php echo esc_url( $wpca_logo ); ?>" alt="" />
-			<?php else : ?>
-				<span class="dashicons dashicons-admin-customizer"></span>
-			<?php endif; ?>
+			<img class="wpca-header-logo" src="<?php echo esc_url( $wpca_logo ); ?>" alt=""<?php echo '' === $wpca_logo ? ' style="display:none"' : ''; ?> />
+			<span class="dashicons dashicons-admin-customizer wpca-header-icon"<?php echo '' !== $wpca_logo ? ' style="display:none"' : ''; ?>></span>
 			<div>
 				<h1><?php echo esc_html( $this->settings->product_name() ); ?></h1>
 				<p class="wpca-header-sub"><?php esc_html_e( 'Brand control panel', 'wp-custom-admin' ); ?></p>

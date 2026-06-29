@@ -71,6 +71,22 @@
 		}
 	}
 
+	function setHeaderLogo( src ) {
+		var img = document.querySelector( '.wpca-header-logo' );
+		var icon = document.querySelector( '.wpca-header-icon' );
+		if ( img ) {
+			if ( src ) {
+				img.src = src;
+				img.style.display = '';
+			} else {
+				img.style.display = 'none';
+			}
+		}
+		if ( icon ) {
+			icon.style.display = src ? 'none' : '';
+		}
+	}
+
 	function initMediaPickers() {
 		$( '.wpca-media' ).each( function () {
 			var $wrap = $( this );
@@ -103,6 +119,10 @@
 					$input.val( attachment.id );
 					$preview.html( $( '<img />' ).attr( 'src', src ) );
 					$remove.show();
+
+					if ( 'logo_id' === $wrap.data( 'key' ) ) {
+						setHeaderLogo( src );
+					}
 				} );
 
 				frame.open();
@@ -113,6 +133,10 @@
 				$input.val( '' );
 				$preview.empty();
 				$remove.hide();
+
+				if ( 'logo_id' === $wrap.data( 'key' ) ) {
+					setHeaderLogo( '' );
+				}
 			} );
 		} );
 	}

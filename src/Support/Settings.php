@@ -123,11 +123,12 @@ final class Settings {
 	}
 
 	/**
-	 * Compose the resolved settings using the documented precedence.
+	 * Everything below the per-site option: defaults -> wpca_default_settings
+	 * filter -> WPCA_CONFIG constant -> network option.
 	 *
 	 * @return array<string,mixed>
 	 */
-	private function resolve(): array {
+	public function baseline(): array {
 		$base = self::defaults();
 
 		/**
@@ -141,17 +142,50 @@ final class Settings {
 			$base = array_merge( $base, WPCA_CONFIG );
 		}
 
-		$resolved = $base;
-
 		if ( is_multisite() ) {
 			$network = get_site_option( self::NETWORK_OPTION, array() );
 
 			if ( is_array( $network ) ) {
-				$resolved = array_merge( $resolved, $network );
+				$base = array_merge( $base, $network );
 			}
 		}
 
-		$site = get_option( self::OPTION, array() );
+		return $base;
+	}
+
+	/**
+	 * Reduce a full settings array to only the keys that diverge from the
+	 * baseline, so a per-site option stores just its explicit overrides.
+	 *
+	 * This is what makes the key-by-key precedence real: keys a site never
+	 * changed are not stored, so they keep inheriting the network/default value
+	 * (and follow future changes to it). For single-site installs the baseline is
+	 * just the defaults, so the resolved result is unchanged — only storage shrinks.
+	 *
+	 * @param array<string,mixed> $full Full sanitized settings.
+	 * @return array<string,mixed>
+	 */
+	public function sparse_for_storage( array $full ): array {
+		$baseline = $this->baseline();
+		$sparse   = array();
+
+		foreach ( $full as $key => $value ) {
+			if ( ! array_key_exists( $key, $baseline ) || $baseline[ $key ] !== $value ) {
+				$sparse[ $key ] = $value;
+			}
+		}
+
+		return $sparse;
+	}
+
+	/**
+	 * Compose the resolved settings: baseline overlaid with the sparse per-site option.
+	 *
+	 * @return array<string,mixed>
+	 */
+	private function resolve(): array {
+		$resolved = $this->baseline();
+		$site     = get_option( self::OPTION, array() );
 
 		if ( is_array( $site ) ) {
 			$resolved = array_merge( $resolved, $site );

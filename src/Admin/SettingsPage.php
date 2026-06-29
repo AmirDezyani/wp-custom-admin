@@ -85,11 +85,22 @@ final class SettingsPage {
 			Settings::OPTION,
 			array(
 				'type'              => 'array',
-				'sanitize_callback' => array( Sanitizer::class, 'sanitize' ),
-				'default'           => Settings::defaults(),
+				'sanitize_callback' => array( $this, 'sanitize_option' ),
+				'default'           => array(),
 				'show_in_rest'      => false,
 			)
 		);
+	}
+
+	/**
+	 * Sanitize callback for the per-site option: validate, then store only the
+	 * keys that diverge from the baseline (so network/default values keep flowing).
+	 *
+	 * @param mixed $input Raw posted value.
+	 * @return array<string,mixed>
+	 */
+	public function sanitize_option( mixed $input ): array {
+		return $this->settings->sparse_for_storage( Sanitizer::sanitize( $input ) );
 	}
 
 	/**
@@ -176,8 +187,9 @@ final class SettingsPage {
 				$decoded = json_decode( $raw, true );
 
 				if ( is_array( $decoded ) ) {
-					// Imported data passes through the SAME gate as the settings form.
-					update_option( Settings::OPTION, Sanitizer::sanitize( $decoded ) );
+					// Imported data passes through the SAME gate as the settings form,
+					// then stored sparsely so it overrides only what it specifies.
+					update_option( Settings::OPTION, $this->settings->sparse_for_storage( Sanitizer::sanitize( $decoded ) ) );
 					$this->settings->flush();
 					$notice = 'imported';
 				}

@@ -4,7 +4,7 @@ Tags: admin, white-label, branding, admin-theme, login
 Requires at least: 6.5
 Tested up to: 6.5
 Requires PHP: 8.0
-Stable tag: 0.3.0
+Stable tag: 0.4.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -41,6 +41,10 @@ No. Deactivation is non-destructive. Data is only removed on uninstall, and only
 Yes. Network admin is left untouched by default; a network-level default can be set with per-site overrides.
 
 == Changelog ==
+
+= 0.4.0 =
+* Multisite: a Network Admin page for network-wide brand defaults (identity + palette); per-site settings still override them.
+* Settings page: the admin logo now previews live in the page header when selected.
 
 = 0.3.0 =
 * Full right-to-left (RTL) support for the admin, login, and settings screens.

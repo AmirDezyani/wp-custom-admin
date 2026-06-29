@@ -103,9 +103,14 @@ wp-custom-admin/
 
 - All config lives in a single autoloaded option, `get_option('wpca_settings')`, registered **once** via
   `register_setting()` with a single `sanitize_callback` (`Sanitizer::sanitize`).
-- Read through `Settings::all()` / `Settings::get($key, $default)`, which merges stored values over
-  `Settings::defaults()` with `wp_parse_args()` **at read time** (so a fresh install is already branded
-  and new keys self-heal across versions).
+- Read through `Settings::all()` / `Settings::get($key, $default)`. `Settings::baseline()` composes
+  everything below the site option (defaults → `wpca_default_settings` filter → `WPCA_CONFIG` → network
+  option); `all()` overlays the per-site option on top **at read time** (fresh installs render branded,
+  new keys self-heal across versions).
+- Store the per-site option **sparsely**: `Settings::sparse_for_storage()` drops keys equal to the
+  baseline, so keys a site never changed keep inheriting the network/default value (real key-by-key
+  precedence, and they follow future baseline changes). Single-site resolved output is identical — only
+  the stored row shrinks. The settings-form `sanitize_callback` and import both pass through this.
 - **Config resolution precedence** (lowest → highest):
   1. hardcoded `Settings::defaults()`
   2. `apply_filters('wpca_default_settings', $defaults)`
@@ -199,8 +204,9 @@ Run **Plugin Check (PCP)** + `phpcs` (WordPress-Extra) before shipping.
 
 ## 10. Lifecycle & i18n
 
-- **Activation:** set default options if absent, set `wpca_db_version`. **Deactivation:** clear only
-  cron/transients — **never delete branding data.**
+- **Activation:** seed the option **empty** (defaults merge at read time; an empty per-site row keeps
+  key-by-key inheritance) and set `wpca_db_version`. **Deactivation:** clear only cron/transients —
+  **never delete branding data.**
 - **uninstall.php:** `if ( ! defined('WP_UNINSTALL_PLUGIN') ) exit;` then delete only if
   `$opts['delete_on_uninstall']` is true. On multisite, loop `get_sites()`/`switch_to_blog()` and
   `delete_site_option()` for the network. Prefer `uninstall.php` over `register_uninstall_hook()`.
