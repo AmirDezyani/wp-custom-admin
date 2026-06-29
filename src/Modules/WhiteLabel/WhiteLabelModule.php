@@ -63,17 +63,24 @@ final class WhiteLabelModule extends AbstractModule {
 			$node = $wp_admin_bar->get_node( 'my-account' );
 
 			if ( is_object( $node ) && isset( $node->title ) ) {
-				// Build the localized "Howdy, " prefix so this works in any language.
-				$greeting = sprintf(
+				$title = (string) $node->title;
+
+				// The greeting is whatever precedes the display-name span. Stripping by
+				// that marker is locale-agnostic and robust to wording changes ("Howdy,").
+				$pos = strpos( $title, '<span class="display-name">' );
+
+				if ( false !== $pos ) {
+					$title = substr( $title, $pos );
+				} else {
 					/* translators: %s: user display name (core string, reused to derive the prefix). */
-					__( 'Howdy, %s' ), // phpcs:ignore WordPress.WP.I18n.MissingArgDomain -- core string.
-					''
-				);
+					$title = str_replace( sprintf( __( 'Howdy, %s' ), '' ), '', $title ); // phpcs:ignore WordPress.WP.I18n.MissingArgDomain -- core string.
+				}
 
 				$wp_admin_bar->add_node(
 					array(
-						'id'    => 'my-account',
-						'title' => str_replace( $greeting, '', (string) $node->title ),
+						'id'     => 'my-account',
+						'title'  => $title,
+						'parent' => $node->parent,
 					)
 				);
 			}

@@ -17,6 +17,9 @@
 body.login {
 	background: var(--wpca-login-bg);
 	font-family: var(--wpca-font);
+	--wp-admin-theme-color: var(--wpca-primary);
+	--wp-admin-theme-color-darker-10: var(--wpca-primary-hover);
+	--wp-admin-theme-color-darker-20: var(--wpca-primary-hover);
 }
 
 body.login #login {
@@ -55,7 +58,7 @@ body.login input[type="email"]:focus {
 }
 
 /* Primary button. */
-body.login .wp-core-ui .button-primary {
+body.login .button-primary {
 	background: var(--wpca-primary);
 	border-color: var(--wpca-primary);
 	border-radius: 8px;
@@ -67,8 +70,8 @@ body.login .wp-core-ui .button-primary {
 	font-weight: 600;
 }
 
-body.login .wp-core-ui .button-primary:hover,
-body.login .wp-core-ui .button-primary:focus {
+body.login .button-primary:hover,
+body.login .button-primary:focus {
 	background: var(--wpca-primary-hover);
 	border-color: var(--wpca-primary-hover);
 }

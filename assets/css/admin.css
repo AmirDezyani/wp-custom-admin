@@ -51,6 +51,15 @@ body.wpca-admin a:focus {
 	color: var(--wpca-primary-hover);
 }
 
+/* Override WordPress' own accent variable so every core element that derives from
+   it (primary buttons, links, focus rings, checkboxes, active states) adopts the
+   brand color. WP 7.0 colors these via var(--wp-admin-theme-color). */
+body.wpca-admin {
+	--wp-admin-theme-color: var(--wpca-primary);
+	--wp-admin-theme-color-darker-10: var(--wpca-primary-hover);
+	--wp-admin-theme-color-darker-20: var(--wpca-primary-hover);
+}
+
 /* ------------------------------------------------------------ Admin bar ---- */
 
 body.wpca-admin #wpadminbar {
@@ -174,7 +183,7 @@ body.wpca-admin .postbox h2 {
 
 /* ---------------------------------------------------------------- Buttons -- */
 
-body.wpca-admin .wp-core-ui .button-primary {
+body.wpca-admin .button-primary {
 	background: var(--wpca-primary);
 	border-color: var(--wpca-primary);
 	box-shadow: none;
@@ -183,26 +192,26 @@ body.wpca-admin .wp-core-ui .button-primary {
 	padding: 0 14px;
 }
 
-body.wpca-admin .wp-core-ui .button-primary:hover,
-body.wpca-admin .wp-core-ui .button-primary:focus {
+body.wpca-admin .button-primary:hover,
+body.wpca-admin .button-primary:focus {
 	background: var(--wpca-primary-hover);
 	border-color: var(--wpca-primary-hover);
 	box-shadow: 0 0 0 1px var(--wpca-primary-hover);
 }
 
-body.wpca-admin .wp-core-ui .button-primary:focus {
+body.wpca-admin .button-primary:focus {
 	box-shadow: 0 0 0 2px #fff, 0 0 0 4px var(--wpca-primary);
 }
 
-body.wpca-admin .wp-core-ui .button,
-body.wpca-admin .wp-core-ui .button-secondary {
+body.wpca-admin .button,
+body.wpca-admin .button-secondary {
 	border-radius: var(--wpca-radius-sm);
 	border-color: var(--wpca-border);
 	color: var(--wpca-text);
 	background: #fff;
 }
 
-body.wpca-admin .wp-core-ui .button:hover {
+body.wpca-admin .button:hover {
 	border-color: var(--wpca-primary);
 	color: var(--wpca-primary);
 }
@@ -238,8 +247,8 @@ body.wpca-admin input[type="checkbox"]:checked::before {
 	color: var(--wpca-primary);
 }
 
-body.wpca-admin .wp-core-ui input[type="checkbox"]:checked,
-body.wpca-admin .wp-core-ui input[type="radio"]:checked {
+body.wpca-admin input[type="checkbox"]:checked,
+body.wpca-admin input[type="radio"]:checked {
 	border-color: var(--wpca-primary);
 }
 
