@@ -9,6 +9,16 @@ admin menu, white-labeling). Built once, dropped into many projects.
 > **Zero-build:** runs by copying the folder into `wp-content/plugins/`. No `npm`/webpack/Composer step
 > required on a client site. Composer/PHPCS here are dev-only tooling.
 
+## Try it live (no install)
+
+Launch a throwaway WordPress in your browser with the plugin pre-installed and active
+(powered by [WordPress Playground](https://wordpress.org/playground/)):
+
+- ▶︎ **[English demo](https://playground.wordpress.net/?blueprint-url=https://raw.githubusercontent.com/AmirDezyani/wp-custom-admin/main/.playground/blueprint.json)**
+- ▶︎ **[Persian / RTL demo (فارسی)](https://playground.wordpress.net/?blueprint-url=https://raw.githubusercontent.com/AmirDezyani/wp-custom-admin/main/.playground/blueprint-fa.json)**
+
+It boots straight into the reskinned dashboard; open the **WP Custom Admin** menu to change colors, logo, and toggles.
+
 ## Highlights
 
 - 🎨 **Full reskin** driven entirely by CSS custom properties (`--wpca-*`) — recolor with saved options, no file edits.
@@ -55,10 +65,13 @@ It renders a sensible default skin immediately — configuration is optional.
 ## Development
 
 ```bash
-composer install      # installs PHPCS + WordPress Coding Standards (dev only)
-composer phpcs        # lint against the WordPress ruleset
-composer phpcbf        # auto-fix what can be fixed
+composer install      # installs PHPCS + WPCS + PHPUnit + Brain Monkey (dev only)
+composer phpcs        # lint against the WordPress-Extra ruleset
+composer phpcbf       # auto-fix what can be fixed
+composer test         # run the PHPUnit unit tests (no WordPress install needed)
 ```
+
+CI runs PHP lint (8.0–8.3), `phpcs`, PHPUnit, and WordPress Plugin Check on every push.
 
 See [`CLAUDE.md`](CLAUDE.md) for the binding engineering standards and [`PLAN.md`](PLAN.md) for the roadmap.
 

@@ -10,6 +10,9 @@
 /composer.json
 /composer.lock
 /phpcs.xml.dist
+/phpunit.xml.dist
+/tests
+/.playground
 /.phpcs.cache
 /CLAUDE.md
 /PLAN.md

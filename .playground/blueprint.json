@@ -1,0 +1,18 @@
+{
+	"$schema": "https://playground.wordpress.net/blueprint-schema.json",
+	"landingPage": "/wp-admin/index.php",
+	"preferredVersions": { "php": "8.2", "wp": "latest" },
+	"login": true,
+	"siteOptions": { "blogname": "Acme Studio" },
+	"steps": [
+		{
+			"step": "installPlugin",
+			"pluginData": {
+				"resource": "url",
+				"url": "https://github.com/AmirDezyani/wp-custom-admin/releases/download/v0.4.1/wp-custom-admin-0.4.1.zip",
+				"caption": "Installing WP Custom Admin"
+			},
+			"options": { "activate": true }
+		}
+	]
+}
