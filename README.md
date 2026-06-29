@@ -52,6 +52,17 @@ composer phpcbf        # auto-fix what can be fixed
 
 See [`CLAUDE.md`](CLAUDE.md) for the binding engineering standards and [`PLAN.md`](PLAN.md) for the roadmap.
 
+## Build a release zip
+
+Dev/build files are marked `export-ignore` in `.gitattributes`, so `git archive` emits a clean,
+deploy-ready folder (pure PHP/CSS/JS):
+
+```bash
+git archive --format=zip --prefix=wp-custom-admin/ -o wp-custom-admin.zip HEAD
+```
+
+Unzip into `wp-content/plugins/` (or upload the zip via Plugins → Add New → Upload).
+
 ## License
 
 GPL-2.0-or-later.

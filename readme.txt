@@ -4,7 +4,7 @@ Tags: admin, white-label, branding, admin-theme, login
 Requires at least: 6.4
 Tested up to: 6.5
 Requires PHP: 8.0
-Stable tag: 0.1.0
+Stable tag: 0.2.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -41,6 +41,11 @@ No. Deactivation is non-destructive. Data is only removed on uninstall, and only
 Yes. Network admin is left untouched by default; a network-level default can be set with per-site overrides.
 
 == Changelog ==
+
+= 0.2.0 =
+* Live color preview on the settings page (the admin recolors as you pick).
+* Drag-and-drop reordering of admin menu items.
+* Release tooling: .gitattributes export-ignore for clean `git archive` builds.
 
 = 0.1.0 =
 * Initial release.

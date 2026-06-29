@@ -28,6 +28,20 @@ final class SettingsPage {
 	private const CAPABILITY       = 'manage_options';
 	private const MAX_IMPORT_BYTES = 262144;
 
+	/**
+	 * Maps a color setting key to the CSS custom property it drives (for live preview).
+	 */
+	private const COLOR_VARS = array(
+		'primary_color'        => '--wpca-primary',
+		'primary_hover_color'  => '--wpca-primary-hover',
+		'accent_color'         => '--wpca-accent',
+		'menu_bg_color'        => '--wpca-menu-bg',
+		'menu_text_color'      => '--wpca-menu-text',
+		'menu_highlight_color' => '--wpca-menu-highlight',
+		'adminbar_bg_color'    => '--wpca-adminbar-bg',
+		'login_bg_color'       => '--wpca-login-bg',
+	);
+
 	private Settings $settings;
 
 	private string $hook_suffix = '';
@@ -95,7 +109,7 @@ final class SettingsPage {
 		wp_enqueue_script(
 			'wpca-settings',
 			WPCA_URL . 'assets/js/settings.js',
-			array( 'jquery', 'wp-color-picker', 'wp-i18n' ),
+			array( 'jquery', 'wp-color-picker', 'wp-i18n', 'jquery-ui-sortable' ),
 			WPCA_VERSION,
 			true
 		);
@@ -234,13 +248,14 @@ final class SettingsPage {
 		$defaults = Settings::defaults();
 
 		printf(
-			'<div class="wpca-field wpca-field--color"><label for="wpca-%1$s">%2$s</label><div class="wpca-control"><input type="text" id="wpca-%1$s" name="%3$s[%1$s]" value="%4$s" class="wpca-color" data-default-color="%5$s" />%6$s</div></div>',
+			'<div class="wpca-field wpca-field--color"><label for="wpca-%1$s">%2$s</label><div class="wpca-control"><input type="text" id="wpca-%1$s" name="%3$s[%1$s]" value="%4$s" class="wpca-color" data-default-color="%5$s" data-css-var="%7$s" />%6$s</div></div>',
 			esc_attr( $key ),
 			esc_html( $label ),
 			esc_attr( Settings::OPTION ),
 			esc_attr( (string) $this->value( $key ) ),
 			esc_attr( (string) ( $defaults[ $key ] ?? '' ) ),
-			$this->help( $help ) // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- pre-escaped in help().
+			$this->help( $help ), // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- pre-escaped in help().
+			esc_attr( self::COLOR_VARS[ $key ] ?? '' )
 		);
 	}
 
@@ -327,11 +342,14 @@ final class SettingsPage {
 			return;
 		}
 
+		echo '<p class="wpca-help">' . esc_html__( 'Drag rows to reorder the menu. The chosen order is applied to everyone; newly added plugin menus appear after ordered items.', 'wp-custom-admin' ) . '</p>';
+
 		echo '<table class="wpca-menu-table widefat striped"><thead><tr>';
+		echo '<th class="wpca-menu-handle-col"><span class="screen-reader-text">' . esc_html__( 'Reorder', 'wp-custom-admin' ) . '</span></th>';
 		echo '<th>' . esc_html__( 'Menu item', 'wp-custom-admin' ) . '</th>';
 		echo '<th>' . esc_html__( 'Hide (non-admins)', 'wp-custom-admin' ) . '</th>';
 		echo '<th>' . esc_html__( 'Rename to', 'wp-custom-admin' ) . '</th>';
-		echo '</tr></thead><tbody>';
+		echo '</tr></thead><tbody class="wpca-menu-sortable">';
 
 		foreach ( $menu as $item ) {
 			if ( ! isset( $item[0], $item[2] ) ) {
@@ -347,7 +365,10 @@ final class SettingsPage {
 			}
 
 			printf(
-				'<tr><td><span class="wpca-menu-name">%1$s</span><code>%2$s</code></td>'
+				'<tr>'
+				. '<td class="wpca-menu-handle"><span class="dashicons dashicons-menu" aria-hidden="true"></span>'
+				. '<input type="hidden" class="wpca-menu-order-input" name="%3$s[menu_order][]" value="%4$s" /></td>'
+				. '<td><span class="wpca-menu-name">%1$s</span><code>%2$s</code></td>'
 				. '<td><input type="checkbox" name="%3$s[menu_hidden][]" value="%4$s" %5$s /></td>'
 				. '<td><input type="text" name="%3$s[menu_renames][%4$s]" value="%6$s" placeholder="%1$s" class="regular-text" /></td></tr>',
 				esc_html( $label ),

@@ -1,0 +1,16 @@
+# Normalize line endings across platforms.
+* text=auto
+
+# Keep dev/build-only files out of `git archive` release artifacts, so the
+# zipped plugin is pure PHP/CSS/JS (mirrors .distignore).
+/.gitattributes export-ignore
+/.gitignore     export-ignore
+/.distignore    export-ignore
+/.editorconfig  export-ignore
+/.github        export-ignore
+/CLAUDE.md      export-ignore
+/PLAN.md        export-ignore
+/README.md      export-ignore
+/composer.json  export-ignore
+/composer.lock  export-ignore
+/phpcs.xml.dist export-ignore

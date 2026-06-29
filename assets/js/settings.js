@@ -41,8 +41,33 @@
 	}
 
 	function initColorPickers() {
-		if ( $.fn.wpColorPicker ) {
-			$( '.wpca-color' ).wpColorPicker();
+		if ( ! $.fn.wpColorPicker ) {
+			return;
+		}
+
+		$( '.wpca-color' ).wpColorPicker( {
+			// Recolor the surrounding (already-reskinned) admin live as you pick.
+			change: function ( event, ui ) {
+				var cssVar = this.getAttribute( 'data-css-var' );
+
+				if ( cssVar && ui && ui.color ) {
+					document.documentElement.style.setProperty( cssVar, ui.color.toString() );
+				}
+			},
+		} );
+	}
+
+	function initMenuSort() {
+		var $body = $( '.wpca-menu-sortable' );
+
+		if ( $body.length && $.fn.sortable ) {
+			$body.sortable( {
+				items: '> tr',
+				handle: '.wpca-menu-handle',
+				axis: 'y',
+				placeholder: 'wpca-menu-placeholder',
+				forcePlaceholderSize: true,
+			} );
 		}
 	}
 
@@ -96,5 +121,6 @@
 		initTabs();
 		initColorPickers();
 		initMediaPickers();
+		initMenuSort();
 	} );
 }( jQuery ) );

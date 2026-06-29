@@ -237,6 +237,35 @@
 	background: transparent;
 }
 
+.wpca-menu-handle-col {
+	width: 32px;
+}
+
+.wpca-menu-handle {
+	width: 32px;
+	text-align: center;
+	cursor: grab;
+	color: #94a3b8;
+}
+
+.wpca-menu-handle:active {
+	cursor: grabbing;
+}
+
+.wpca-menu-handle .dashicons {
+	line-height: inherit;
+}
+
+.wpca-menu-placeholder {
+	outline: 2px dashed var(--wpca-primary, #4f46e5);
+	outline-offset: -2px;
+	background: rgba(79, 70, 229, 0.06);
+}
+
+.wpca-menu-sortable tr.ui-sortable-helper {
+	box-shadow: 0 6px 16px rgba(15, 23, 42, 0.18);
+}
+
 /* --------------------------------------------------------------- Actions --- */
 
 .wpca-actions {
