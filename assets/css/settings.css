@@ -1,0 +1,259 @@
+/**
+ * WP Custom Admin — settings page UI.
+ *
+ * Page-specific layout for the brand control panel. The global admin reskin
+ * (admin.css) already applies; this adds the header, tabs, cards, toggles, and
+ * field grid. References the same --wpca-* tokens with safe fallbacks.
+ */
+
+.wpca-settings-wrap {
+	max-width: 900px;
+	margin-right: 20px;
+}
+
+/* ---------------------------------------------------------------- Header --- */
+
+.wpca-header {
+	margin: 10px 0 18px;
+}
+
+.wpca-header-brand {
+	display: flex;
+	align-items: center;
+	gap: 14px;
+}
+
+.wpca-header-logo {
+	max-height: 48px;
+	max-width: 200px;
+	width: auto;
+}
+
+.wpca-header-brand .dashicons {
+	font-size: 34px;
+	width: 34px;
+	height: 34px;
+	color: var(--wpca-primary, #4f46e5);
+}
+
+.wpca-header h1 {
+	margin: 0;
+	font-size: 22px;
+	line-height: 1.2;
+}
+
+.wpca-header-sub {
+	margin: 2px 0 0;
+	color: #64748b;
+}
+
+/* ------------------------------------------------------------------ Tabs --- */
+
+.wpca-tabs {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 4px;
+	border-bottom: 1px solid #e2e8f0;
+	margin-bottom: 18px;
+}
+
+.wpca-tab {
+	appearance: none;
+	background: transparent;
+	border: 0;
+	border-bottom: 2px solid transparent;
+	padding: 10px 14px;
+	margin-bottom: -1px;
+	font-size: 14px;
+	font-weight: 600;
+	color: #64748b;
+	cursor: pointer;
+}
+
+.wpca-tab:hover {
+	color: var(--wpca-primary, #4f46e5);
+}
+
+.wpca-tab.is-active {
+	color: var(--wpca-primary, #4f46e5);
+	border-bottom-color: var(--wpca-primary, #4f46e5);
+}
+
+/* ---------------------------------------------------------------- Panels --- */
+
+.wpca-panel {
+	display: none;
+}
+
+.wpca-panel.is-active {
+	display: block;
+}
+
+/* ----------------------------------------------------------------- Cards --- */
+
+.wpca-card {
+	background: #fff;
+	border: 1px solid #e2e8f0;
+	border-radius: 12px;
+	box-shadow: 0 1px 3px rgba(15, 23, 42, 0.06);
+	padding: 20px 22px;
+	margin-bottom: 18px;
+}
+
+.wpca-card > h2 {
+	margin: 0 0 14px;
+	padding-bottom: 12px;
+	border-bottom: 1px solid #eef2f6;
+	font-size: 15px;
+	font-weight: 700;
+}
+
+/* ---------------------------------------------------------------- Fields --- */
+
+.wpca-field {
+	display: grid;
+	grid-template-columns: 220px 1fr;
+	gap: 12px 20px;
+	align-items: start;
+	padding: 12px 0;
+	border-bottom: 1px solid #f1f5f9;
+}
+
+.wpca-field:last-child {
+	border-bottom: 0;
+}
+
+.wpca-field > label {
+	font-weight: 600;
+	padding-top: 6px;
+	color: #334155;
+}
+
+.wpca-help {
+	margin: 6px 0 0;
+	color: #64748b;
+	font-size: 12.5px;
+}
+
+/* Toggles span the full width with the switch on the left. */
+.wpca-field--toggle {
+	grid-template-columns: 46px 1fr;
+	align-items: center;
+}
+
+.wpca-toggle-label {
+	font-weight: 600;
+	color: #334155;
+}
+
+.wpca-switch {
+	position: relative;
+	display: inline-block;
+	width: 42px;
+	height: 24px;
+}
+
+.wpca-switch input {
+	position: absolute;
+	opacity: 0;
+	width: 0;
+	height: 0;
+}
+
+.wpca-switch-track {
+	position: absolute;
+	inset: 0;
+	background: #cbd5e1;
+	border-radius: 999px;
+	transition: background 0.15s ease;
+}
+
+.wpca-switch-track::before {
+	content: "";
+	position: absolute;
+	left: 3px;
+	top: 3px;
+	width: 18px;
+	height: 18px;
+	background: #fff;
+	border-radius: 50%;
+	box-shadow: 0 1px 2px rgba(0, 0, 0, 0.25);
+	transition: transform 0.15s ease;
+}
+
+.wpca-switch input:checked + .wpca-switch-track {
+	background: var(--wpca-primary, #4f46e5);
+}
+
+.wpca-switch input:checked + .wpca-switch-track::before {
+	transform: translateX(18px);
+}
+
+.wpca-switch input:focus + .wpca-switch-track {
+	box-shadow: 0 0 0 2px rgba(79, 70, 229, 0.35);
+}
+
+/* --------------------------------------------------------------- Media ----- */
+
+.wpca-media-preview {
+	min-height: 48px;
+	margin-bottom: 8px;
+}
+
+.wpca-media-preview img {
+	max-height: 64px;
+	max-width: 260px;
+	border: 1px solid #e2e8f0;
+	border-radius: 8px;
+	padding: 6px;
+	background: #f8fafc;
+}
+
+.wpca-media-actions {
+	margin: 0;
+}
+
+/* ------------------------------------------------------------ Menu table --- */
+
+.wpca-menu-table {
+	margin-top: 12px;
+	border-radius: 10px;
+	overflow: hidden;
+}
+
+.wpca-menu-table th,
+.wpca-menu-table td {
+	vertical-align: middle;
+}
+
+.wpca-menu-name {
+	font-weight: 600;
+	margin-right: 8px;
+}
+
+.wpca-menu-table code {
+	font-size: 11px;
+	color: #64748b;
+	background: transparent;
+}
+
+/* --------------------------------------------------------------- Actions --- */
+
+.wpca-actions {
+	position: sticky;
+	bottom: 0;
+	background: linear-gradient(180deg, rgba(241, 245, 249, 0), #f1f5f9 40%);
+	padding: 14px 0;
+	margin-top: 4px;
+}
+
+/* Responsive: stack field columns on narrow screens. */
+@media screen and (max-width: 782px) {
+	.wpca-field {
+		grid-template-columns: 1fr;
+	}
+
+	.wpca-field--toggle {
+		grid-template-columns: 46px 1fr;
+	}
+}

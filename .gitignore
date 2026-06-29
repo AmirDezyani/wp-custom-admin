@@ -1,0 +1,24 @@
+# Dependencies (dev-only tooling — never shipped)
+/vendor/
+/node_modules/
+
+# Build artifacts
+/build/
+/dist/
+*.zip
+
+# Editor / OS
+.idea/
+.vscode/
+*.sublime-*
+.DS_Store
+Thumbs.db
+
+# Tooling caches
+.phpcs.cache
+.phpunit.result.cache
+composer.phar
+
+# Agent-skills tooling artifacts (local dev only — not part of the plugin)
+/.agents/
+/skills-lock.json

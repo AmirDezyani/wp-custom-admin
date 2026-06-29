@@ -1,0 +1,25 @@
+{
+	"name": "amirdezyani/wp-custom-admin",
+	"description": "Reusable, brandable WordPress admin reskin plugin (zero-build).",
+	"type": "wordpress-plugin",
+	"license": "GPL-2.0-or-later",
+	"keywords": ["wordpress", "admin", "white-label", "branding", "reskin"],
+	"require": {
+		"php": ">=8.0"
+	},
+	"require-dev": {
+		"squizlabs/php_codesniffer": "^3.9",
+		"wp-coding-standards/wpcs": "^3.1",
+		"phpcompatibility/phpcompatibility-wp": "^2.1",
+		"dealerdirect/phpcodesniffer-composer-installer": "^1.0"
+	},
+	"scripts": {
+		"phpcs": "phpcs",
+		"phpcbf": "phpcbf"
+	},
+	"config": {
+		"allow-plugins": {
+			"dealerdirect/phpcodesniffer-composer-installer": true
+		}
+	}
+}

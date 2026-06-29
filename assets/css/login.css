@@ -1,0 +1,91 @@
+/**
+ * WP Custom Admin — login page reskin.
+ *
+ * Scoped to body.login. Brand tokens are injected via Support\Assets on the
+ * login_enqueue_scripts hook; the logo image rule is appended only when a logo
+ * is configured, so WordPress' default logo is preserved otherwise.
+ */
+
+:root {
+	--wpca-primary: #4f46e5;
+	--wpca-primary-hover: #4338ca;
+	--wpca-accent: #06b6d4;
+	--wpca-login-bg: #0f172a;
+	--wpca-font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+
+body.login {
+	background: var(--wpca-login-bg);
+	font-family: var(--wpca-font);
+}
+
+body.login #login {
+	width: 360px;
+	padding: 6% 0 0;
+}
+
+/* The login card. */
+body.login #loginform,
+body.login .login form {
+	background: #ffffff;
+	border: 1px solid rgba(255, 255, 255, 0.06);
+	border-radius: 12px;
+	box-shadow: 0 20px 40px -12px rgba(0, 0, 0, 0.45);
+	padding: 26px 24px 24px;
+}
+
+body.login label {
+	color: #334155;
+	font-weight: 500;
+}
+
+body.login input[type="text"],
+body.login input[type="password"],
+body.login input[type="email"] {
+	border-radius: 8px;
+	border-color: #cbd5e1;
+	padding: 8px 10px;
+}
+
+body.login input[type="text"]:focus,
+body.login input[type="password"]:focus,
+body.login input[type="email"]:focus {
+	border-color: var(--wpca-primary);
+	box-shadow: 0 0 0 2px rgba(79, 70, 229, 0.25);
+}
+
+/* Primary button. */
+body.login .wp-core-ui .button-primary {
+	background: var(--wpca-primary);
+	border-color: var(--wpca-primary);
+	border-radius: 8px;
+	text-shadow: none;
+	box-shadow: none;
+	width: 100%;
+	height: 40px;
+	margin-top: 6px;
+	font-weight: 600;
+}
+
+body.login .wp-core-ui .button-primary:hover,
+body.login .wp-core-ui .button-primary:focus {
+	background: var(--wpca-primary-hover);
+	border-color: var(--wpca-primary-hover);
+}
+
+/* Links below the form. */
+body.login #nav a,
+body.login #backtoblog a {
+	color: rgba(226, 232, 240, 0.85);
+}
+
+body.login #nav a:hover,
+body.login #backtoblog a:hover {
+	color: #ffffff;
+}
+
+body.login .message,
+body.login .success {
+	border-left-color: var(--wpca-primary);
+	border-radius: 8px;
+}

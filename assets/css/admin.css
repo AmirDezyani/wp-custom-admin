@@ -1,0 +1,296 @@
+/**
+ * WP Custom Admin — admin reskin.
+ *
+ * Authored entirely against CSS custom properties. Only the :root{} token block
+ * is generated per site (see Support\Assets); these fallbacks keep the skin valid
+ * even before the inline block loads. All rules are scoped under body.wpca-admin
+ * and target stable WordPress core selectors only.
+ */
+
+:root {
+	--wpca-primary: #4f46e5;
+	--wpca-primary-hover: #4338ca;
+	--wpca-accent: #06b6d4;
+	--wpca-menu-bg: #18181b;
+	--wpca-menu-text: #cbd5e1;
+	--wpca-menu-highlight: #4f46e5;
+	--wpca-adminbar-bg: #111827;
+	--wpca-font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+
+	/* Derived surface tokens (not user-configurable in v0.1.0). */
+	--wpca-content-bg: #f1f5f9;
+	--wpca-card-bg: #ffffff;
+	--wpca-border: #e2e8f0;
+	--wpca-text: #1e293b;
+	--wpca-text-muted: #64748b;
+	--wpca-radius: 10px;
+	--wpca-radius-sm: 7px;
+	--wpca-shadow: 0 1px 2px rgba(15, 23, 42, 0.06), 0 1px 3px rgba(15, 23, 42, 0.08);
+}
+
+/* ---------------------------------------------------------------- Base ---- */
+
+body.wpca-admin,
+body.wpca-admin #wpwrap {
+	font-family: var(--wpca-font);
+	background: var(--wpca-content-bg);
+	color: var(--wpca-text);
+}
+
+body.wpca-admin #wpcontent,
+body.wpca-admin #wpbody-content {
+	background: var(--wpca-content-bg);
+}
+
+body.wpca-admin a {
+	color: var(--wpca-primary);
+}
+
+body.wpca-admin a:hover,
+body.wpca-admin a:focus {
+	color: var(--wpca-primary-hover);
+}
+
+/* ------------------------------------------------------------ Admin bar ---- */
+
+body.wpca-admin #wpadminbar {
+	background: var(--wpca-adminbar-bg);
+	box-shadow: 0 1px 0 rgba(255, 255, 255, 0.04);
+}
+
+body.wpca-admin #wpadminbar .ab-item,
+body.wpca-admin #wpadminbar a.ab-item,
+body.wpca-admin #wpadminbar > #wp-toolbar span.ab-label {
+	color: #e2e8f0;
+}
+
+body.wpca-admin #wpadminbar .ab-top-menu > li:hover > .ab-item,
+body.wpca-admin #wpadminbar .ab-top-menu > li.hover > .ab-item {
+	background: rgba(255, 255, 255, 0.08);
+	color: #fff;
+}
+
+/* -------------------------------------------------------------- Sidebar ---- */
+
+body.wpca-admin #adminmenuback,
+body.wpca-admin #adminmenuwrap,
+body.wpca-admin #adminmenu,
+body.wpca-admin #adminmenu .wp-submenu {
+	background: var(--wpca-menu-bg);
+}
+
+body.wpca-admin #adminmenu a {
+	color: var(--wpca-menu-text);
+}
+
+body.wpca-admin #adminmenu div.wp-menu-image::before {
+	color: var(--wpca-menu-text);
+	opacity: 0.85;
+}
+
+body.wpca-admin #adminmenu li.menu-top:hover,
+body.wpca-admin #adminmenu li.opensub > a.menu-top,
+body.wpca-admin #adminmenu li > a.menu-top:focus {
+	background: rgba(255, 255, 255, 0.06);
+	color: #fff;
+}
+
+body.wpca-admin #adminmenu li.menu-top:hover div.wp-menu-image::before,
+body.wpca-admin #adminmenu li.menu-top:focus-within div.wp-menu-image::before {
+	color: #fff;
+	opacity: 1;
+}
+
+/* Active top-level item. */
+body.wpca-admin #adminmenu li.current a.menu-top,
+body.wpca-admin #adminmenu li.wp-has-current-submenu a.wp-has-current-submenu,
+body.wpca-admin #adminmenu .wp-menu-arrow,
+body.wpca-admin #adminmenu .wp-has-current-submenu .wp-submenu .wp-submenu-head {
+	background: var(--wpca-menu-highlight);
+	color: #fff;
+}
+
+body.wpca-admin #adminmenu li.current div.wp-menu-image::before,
+body.wpca-admin #adminmenu li.wp-has-current-submenu div.wp-menu-image::before {
+	color: #fff;
+	opacity: 1;
+}
+
+/* Submenus. */
+body.wpca-admin #adminmenu .wp-submenu a {
+	color: rgba(203, 213, 225, 0.85);
+}
+
+body.wpca-admin #adminmenu .wp-submenu a:hover,
+body.wpca-admin #adminmenu .wp-submenu a:focus,
+body.wpca-admin #adminmenu .wp-submenu li.current a {
+	color: #fff;
+}
+
+body.wpca-admin #adminmenu .wp-submenu li.current a {
+	font-weight: 600;
+}
+
+/* Collapse button + separators. */
+body.wpca-admin #adminmenu li.wp-menu-separator {
+	background: rgba(255, 255, 255, 0.04);
+}
+
+body.wpca-admin #collapse-button {
+	color: var(--wpca-menu-text);
+}
+
+/* --------------------------------------------------------------- Content --- */
+
+body.wpca-admin .wrap {
+	margin: 24px 24px 0 12px;
+}
+
+body.wpca-admin .wrap > h1,
+body.wpca-admin .wp-heading-inline {
+	font-weight: 700;
+	letter-spacing: -0.01em;
+	color: var(--wpca-text);
+}
+
+/* Cards / metaboxes. */
+body.wpca-admin .postbox,
+body.wpca-admin .card,
+body.wpca-admin .stuffbox {
+	background: var(--wpca-card-bg);
+	border: 1px solid var(--wpca-border);
+	border-radius: var(--wpca-radius);
+	box-shadow: var(--wpca-shadow);
+}
+
+body.wpca-admin .postbox .postbox-header {
+	border-bottom: 1px solid var(--wpca-border);
+}
+
+body.wpca-admin .postbox .hndle,
+body.wpca-admin .postbox h2 {
+	font-weight: 600;
+}
+
+/* ---------------------------------------------------------------- Buttons -- */
+
+body.wpca-admin .wp-core-ui .button-primary {
+	background: var(--wpca-primary);
+	border-color: var(--wpca-primary);
+	box-shadow: none;
+	text-shadow: none;
+	border-radius: var(--wpca-radius-sm);
+	padding: 0 14px;
+}
+
+body.wpca-admin .wp-core-ui .button-primary:hover,
+body.wpca-admin .wp-core-ui .button-primary:focus {
+	background: var(--wpca-primary-hover);
+	border-color: var(--wpca-primary-hover);
+	box-shadow: 0 0 0 1px var(--wpca-primary-hover);
+}
+
+body.wpca-admin .wp-core-ui .button-primary:focus {
+	box-shadow: 0 0 0 2px #fff, 0 0 0 4px var(--wpca-primary);
+}
+
+body.wpca-admin .wp-core-ui .button,
+body.wpca-admin .wp-core-ui .button-secondary {
+	border-radius: var(--wpca-radius-sm);
+	border-color: var(--wpca-border);
+	color: var(--wpca-text);
+	background: #fff;
+}
+
+body.wpca-admin .wp-core-ui .button:hover {
+	border-color: var(--wpca-primary);
+	color: var(--wpca-primary);
+}
+
+/* ------------------------------------------------------ Forms & inputs ----- */
+
+body.wpca-admin input[type="text"],
+body.wpca-admin input[type="search"],
+body.wpca-admin input[type="email"],
+body.wpca-admin input[type="url"],
+body.wpca-admin input[type="password"],
+body.wpca-admin input[type="number"],
+body.wpca-admin select,
+body.wpca-admin textarea {
+	border-radius: var(--wpca-radius-sm);
+	border-color: #cbd5e1;
+}
+
+body.wpca-admin input[type="text"]:focus,
+body.wpca-admin input[type="search"]:focus,
+body.wpca-admin input[type="email"]:focus,
+body.wpca-admin input[type="url"]:focus,
+body.wpca-admin input[type="password"]:focus,
+body.wpca-admin input[type="number"]:focus,
+body.wpca-admin select:focus,
+body.wpca-admin textarea:focus {
+	border-color: var(--wpca-primary);
+	box-shadow: 0 0 0 2px rgba(79, 70, 229, 0.18);
+}
+
+body.wpca-admin input[type="checkbox"]:checked::before {
+	content: "\f147";
+	color: var(--wpca-primary);
+}
+
+body.wpca-admin .wp-core-ui input[type="checkbox"]:checked,
+body.wpca-admin .wp-core-ui input[type="radio"]:checked {
+	border-color: var(--wpca-primary);
+}
+
+/* --------------------------------------------------------------- Tables ---- */
+
+body.wpca-admin .wp-list-table {
+	border: 1px solid var(--wpca-border);
+	border-radius: var(--wpca-radius);
+	overflow: hidden;
+	box-shadow: var(--wpca-shadow);
+}
+
+body.wpca-admin .wp-list-table thead th,
+body.wpca-admin .wp-list-table tfoot th {
+	background: #f8fafc;
+	border-bottom: 1px solid var(--wpca-border);
+}
+
+body.wpca-admin .wp-list-table tbody tr:hover {
+	background: #f8fafc;
+}
+
+/* --------------------------------------------------------------- Notices --- */
+
+body.wpca-admin .notice,
+body.wpca-admin div.updated,
+body.wpca-admin div.error {
+	border-radius: var(--wpca-radius-sm);
+	box-shadow: var(--wpca-shadow);
+}
+
+/* ---------------------------------------------------------------- Footer ---- */
+
+body.wpca-admin #wpfooter {
+	color: var(--wpca-text-muted);
+}
+
+body.wpca-admin #wpfooter a {
+	color: var(--wpca-primary);
+}
+
+/* -------------------------------------------------------------- Brand logo - */
+
+/* When a logo is configured, surface it at the top of the admin menu. */
+body.wpca-admin #adminmenuwrap::before {
+	content: "";
+	display: var(--wpca-logo-display, none);
+	height: 52px;
+	margin: 8px 12px 4px;
+	background-image: var(--wpca-logo, none);
+	background-repeat: no-repeat;
+	background-position: left center;
+	background-size: contain;
+}

@@ -1,0 +1,16 @@
+# Files excluded from the deployed / zipped plugin artifact.
+# The shipped folder is pure PHP/CSS/JS — no dev tooling.
+/.git
+/.github
+/.gitignore
+/.editorconfig
+/.distignore
+/node_modules
+/vendor
+/composer.json
+/composer.lock
+/phpcs.xml.dist
+/.phpcs.cache
+/CLAUDE.md
+/PLAN.md
+/README.md
