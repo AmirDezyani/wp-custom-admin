@@ -44,7 +44,7 @@
 
 .wpca-header-sub {
 	margin: 2px 0 0;
-	color: #64748b;
+	color: var(--wpca-text-muted);
 }
 
 /* ------------------------------------------------------------------ Tabs --- */
@@ -53,7 +53,7 @@
 	display: flex;
 	flex-wrap: wrap;
 	gap: 4px;
-	border-bottom: 1px solid #e2e8f0;
+	border-bottom: 1px solid var(--wpca-border);
 	margin-bottom: 18px;
 }
 
@@ -66,7 +66,7 @@
 	margin-bottom: -1px;
 	font-size: 14px;
 	font-weight: 600;
-	color: #64748b;
+	color: var(--wpca-text-muted);
 	cursor: pointer;
 }
 
@@ -92,10 +92,10 @@
 /* ----------------------------------------------------------------- Cards --- */
 
 .wpca-card {
-	background: #fff;
-	border: 1px solid #e2e8f0;
+	background: var(--wpca-card-bg);
+	border: 1px solid var(--wpca-border);
 	border-radius: 12px;
-	box-shadow: 0 1px 3px rgba(15, 23, 42, 0.06);
+	box-shadow: var(--wpca-shadow-xs);
 	padding: 20px 22px;
 	margin-bottom: 18px;
 }
@@ -103,7 +103,7 @@
 .wpca-card > h2 {
 	margin: 0 0 14px;
 	padding-bottom: 12px;
-	border-bottom: 1px solid #eef2f6;
+	border-bottom: 1px solid var(--wpca-border);
 	font-size: 15px;
 	font-weight: 700;
 }
@@ -116,7 +116,7 @@
 	gap: 12px 20px;
 	align-items: start;
 	padding: 12px 0;
-	border-bottom: 1px solid #f1f5f9;
+	border-bottom: 1px solid var(--wpca-border);
 }
 
 .wpca-field:last-child {
@@ -126,12 +126,12 @@
 .wpca-field > label {
 	font-weight: 600;
 	padding-top: 6px;
-	color: #334155;
+	color: var(--wpca-text);
 }
 
 .wpca-help {
 	margin: 6px 0 0;
-	color: #64748b;
+	color: var(--wpca-text-muted);
 	font-size: 12.5px;
 }
 
@@ -143,7 +143,7 @@
 
 .wpca-toggle-label {
 	font-weight: 600;
-	color: #334155;
+	color: var(--wpca-text);
 }
 
 .wpca-switch {
@@ -163,7 +163,7 @@
 .wpca-switch-track {
 	position: absolute;
 	inset: 0;
-	background: #cbd5e1;
+	background: var(--wpca-border-strong);
 	border-radius: 999px;
 	transition: background 0.15s ease;
 }
@@ -189,8 +189,8 @@
 	transform: translateX(18px);
 }
 
-.wpca-switch input:focus + .wpca-switch-track {
-	box-shadow: 0 0 0 2px rgba(79, 70, 229, 0.35);
+.wpca-switch input:focus-visible + .wpca-switch-track {
+	box-shadow: 0 0 0 2px color-mix(in srgb, var(--wpca-primary) 35%, transparent);
 }
 
 /* --------------------------------------------------------------- Media ----- */
@@ -203,10 +203,10 @@
 .wpca-media-preview img {
 	max-height: 64px;
 	max-width: 260px;
-	border: 1px solid #e2e8f0;
+	border: 1px solid var(--wpca-border);
 	border-radius: 8px;
 	padding: 6px;
-	background: #f8fafc;
+	background: var(--wpca-surface-2);
 }
 
 .wpca-media-actions {
@@ -233,7 +233,7 @@
 
 .wpca-menu-table code {
 	font-size: 11px;
-	color: #64748b;
+	color: var(--wpca-text-muted);
 	background: transparent;
 }
 
@@ -245,7 +245,7 @@
 	width: 32px;
 	text-align: center;
 	cursor: grab;
-	color: #94a3b8;
+	color: var(--wpca-text-faint);
 }
 
 .wpca-menu-handle:active {
@@ -259,7 +259,7 @@
 .wpca-menu-placeholder {
 	outline: 2px dashed var(--wpca-primary, #4f46e5);
 	outline-offset: -2px;
-	background: rgba(79, 70, 229, 0.06);
+	background: color-mix(in srgb, var(--wpca-primary) 8%, transparent);
 }
 
 .wpca-menu-sortable tr.ui-sortable-helper {
@@ -271,7 +271,7 @@
 .wpca-actions {
 	position: sticky;
 	bottom: 0;
-	background: linear-gradient(180deg, rgba(241, 245, 249, 0), #f1f5f9 40%);
+	background: linear-gradient(180deg, transparent, var(--wpca-content-bg) 40%);
 	padding: 14px 0;
 	margin-top: 4px;
 }

@@ -157,9 +157,19 @@ body.wpca-admin #adminmenu li.menu-top:focus-within div.wp-menu-image::before {
 	opacity: 1;
 }
 
-/* Active top-level item. */
+/* Active top-level item — a tinted surface + left accent bar, not a full slab. */
 body.wpca-admin #adminmenu li.current a.menu-top,
-body.wpca-admin #adminmenu li.wp-has-current-submenu a.wp-has-current-submenu,
+body.wpca-admin #adminmenu li.wp-has-current-submenu a.wp-has-current-submenu {
+	background: color-mix(in srgb, var(--wpca-menu-highlight) 26%, transparent);
+	box-shadow: inset 3px 0 0 var(--wpca-menu-highlight);
+	color: #fff;
+}
+
+body.rtl.wpca-admin #adminmenu li.current a.menu-top,
+body.rtl.wpca-admin #adminmenu li.wp-has-current-submenu a.wp-has-current-submenu {
+	box-shadow: inset -3px 0 0 var(--wpca-menu-highlight);
+}
+
 body.wpca-admin #adminmenu .wp-menu-arrow,
 body.wpca-admin #adminmenu .wp-has-current-submenu .wp-submenu .wp-submenu-head {
 	background: var(--wpca-menu-highlight);
@@ -316,6 +326,8 @@ body.wpca-admin .wp-list-table thead th,
 body.wpca-admin .wp-list-table tfoot th {
 	background: var(--wpca-surface-2);
 	border-bottom: 1px solid var(--wpca-border);
+	color: var(--wpca-text-muted);
+	font-weight: 600;
 }
 
 body.wpca-admin .wp-list-table tbody tr:hover {
@@ -327,8 +339,76 @@ body.wpca-admin .wp-list-table tbody tr:hover {
 body.wpca-admin .notice,
 body.wpca-admin div.updated,
 body.wpca-admin div.error {
+	border: 1px solid var(--wpca-border);
+	border-left-width: 3px;
 	border-radius: var(--wpca-radius-sm);
-	box-shadow: var(--wpca-shadow);
+	box-shadow: var(--wpca-shadow-xs);
+	background: var(--wpca-card-bg);
+	color: var(--wpca-text);
+}
+
+body.wpca-admin .notice-success,
+body.wpca-admin div.updated {
+	border-left-color: var(--wpca-pos);
+	background: var(--wpca-pos-bg);
+}
+
+body.wpca-admin .notice-error,
+body.wpca-admin div.error {
+	border-left-color: var(--wpca-neg);
+	background: var(--wpca-neg-bg);
+}
+
+body.wpca-admin .notice-warning {
+	border-left-color: var(--wpca-warn);
+	background: var(--wpca-warn-bg);
+}
+
+body.wpca-admin .notice-info {
+	border-left-color: var(--wpca-primary);
+}
+
+/* ------------------------------------------------------- Settings forms --- */
+
+body.wpca-admin .form-table th {
+	color: var(--wpca-text);
+	font-weight: 600;
+	padding-top: 16px;
+	padding-bottom: 16px;
+}
+
+body.wpca-admin .form-table td {
+	padding-top: 12px;
+	padding-bottom: 12px;
+}
+
+body.wpca-admin .form-table .description,
+body.wpca-admin p.description {
+	color: var(--wpca-text-muted);
+}
+
+/* ---------------------------------------------------------- Page header ---- */
+
+body.wpca-admin .wrap > h1.wp-heading-inline {
+	font-size: 20px;
+}
+
+body.wpca-admin .page-title-action {
+	border: 1px solid var(--wpca-border);
+	border-radius: var(--wpca-radius-sm);
+	background: var(--wpca-card-bg);
+	color: var(--wpca-text);
+	padding: 5px 13px;
+	font-weight: 600;
+	box-shadow: none;
+	transition: border-color var(--wpca-dur) var(--wpca-ease), color var(--wpca-dur) var(--wpca-ease);
+}
+
+body.wpca-admin .page-title-action:hover,
+body.wpca-admin .page-title-action:focus {
+	border-color: var(--wpca-primary);
+	color: var(--wpca-primary);
+	background: var(--wpca-card-bg);
 }
 
 /* ---------------------------------------------------------------- Footer ---- */

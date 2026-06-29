@@ -116,6 +116,23 @@
 	outline-offset: 2px;
 }
 
+.wpca-hero-chart {
+	position: relative;
+	width: 220px;
+	max-width: 42%;
+	height: 56px;
+	color: #fff;
+	opacity: 0.92;
+}
+
+.wpca-hero-chart .wpca-spark {
+	height: 56px;
+}
+
+.wpca-hero-chart .wpca-spark-fill {
+	fill: rgba(255, 255, 255, 0.2);
+}
+
 /* ------------------------------------------------------------ KPI cards ---- */
 
 .wpca-kpis {

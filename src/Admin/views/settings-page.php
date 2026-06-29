@@ -83,6 +83,7 @@ $wpca_notice = isset( $_GET['wpca_notice'] ) ? sanitize_key( wp_unslash( $_GET['
 					),
 					__( 'Applies a dark theme to the admin content and the Home dashboard.', 'wp-custom-admin' )
 				);
+				$this->field_toggle( 'dashboard_chart', __( 'Activity chart in the dashboard header', 'wp-custom-admin' ), __( 'Shows a 14-day activity trend chart when there is recent data.', 'wp-custom-admin' ) );
 				?>
 			</div>
 		</section>

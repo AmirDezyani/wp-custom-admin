@@ -294,6 +294,23 @@ final class DashboardModule extends AbstractModule {
 	}
 
 	/**
+	 * Combined daily activity across all metrics, for the hero trend chart.
+	 *
+	 * @return int[]
+	 */
+	public function hero_series(): array {
+		$combined = array();
+
+		foreach ( $this->trends() as $trend ) {
+			foreach ( (array) $trend['series'] as $index => $value ) {
+				$combined[ $index ] = ( $combined[ $index ] ?? 0 ) + (int) $value;
+			}
+		}
+
+		return array_values( $combined );
+	}
+
+	/**
 	 * Recent activity: latest content across statuses, with author, status and a
 	 * human-relative time — an activity feed rather than a plain link list.
 	 *

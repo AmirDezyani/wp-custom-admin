@@ -208,6 +208,7 @@ final class Settings {
 			'whitelabel_enabled'     => true,
 			'dashboard_enabled'      => true,
 			'dashboard_landing'      => true,
+			'dashboard_chart'        => true,
 
 			// Brand identity.
 			'product_name'           => '',

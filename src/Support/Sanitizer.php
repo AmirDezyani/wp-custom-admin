@@ -30,6 +30,7 @@ final class Sanitizer {
 		'whitelabel_enabled',
 		'dashboard_enabled',
 		'dashboard_landing',
+		'dashboard_chart',
 		'hide_wp_logo',
 		'replace_howdy',
 		'hide_welcome_panel',

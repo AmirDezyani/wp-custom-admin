@@ -4,7 +4,7 @@ Tags: admin, white-label, branding, admin-theme, login
 Requires at least: 6.5
 Tested up to: 6.5
 Requires PHP: 7.4
-Stable tag: 0.6.0
+Stable tag: 0.7.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -41,6 +41,13 @@ No. Deactivation is non-destructive. Data is only removed on uninstall, and only
 Yes. Network admin is left untouched by default; a network-level default can be set with per-site overrides.
 
 == Changelog ==
+
+= 0.7.0 =
+* Cohesion across the admin: tokenized admin notices, settings form tables, the
+  page-title bar, list-table headers, and a refined sidebar active state — so
+  every screen matches the dashboard, in light and dark.
+* Settings page restyled with the shared tokens (now dark-mode aware).
+* Dashboard header gains an optional 14-day activity trend chart.
 
 = 0.6.0 =
 * Premium redesign: a tokenized design system (one neutral ramp, 8pt spacing,

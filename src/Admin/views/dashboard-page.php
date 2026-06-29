@@ -20,6 +20,9 @@ $wpca_name    = $wpca_user instanceof WP_User ? $wpca_user->display_name : '';
 $wpca_product = $this->settings->product_name();
 $wpca_logo    = $this->settings->logo_url( 'medium' );
 
+$wpca_hero_pts   = $this->hero_series();
+$wpca_show_chart = $this->settings->flag( 'dashboard_chart' ) && array_sum( $wpca_hero_pts ) > 0;
+
 $wpca_status_map = array(
 	'publish' => array(
 		'label' => __( 'Published', 'wp-custom-admin' ),
@@ -61,6 +64,8 @@ $wpca_status_map = array(
 		</div>
 		<?php if ( '' !== $wpca_logo ) : ?>
 			<img class="wpca-hero-logo" src="<?php echo esc_url( $wpca_logo ); ?>" alt="" />
+		<?php elseif ( $wpca_show_chart ) : ?>
+			<div class="wpca-hero-chart" aria-hidden="true"><?php echo Spark::svg( $wpca_hero_pts ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- numeric inline SVG. ?></div>
 		<?php else : ?>
 			<a class="wpca-hero-cta" href="<?php echo esc_url( home_url( '/' ) ); ?>" target="_blank" rel="noopener">
 				<?php echo Icon::svg( 'external', 16 ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- static inline SVG. ?>
