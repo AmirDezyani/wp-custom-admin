@@ -160,8 +160,15 @@ Run **Plugin Check (PCP)** + `phpcs` (WordPress-Extra) before shipping.
 - Force the skin for **all** admin users (scoped under `body.wpca-admin`, added via the `admin_body_class`
   filter — which takes/returns a **string**). Do not rely on WP's per-user `wp_admin_css_color` picker.
 - Target **stable** core selectors only: `#wpadminbar`, `#adminmenu` / `#adminmenuwrap` / `#adminmenuback`,
-  `#wpcontent`, `#wpfooter`, `.wp-core-ui .button-primary` (+ `:hover`/`:focus`), `#adminmenu .wp-submenu`.
+  `#wpcontent`, `#wpfooter`, `.button-primary` (+ `:hover`/`:focus`), `#adminmenu .wp-submenu`.
   Treat this set as the version-resilience contract; review it each WP major release.
+- **`wp-core-ui` is a class ON `<body>`, not a wrapper.** Never write `body.wpca-admin .wp-core-ui .button`
+  (that looks for a *descendant* `.wp-core-ui` and matches nothing). Use `body.wpca-admin .button-primary`.
+  A primary button also carries `.button`, so any `.button` rule must be `.button:not(.button-primary)` or it
+  clobbers primaries.
+- **Recolor accents by overriding WP's own variable.** Modern WP (7.0) colors buttons, links, focus rings,
+  and checkboxes via `--wp-admin-theme-color` (+ `-darker-10/-20`). Set these to the brand primary under
+  `body.wpca-admin` so every core accent element follows — more robust than fighting individual selectors.
 - Win by **load order + body-class scope**, not an `!important` war. Self-host fonts (no Google Fonts/`@import`);
   expose family as `--wpca-font`. Version every asset with `filemtime()` (dev) / `WPCA_VERSION` (prod) for cache-busting.
 - Login page: override `#login h1 a` with the client logo; set `login_headerurl` (home) + `login_headertext`
@@ -172,8 +179,9 @@ Run **Plugin Check (PCP)** + `phpcs` (WordPress-Extra) before shipping.
 ## 8. White-label & menu control
 
 - All hooks here are **load-bearing on priority** — document priorities in comments:
-  - `admin_bar_menu` @ **999**: `remove_node('wp-logo')`; rewrite the `my-account` node to drop "Howdy, "
-    (do NOT use a global `gettext` filter — it taxes every string on every request).
+  - `admin_bar_menu` @ **999**: `remove_node('wp-logo')`. **"Howdy" removal:** rewriting the `my-account`
+    node title did **not** take effect on WP 7.0 — use a `gettext` filter that maps the source `'Howdy, %s'`
+    → `'%s'`, with an early `'default' === $domain` check so the per-string cost is negligible.
   - `admin_menu` @ **999**: `remove_menu_page()` / `remove_submenu_page()`, renames (mutate `$menu`/`$submenu`,
     match by **slug** `$menu[$i][2]`, never index), and visibility — all gated by `current_user_can()`.
   - Reorder: `custom_menu_order` must return `true` **and** `menu_order` returns the slug array (required pair).
