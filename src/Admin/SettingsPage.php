@@ -213,8 +213,8 @@ final class SettingsPage {
 	/**
 	 * Current value for a setting key.
 	 */
-	private function value( string $key, mixed $default = '' ): mixed {
-		return $this->settings->get( $key, $default );
+	private function value( string $key, mixed $fallback = '' ): mixed {
+		return $this->settings->get( $key, $fallback );
 	}
 
 	/**

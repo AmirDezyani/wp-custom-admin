@@ -25,10 +25,10 @@ final class Assets {
 	 */
 	private const FONT_STACKS = array(
 		// Vazirmatn/Tahoma fallbacks ensure Persian/Arabic glyphs render on RTL sites.
-		'system'    => "-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,Vazirmatn,Tahoma,sans-serif",
-		'inter'     => "'Inter','Segoe UI',Roboto,Helvetica,Arial,Vazirmatn,Tahoma,sans-serif",
-		'georgia'   => "Georgia,'Times New Roman',Vazirmatn,Tahoma,serif",
-		'monospace' => "ui-monospace,SFMono-Regular,Menlo,Consolas,Vazirmatn,Tahoma,monospace",
+		'system'    => '-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,Vazirmatn,Tahoma,sans-serif',
+		'inter'     => '"Inter","Segoe UI",Roboto,Helvetica,Arial,Vazirmatn,Tahoma,sans-serif',
+		'georgia'   => 'Georgia,"Times New Roman",Vazirmatn,Tahoma,serif',
+		'monospace' => 'ui-monospace,SFMono-Regular,Menlo,Consolas,Vazirmatn,Tahoma,monospace',
 	);
 
 	private Settings $settings;

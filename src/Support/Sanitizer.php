@@ -81,21 +81,19 @@ final class Sanitizer {
 
 		$out['login_header_url'] = esc_url_raw( (string) ( $input['login_header_url'] ?? '' ) );
 
-		// wp_targeted_link_rel forces rel="noopener" on target="_blank" links (anti reverse-tabnabbing).
-		$out['footer_text'] = wp_targeted_link_rel(
-			wp_kses(
-				(string) ( $input['footer_text'] ?? '' ),
-				array(
-					'a'      => array(
-						'href'   => array(),
-						'rel'    => array(),
-						'target' => array(),
-					),
-					'strong' => array(),
-					'em'     => array(),
-					'span'   => array(),
-					'br'     => array(),
-				)
+		// Limited HTML only. Modern browsers apply rel="noopener" to target="_blank" automatically.
+		$out['footer_text'] = wp_kses(
+			(string) ( $input['footer_text'] ?? '' ),
+			array(
+				'a'      => array(
+					'href'   => array(),
+					'rel'    => array(),
+					'target' => array(),
+				),
+				'strong' => array(),
+				'em'     => array(),
+				'span'   => array(),
+				'br'     => array(),
 			)
 		);
 

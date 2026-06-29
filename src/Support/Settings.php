@@ -59,10 +59,10 @@ final class Settings {
 	 * @param string $key     Setting key.
 	 * @param mixed  $default Value to return when the key is absent.
 	 */
-	public function get( string $key, mixed $default = null ): mixed {
+	public function get( string $key, mixed $fallback = null ): mixed {
 		$all = $this->all();
 
-		return array_key_exists( $key, $all ) ? $all[ $key ] : $default;
+		return array_key_exists( $key, $all ) ? $all[ $key ] : $fallback;
 	}
 
 	/**

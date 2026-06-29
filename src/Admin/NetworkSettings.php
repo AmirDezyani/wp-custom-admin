@@ -143,7 +143,11 @@ final class NetworkSettings {
 					<div class="wpca-field">
 						<label><?php esc_html_e( 'Admin logo', 'wp-custom-admin' ); ?></label>
 						<div class="wpca-control wpca-media" data-key="logo_id">
-							<div class="wpca-media-preview"><?php if ( '' !== $logo_url ) : ?><img src="<?php echo esc_url( $logo_url ); ?>" alt="" /><?php endif; ?></div>
+							<div class="wpca-media-preview">
+								<?php if ( '' !== $logo_url ) : ?>
+									<img src="<?php echo esc_url( $logo_url ); ?>" alt="" />
+								<?php endif; ?>
+							</div>
 							<input type="hidden" class="wpca-media-id" name="<?php echo esc_attr( $option ); ?>[logo_id]" value="<?php echo esc_attr( (string) $logo_id ); ?>" />
 							<p class="wpca-media-actions">
 								<button type="button" class="button wpca-media-select"><?php esc_html_e( 'Select image', 'wp-custom-admin' ); ?></button>

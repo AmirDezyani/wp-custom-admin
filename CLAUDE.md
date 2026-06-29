@@ -224,7 +224,7 @@ Run **Plugin Check (PCP)** + `phpcs` (WordPress-Extra) before shipping.
 ## 11. Definition of done (quality gates)
 
 A change is done only when:
-1. `composer phpcs` passes clean against the WordPress ruleset.
+1. `composer phpcs` passes clean against the **WordPress-Extra** ruleset (CI runs it on every push).
 2. The security checklist (§6) is satisfied for every new I/O boundary.
 3. Strict types + full typing present; no new God-class; feature lives in a toggleable module.
 4. All theming flows through `--wpca-*` tokens (no hardcoded client colors in CSS).

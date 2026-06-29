@@ -80,6 +80,7 @@ final class MenuModule extends AbstractModule {
 		foreach ( $menu as $index => $item ) {
 			// $item[2] is the menu slug; $item[0] is the display label.
 			if ( isset( $item[2], $renames[ $item[2] ] ) ) {
+				// phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited -- renaming a menu item requires writing $menu in place.
 				$menu[ $index ][0] = $renames[ $item[2] ];
 			}
 		}
