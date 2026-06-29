@@ -294,3 +294,15 @@ body.wpca-admin #adminmenuwrap::before {
 	background-position: left center;
 	background-size: contain;
 }
+
+/* ------------------------------------------------------------------ RTL ---- */
+
+/* WordPress core flips its own admin layout on RTL locales (e.g. fa_IR); we only
+   need to flip the few directional rules this stylesheet adds. */
+body.rtl.wpca-admin .wrap {
+	margin: 24px 12px 0 24px;
+}
+
+body.rtl.wpca-admin #adminmenuwrap::before {
+	background-position: right center;
+}

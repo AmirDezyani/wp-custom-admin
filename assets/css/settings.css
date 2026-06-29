@@ -8,7 +8,7 @@
 
 .wpca-settings-wrap {
 	max-width: 900px;
-	margin-right: 20px;
+	margin-inline-end: 20px;
 }
 
 /* ---------------------------------------------------------------- Header --- */
@@ -228,7 +228,7 @@
 
 .wpca-menu-name {
 	font-weight: 600;
-	margin-right: 8px;
+	margin-inline-end: 8px;
 }
 
 .wpca-menu-table code {
@@ -274,6 +274,16 @@
 	background: linear-gradient(180deg, rgba(241, 245, 249, 0), #f1f5f9 40%);
 	padding: 14px 0;
 	margin-top: 4px;
+}
+
+/* RTL: the grid/flex layout flips automatically; only the toggle knob needs help. */
+body.rtl .wpca-switch-track::before {
+	left: auto;
+	right: 3px;
+}
+
+body.rtl .wpca-switch input:checked + .wpca-switch-track::before {
+	transform: translateX(-18px);
 }
 
 /* Responsive: stack field columns on narrow screens. */

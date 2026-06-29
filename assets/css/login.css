@@ -89,3 +89,10 @@ body.login .success {
 	border-left-color: var(--wpca-primary);
 	border-radius: 8px;
 }
+
+/* RTL: move the notice accent border to the right edge. */
+body.rtl.login .message,
+body.rtl.login .success {
+	border-left: none;
+	border-right: 4px solid var(--wpca-primary);
+}

@@ -1,10 +1,10 @@
 === WP Custom Admin ===
 Contributors: amirdezyani
 Tags: admin, white-label, branding, admin-theme, login
-Requires at least: 6.4
+Requires at least: 6.5
 Tested up to: 6.5
 Requires PHP: 8.0
-Stable tag: 0.2.0
+Stable tag: 0.3.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -41,6 +41,11 @@ No. Deactivation is non-destructive. Data is only removed on uninstall, and only
 Yes. Network admin is left untouched by default; a network-level default can be set with per-site overrides.
 
 == Changelog ==
+
+= 0.3.0 =
+* Full right-to-left (RTL) support for the admin, login, and settings screens.
+* Persian (fa_IR) translation bundled; loads automatically on Persian sites.
+* Persian/Arabic-safe font fallbacks (Vazirmatn, Tahoma).
 
 = 0.2.0 =
 * Live color preview on the settings page (the admin recolors as you pick).

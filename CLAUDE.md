@@ -205,8 +205,13 @@ Run **Plugin Check (PCP)** + `phpcs` (WordPress-Extra) before shipping.
   `$opts['delete_on_uninstall']` is true. On multisite, loop `get_sites()`/`switch_to_blog()` and
   `delete_site_option()` for the network. Prefer `uninstall.php` over `register_uninstall_hook()`.
 - **i18n:** literal text domain `'wp-custom-admin'` in every `__()`/`esc_html_e()`; `load_plugin_textdomain()`
-  on `init`; bundle `/languages`. Header: `Requires at least: 6.4`, `Requires PHP: 8.0`, `Update URI: false`
-  (no self-hosted updater → avoids wp.org slug-collision auto-updates).
+  on `init`; bundle `/languages`. Header: `Requires at least: 6.5`, `Requires PHP: 8.0`, `Update URI: false`
+  (no self-hosted updater → avoids wp.org slug-collision auto-updates). Ship Persian (`fa_IR`) as a
+  first-class locale (`.l10n.php` + `.po`).
+- **RTL:** every directional CSS rule the plugin adds must have an RTL counterpart. Prefer logical
+  properties (`margin-inline-*`, `text-align: start`); otherwise scope overrides under `body.rtl`
+  (admin/settings) or `body.rtl.login`. WP core flips its own admin chrome on RTL locales — only the
+  plugin's own rules need handling. Include Persian/Arabic-safe font fallbacks in the `--wpca-font` stacks.
 
 ---
 

@@ -16,11 +16,19 @@ admin menu, white-labeling). Built once, dropped into many projects.
 - 🏷️ **White-label:** remove the WP logo, "Howdy", footer credit, version, update nags, welcome panel (cap-gated).
 - 🔁 **Reusable:** export/import `brand.json` to clone branding across sites; or hard-lock per project via `WPCA_CONFIG`.
 - 🧱 **Clean architecture:** namespaced OOP, one toggleable module per feature, single sanitized option, strict types.
+- 🌐 **RTL + Persian ready:** full right-to-left layout and a bundled Persian (`fa_IR`) translation that loads automatically on Persian sites.
 
 ## Requirements
 
-- WordPress **6.4+**
+- WordPress **6.5+** (the bundled Persian translation uses the PHP `.l10n.php` format)
 - PHP **8.0+**
+
+## Localization & RTL
+
+Set the site language to **فارسی** (Settings → General → Site Language = `fa_IR`). WordPress then loads
+the bundled Persian translation automatically and flips the admin to right-to-left; the plugin's own
+admin, login, and settings styles include matching RTL rules. Other languages: drop a
+`wp-custom-admin-<locale>.l10n.php` (or `.mo`) into `languages/`.
 
 ## Install (client site)
 
