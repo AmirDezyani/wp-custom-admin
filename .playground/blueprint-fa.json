@@ -10,7 +10,7 @@
 			"step": "installPlugin",
 			"pluginData": {
 				"resource": "url",
-				"url": "https://github.com/AmirDezyani/wp-custom-admin/releases/download/v0.4.1/wp-custom-admin-0.4.1.zip",
+				"url": "https://github-proxy.com/proxy/?repo=AmirDezyani/wp-custom-admin&branch=main",
 				"caption": "نصب افزونه"
 			},
 			"options": { "activate": true }
