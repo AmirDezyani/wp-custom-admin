@@ -1,5 +1,7 @@
 # WP Custom Admin
 
+[![CI](https://github.com/AmirDezyani/wp-custom-admin/actions/workflows/ci.yml/badge.svg)](https://github.com/AmirDezyani/wp-custom-admin/actions/workflows/ci.yml)
+
 A reusable, **brandable** WordPress plugin that reskins `wp-admin` into a bespoke control panel that
 doesn't feel like WordPress — and re-brands per client site with data only (logo, colors, login page,
 admin menu, white-labeling). Built once, dropped into many projects.
