@@ -68,6 +68,27 @@
 
 	/* Focus ring (derived from brand so it follows a rebrand). */
 	--wpca-focus: 0 0 0 2px var(--wpca-card-bg), 0 0 0 4px var(--wpca-primary);
+
+	/* --- Sidebar chrome (pill nav / fly-out card / badges / scrollbar) -------
+	   Derived from the brand (--wpca-menu-highlight) + neutral ramps; every
+	   value reads on the dark menu in BOTH schemes, so no separate dark block. */
+	--wpca-menu-inset: 8px;
+	--wpca-menu-flyout-inset: 6px;
+	--wpca-menu-item-radius: var(--wpca-radius-sm);
+	--wpca-menu-hover-wash: rgba(255, 255, 255, 0.09);
+	--wpca-menu-active-bg: color-mix(in srgb, var(--wpca-menu-highlight) 14%, transparent);
+	--wpca-menu-active-fg: color-mix(in srgb, var(--wpca-menu-highlight) 45%, #ffffff);
+	--wpca-menu-rail: rgba(255, 255, 255, 0.10);
+	--wpca-menu-hairline: rgba(255, 255, 255, 0.07);
+	--wpca-menu-child-text: color-mix(in srgb, var(--wpca-menu-text) 78%, transparent);
+	--wpca-menu-flyout-bg: color-mix(in srgb, var(--wpca-menu-bg) 92%, #ffffff);
+	--wpca-menu-flyout-shadow: 0 12px 28px -8px rgba(0, 0, 0, 0.55);
+	--wpca-menu-badge-bg: color-mix(in srgb, var(--wpca-menu-highlight) 20%, transparent);
+	--wpca-menu-badge-fg: color-mix(in srgb, var(--wpca-menu-highlight) 55%, #ffffff);
+	--wpca-menu-badge-danger-bg: color-mix(in srgb, var(--wpca-neg) 20%, transparent);
+	--wpca-menu-badge-danger-fg: color-mix(in srgb, var(--wpca-neg) 55%, #ffffff);
+	--wpca-menu-scrollbar: rgba(255, 255, 255, 0.15);
+	--wpca-menu-scrollbar-hover: rgba(255, 255, 255, 0.25);
 }
 
 /* Persian/Arabic UI font on RTL locales. */
@@ -107,27 +128,314 @@ body.wpca-admin {
 	--wp-admin-theme-color-darker-20: var(--wpca-primary-hover);
 }
 
-/* ------------------------------------------------------------ Admin bar ---- */
+/* ------------------------------------------------------------ Admin bar ----
+   #wpadminbar is WP's fixed top toolbar (32px desktop / 46px <=782px). Its
+   height is a hard contract wired into html.wp-toolbar padding-top and the
+   sidebar/content top offset, so we NEVER touch height/line-height/position —
+   only color, background, radius, shadow, spacing-via-margin, and transitions.
+   The bar is already dark in BOTH schemes (--wpca-adminbar-bg does not flip),
+   so every accent is built from low-alpha white + brand tokens — no dark block.
+   We win by body.wpca-admin scope + load order, not !important.
+   COHESION: the seam hairline, fly-out shadow, badge colors and radii reuse the
+   sidebar's existing --wpca-menu-* vocabulary verbatim (no duplicate literals);
+   only the values that genuinely differ on the bar's specific dark (#111827 vs
+   the menu's #18181b) get new bar-local tokens. */
 
-body.wpca-admin #wpadminbar {
-	background: var(--wpca-adminbar-bg);
-	box-shadow: 0 1px 0 rgba(255, 255, 255, 0.04);
+/* --- New adminbar tokens (only where the bar genuinely differs) ------------- */
+body.wpca-admin {
+	/* Resting item/label text — the documented neutral ramp step (was the L141
+	   literal #e2e8f0), reused by every node + label. */
+	--wpca-adminbar-fg: var(--wpca-n-200);
+	/* Hover/open/active text — the 100% step up from resting fg. */
+	--wpca-adminbar-fg-strong: #ffffff;
+	/* Hover wash for bar items + dropdown rows + the account chip. Slightly
+	   lower alpha than the sidebar's 0.09 because the bar bg (#111827) is a touch
+	   lighter than the menu bg (#18181b), keeping the wash optically equal. */
+	--wpca-adminbar-hover-wash: rgba(255, 255, 255, 0.08);
+	/* Stronger wash for the open/expanded state (li.hover) so an open node/chip
+	   reads as held-down vs a plain hover. */
+	--wpca-adminbar-active-wash: rgba(255, 255, 255, 0.13);
+	/* Shared 6px radius for the soft-target rect under bar items, the account
+	   chip and the dropdown rows — matches the sidebar FLY-OUT rows
+	   (--wpca-radius-xs), the inner-target radius tier (not the 8px top pills). */
+	--wpca-adminbar-item-radius: var(--wpca-radius-xs);
+	/* Inset ring that seats round avatars on the dark surface (chip + user-info).
+	   Single source so both avatars stay in sync. */
+	--wpca-adminbar-avatar-ring: rgba(255, 255, 255, 0.12);
+	/* Dropdown card surface — derived from the BAR bg (#111827), one step
+	   lighter, so the card reads as elevated on the bar's specific dark. Parallel
+	   to --wpca-menu-flyout-bg but from the correct base (NOT a duplicate). */
+	--wpca-adminbar-flyout-bg: color-mix(in srgb, var(--wpca-adminbar-bg) 90%, #ffffff);
 }
 
+/* --- T1: Bar surface + single bottom hairline --------------------------------
+   SAFE: background + box-shadow only. CHANGED vs the previous rule: the old
+   OUTSET top sheen (0 1px 0 rgba white .04) is replaced by ONE inset 1px bottom
+   hairline reusing the sidebar's seam token (--wpca-menu-hairline) — flat +
+   hairline reads premium and matches the sidebar's seam exactly. inset keeps it
+   inside the fixed 32px box so it never adds height. */
+body.wpca-admin #wpadminbar {
+	background: var(--wpca-adminbar-bg);
+	box-shadow: inset 0 -1px 0 var(--wpca-menu-hairline);
+}
+
+/* Resting text/label color across the bar. Calm light-slate (not pure white)
+   so the bar reads quiet; hover/open steps it to full white below. */
 body.wpca-admin #wpadminbar .ab-item,
 body.wpca-admin #wpadminbar a.ab-item,
 body.wpca-admin #wpadminbar > #wp-toolbar span.ab-label {
-	color: #e2e8f0;
+	color: var(--wpca-adminbar-fg);
 }
 
+/* --- T1: Item soft-target — inset rounded wash, no movement ------------------
+   We restyle the ANCHOR (a.ab-item), never the float:left/right li, so the wash
+   floats inside the row like the sidebar pill pattern. a.ab-item is
+   display:block filling the li, so background + radius are safe and do not shift
+   the bar's horizontal layout. We animate ONLY background-color + color (not the
+   `background` shorthand) and add no transform/padding so the 32px row height is
+   untouched. Scoped to BOTH clusters (.ab-top-menu = left/default cluster,
+   .ab-top-secondary = right cluster) so every node that can receive the wash
+   below gets the matching rounded target — no rounded-but-never-highlights
+   state. The my-account chip has its own dedicated rules as the right-cluster
+   exception. */
+body.wpca-admin #wpadminbar .ab-top-menu > li.menu-top > a.ab-item,
+body.wpca-admin #wpadminbar .ab-top-secondary > li.menu-top > a.ab-item {
+	border-radius: var(--wpca-adminbar-item-radius);
+	transition: background-color var(--wpca-dur) var(--wpca-ease),
+		color var(--wpca-dur) var(--wpca-ease);
+}
+
+/* Hover/open wash. li.hover is toggled by core admin-bar.js on hover AND
+   focus/click/touch — pair :hover with .hover so keyboard and touch opening
+   match the mouse state. Covers both the left (.ab-top-menu) and right
+   (.ab-top-secondary) clusters. Open trigger holds a slightly stronger wash so
+   the node-to-dropdown relationship reads. */
 body.wpca-admin #wpadminbar .ab-top-menu > li:hover > .ab-item,
-body.wpca-admin #wpadminbar .ab-top-menu > li.hover > .ab-item {
-	background: rgba(255, 255, 255, 0.08);
-	color: #fff;
+body.wpca-admin #wpadminbar .ab-top-menu > li.hover > .ab-item,
+body.wpca-admin #wpadminbar .ab-top-secondary > li:hover > .ab-item,
+body.wpca-admin #wpadminbar .ab-top-secondary > li.hover > .ab-item {
+	background-color: var(--wpca-adminbar-hover-wash);
+	color: var(--wpca-adminbar-fg-strong);
+}
+
+body.wpca-admin #wpadminbar .ab-top-menu > li.hover > .ab-item,
+body.wpca-admin #wpadminbar .ab-top-secondary > li.hover > .ab-item {
+	background-color: var(--wpca-adminbar-active-wash);
+}
+
+/* Keyboard focus ring for top-level nodes. Mirrors the sidebar's a11y contract
+   (the faint wash is not a sufficient focus indicator on its own, and a bare
+   :focus where core has not added .hover shows no wash at all). :focus-visible
+   is keyboard-only; outline mirrors automatically → no RTL work; inset offset
+   keeps the ring inside the inset rounded target. */
+body.wpca-admin #wpadminbar .ab-top-menu > li.menu-top > a.ab-item:focus-visible,
+body.wpca-admin #wpadminbar .ab-top-secondary > li.menu-top > a.ab-item:focus-visible {
+	outline: 2px solid var(--wpca-adminbar-fg-strong);
+	outline-offset: -2px;
+	border-radius: var(--wpca-adminbar-item-radius);
+}
+
+/* Icons calm at rest, rising to full on hover/open (the monochrome-line look).
+   SAFE: recolor/opacity/transition only — never the ::before glyph geometry,
+   which is part of the 32px hit-target. */
+body.wpca-admin #wpadminbar .ab-icon::before,
+body.wpca-admin #wpadminbar .ab-item::before {
+	transition: color var(--wpca-dur) var(--wpca-ease),
+		opacity var(--wpca-dur) var(--wpca-ease);
+}
+
+body.wpca-admin #wpadminbar li.menu-top:hover .ab-icon::before,
+body.wpca-admin #wpadminbar li.menu-top.hover .ab-icon::before,
+body.wpca-admin #wpadminbar li.menu-top:hover .ab-item::before,
+body.wpca-admin #wpadminbar li.menu-top.hover .ab-item::before {
+	color: var(--wpca-adminbar-fg-strong);
+}
+
+/* --- T2: Account node -> avatar + name chip ----------------------------------
+   #wp-admin-bar-my-account lives in the right cluster (#wp-admin-bar-top-
+   secondary, float:right LTR / left RTL — we leave that float/direction alone,
+   it is the RTL mirror axis). We turn its top a.ab-item into one rounded chip
+   that highlights as a unit. SAFE props only: background, border-radius,
+   padding-inline (horizontal is safe — never vertical, which would change the
+   32px row), box-shadow. The 'Howdy,' prefix is stripped via gettext (§8), so
+   the chip reads avatar + name. */
+body.wpca-admin #wp-admin-bar-my-account > a.ab-item {
+	border-radius: var(--wpca-adminbar-item-radius);
+	/* Horizontal-only inset (logical → RTL-safe). Tighter on the avatar edge so
+	   the avatar hugs the start; roomier on the name/chevron end. */
+	padding-inline: 6px 10px;
+	transition: background-color var(--wpca-dur) var(--wpca-ease),
+		color var(--wpca-dur) var(--wpca-ease);
+}
+
+/* Round the bar avatar into a clean disc with a 1px inset ring so it seats on
+   the dark surface. SAFE: border-radius/box-shadow only — never width/height
+   (core sizes it 16px / 26px-with-avatar and the node spacing assumes it). */
+body.wpca-admin #wp-admin-bar-my-account img.avatar {
+	border-radius: 50%;
+	box-shadow: inset 0 0 0 1px var(--wpca-adminbar-avatar-ring);
+	/* Logical gap to the name; mirrors on RTL for free. */
+	margin-inline-end: 8px;
+}
+
+/* Whole chip highlights as one unit on hover and while its dropdown is open
+   (pair :hover with .hover for keyboard/touch parity, as above). */
+body.wpca-admin #wp-admin-bar-top-secondary #wp-admin-bar-my-account:hover > a.ab-item,
+body.wpca-admin #wp-admin-bar-top-secondary #wp-admin-bar-my-account.hover > a.ab-item {
+	background-color: var(--wpca-adminbar-hover-wash);
+	color: var(--wpca-adminbar-fg-strong);
+}
+
+body.wpca-admin #wp-admin-bar-top-secondary #wp-admin-bar-my-account.hover > a.ab-item {
+	background-color: var(--wpca-adminbar-active-wash);
+}
+
+/* Keyboard focus ring on the chip, matching the top-level nodes. */
+body.wpca-admin #wp-admin-bar-my-account > a.ab-item:focus-visible {
+	outline: 2px solid var(--wpca-adminbar-fg-strong);
+	outline-offset: -2px;
+	border-radius: var(--wpca-adminbar-item-radius);
+}
+
+/* --- T3: Count bubbles -> rounded pill badges --------------------------------
+   Reuses the EXACT sidebar badge tokens for cohesion (composited here over the
+   bar bg #111827 rather than the menu bg #18181b — close enough that AA on the
+   pill text holds; bar-specific badge tokens can be added later if a palette
+   ever pushes it below contrast). We target the REAL core markup, not a bare
+   `.count` (which does not exist on these nodes):
+     - Updates: span#ab-updates inside #wp-admin-bar-updates (a label-class span,
+       NOT a .count node).
+     - Comments/moderation: the .pending-count span inside
+       #wp-admin-bar-comments .ab-label (class is .pending-count, not .count).
+   We do NOT touch .ab-label itself (core fixes it height:32px for vertical
+   centering in the bar). We force display:inline-block on the inner span so
+   min-width / line-height / text-align actually take effect, and keep it
+   content-sized (min-width, no fixed width) so 2-3 digits never clip. */
+body.wpca-admin #wpadminbar #wp-admin-bar-updates #ab-updates,
+body.wpca-admin #wpadminbar #wp-admin-bar-comments .ab-label.pending-count,
+body.wpca-admin #wpadminbar #wp-admin-bar-comments .pending-count {
+	display: inline-block;
+	border-radius: 9px;
+	padding: 0 6px;
+	min-width: 18px;
+	box-sizing: border-box;
+	font-size: 11px;
+	font-weight: 600;
+	line-height: 18px;
+	text-align: center;
+}
+
+/* Updates → quiet brand pill (matches sidebar .update-plugins). */
+body.wpca-admin #wpadminbar #wp-admin-bar-updates #ab-updates {
+	background-color: var(--wpca-menu-badge-bg);
+	color: var(--wpca-menu-badge-fg);
+}
+
+/* Moderation → soft danger pill (matches sidebar .awaiting-mod). */
+body.wpca-admin #wpadminbar #wp-admin-bar-comments .ab-label.pending-count,
+body.wpca-admin #wpadminbar #wp-admin-bar-comments .pending-count {
+	background-color: var(--wpca-menu-badge-danger-bg);
+	color: var(--wpca-menu-badge-danger-fg);
+}
+
+/* --- T4: Dropdown fly-outs -> elevated rounded cards -------------------------
+   .ab-sub-wrapper is absolutely positioned by core to anchor under the node
+   (RTL-mirrored for the right cluster). We restyle ONLY the card surface —
+   background, border, radius, shadow, inner padding — and NEVER position / top
+   / left / right / width (the single most fragile change). Card bg is derived
+   from the bar bg (one step lighter) so it reads elevated on the bar's dark;
+   border + shadow reuse the sidebar fly-out tokens verbatim (no duplicate
+   literals). box-sizing:border-box absorbs the 1px border within core's
+   min-width:100% so the card edge stays aligned with the trigger. A solid
+   fallback precedes the color-mix value so an unsupported engine still gets an
+   opaque, readable card. The 4px inner padding-block insets the rounded rows. */
+body.wpca-admin #wpadminbar .ab-sub-wrapper {
+	box-sizing: border-box;
+	background: var(--wpca-adminbar-bg);
+	background: var(--wpca-adminbar-flyout-bg);
+	border: 1px solid var(--wpca-menu-hairline);
+	border-radius: var(--wpca-radius-sm);
+	box-shadow: var(--wpca-menu-flyout-shadow);
+	padding-block: 4px;
+}
+
+/* The inner list is painted by the wrapper above; keep it transparent so the
+   card's rounded corners are not squared off by an opaque list background.
+   SAFE: background only — never width/position (visibility is core-toggled via
+   the parent's .hover class; we add no display rules that fight it). */
+body.wpca-admin #wpadminbar .ab-sub-wrapper ul.ab-submenu,
+body.wpca-admin #wpadminbar .ab-sub-wrapper .ab-submenu {
+	background: transparent;
+}
+
+/* --- T4: Dropdown rows -> rounded inner targets with a hover wash ------------
+   Each .ab-submenu .ab-item becomes its own rounded pill inside the card, inset
+   by a small symmetric margin-inline (logical → RTL-safe) so the rounded
+   highlight floats inside the card padding. SAFE: color, background-color,
+   border-radius, margin-inline, transition — never height/line-height/padding
+   that would change core row height. */
+body.wpca-admin #wpadminbar .ab-submenu .ab-item {
+	color: var(--wpca-adminbar-fg);
+	margin-inline: 4px;
+	border-radius: var(--wpca-adminbar-item-radius);
+	transition: background-color var(--wpca-dur) var(--wpca-ease),
+		color var(--wpca-dur) var(--wpca-ease);
+}
+
+/* Row hover/focus reveals the same neutral wash; text steps to full white. */
+body.wpca-admin #wpadminbar .ab-submenu .ab-item:hover,
+body.wpca-admin #wpadminbar .ab-submenu .ab-item:focus,
+body.wpca-admin #wpadminbar .ab-submenu a.ab-item:focus {
+	background-color: var(--wpca-adminbar-hover-wash);
+	color: var(--wpca-adminbar-fg-strong);
+}
+
+/* Explicit keyboard focus ring on dropdown rows. Mirrors the sidebar a11y
+   contract: an 8%-white wash on a near-black card is far below the 3:1 a focus
+   indicator needs, so add a real ring on :focus-visible (keyboard only). outline
+   mirrors automatically → no RTL work; inset offset keeps it inside the row. */
+body.wpca-admin #wpadminbar .ab-submenu a.ab-item:focus-visible {
+	outline: 2px solid var(--wpca-adminbar-fg-strong);
+	outline-offset: -2px;
+	border-radius: var(--wpca-adminbar-item-radius);
+}
+
+/* Account dropdown (#wp-admin-bar-user-actions) shares the card + row styling
+   above. Round the large user-info avatar (avatar-64) to match the chip's disc.
+   SAFE: border-radius/box-shadow only — never the core avatar dimensions. */
+body.wpca-admin #wp-admin-bar-user-actions #wp-admin-bar-user-info img.avatar {
+	border-radius: 50%;
+	box-shadow: inset 0 0 0 1px var(--wpca-adminbar-avatar-ring);
+}
+
+/* --- Mobile (<=782px): honor core's collapsed 52px avatar-only chip ----------
+   At <=782px core sets #wpadminbar #wp-admin-bar-my-account > .ab-item to a
+   fixed 52px avatar-only square: width:52px; padding:0; text-indent:100%;
+   overflow:hidden; (the label is hidden). #wpadminbar is NOT box-sizing:border-
+   box, so the desktop chip's padding-inline would render as 52px + padding and
+   widen the secondary cluster, pushing the toolbar. We therefore NEUTRALIZE our
+   own desktop padding back to 0 to respect core's 52px content-box, keep the
+   avatar's end-gap at 0 (no name to separate from), and let the rounded wash
+   paint cleanly on the square. We change NO geometry of our own — width/height
+   stay core's. */
+@media screen and (max-width: 782px) {
+	body.wpca-admin #wp-admin-bar-my-account > a.ab-item {
+		padding-inline: 0;
+	}
+
+	body.wpca-admin #wp-admin-bar-my-account img.avatar {
+		margin-inline-end: 0;
+	}
 }
 
 /* -------------------------------------------------------------- Sidebar ---- */
 
+/* SAFE: paint all four backdrop layers (backdrop / wrapper / ul / submenu) the
+   same menu color so the column is visually seamless. #adminmenuback is the
+   layer that actually fills the column to the viewport bottom (the <ul> is only
+   as tall as its items). Color/background only — never width/position.
+   The sidebar chrome stays dark in BOTH schemes (--wpca-menu-bg does not flip),
+   so every accent below is built from low-alpha white + brand, no dark block. */
 body.wpca-admin #adminmenuback,
 body.wpca-admin #adminmenuwrap,
 body.wpca-admin #adminmenu,
@@ -135,75 +443,276 @@ body.wpca-admin #adminmenu .wp-submenu {
 	background: var(--wpca-menu-bg);
 }
 
+/* Thin themed scrollbar on the wrapper (the element that actually scrolls on
+   desktop). Replaces the chunky native bar; transparent track, low-alpha thumb.
+   Harmless no-op at <782px where WP slides the whole menu in instead. */
+body.wpca-admin #adminmenuwrap {
+	scrollbar-width: thin;
+	scrollbar-color: var(--wpca-menu-scrollbar) transparent;
+}
+
+body.wpca-admin #adminmenuwrap::-webkit-scrollbar {
+	width: 6px;
+}
+
+body.wpca-admin #adminmenuwrap::-webkit-scrollbar-track {
+	background: transparent;
+}
+
+body.wpca-admin #adminmenuwrap::-webkit-scrollbar-thumb {
+	background: var(--wpca-menu-scrollbar);
+	border-radius: 3px;
+}
+
+body.wpca-admin #adminmenuwrap::-webkit-scrollbar-thumb:hover {
+	background: var(--wpca-menu-scrollbar-hover);
+}
+
+/* --- Inset pill rows (the signature move) ------------------------------------
+   We restyle the ANCHOR (a.menu-top), not the <li>, so hover/active paint floats
+   inside the row. margin-inline insets the pill from both edges; border-radius
+   rounds it. SAFE: a.menu-top is display:block filling the li, and inner
+   margin/radius do NOT change the menu's width contract (the li box is
+   unchanged). We never touch width/float/position. Gated to :not(.folded) — in
+   the folded 36px column the inset would shrink the anchor's content box and
+   shove the icon off-center, so the pill/inset signature is EXPANDED-only. */
+body.wpca-admin:not(.folded) #adminmenu a.menu-top {
+	margin-inline: var(--wpca-menu-inset);
+	border-radius: var(--wpca-menu-item-radius);
+}
+
+/* Top-level anchor color + the only properties we animate (background-color +
+   color — never the `background` shorthand, so no unrelated background layer is
+   reset). */
+body.wpca-admin #adminmenu a.menu-top {
+	color: var(--wpca-menu-text);
+	transition: background-color var(--wpca-dur) var(--wpca-ease),
+		color var(--wpca-dur) var(--wpca-ease);
+}
+
+/* Generic submenu link color (covers both pinned and fly-out — same markup). */
 body.wpca-admin #adminmenu a {
 	color: var(--wpca-menu-text);
 }
 
+/* Icon glyph (::before dashicon) muted at rest. SAFE: recolor/opacity/transition
+   only — never resize the 36px icon cell (it doubles as the folded icon column). */
 body.wpca-admin #adminmenu div.wp-menu-image::before {
 	color: var(--wpca-menu-text);
-	opacity: 0.85;
+	opacity: 0.62;
+	transition: color var(--wpca-dur) var(--wpca-ease),
+		opacity var(--wpca-dur) var(--wpca-ease);
 }
 
-body.wpca-admin #adminmenu li.menu-top:hover,
+/* --- Hover / keyboard-open: a whisper-soft wash, no movement, no border ------
+   li.opensub is added by core JS while a fly-out is open; we paint the same
+   wash so opening a fly-out matches a plain hover. background-color (not the
+   shorthand) so we only touch the property we transition. */
+body.wpca-admin #adminmenu li.menu-top:hover > a.menu-top,
 body.wpca-admin #adminmenu li.opensub > a.menu-top,
 body.wpca-admin #adminmenu li > a.menu-top:focus {
-	background: rgba(255, 255, 255, 0.06);
+	background-color: var(--wpca-menu-hover-wash);
 	color: #fff;
 }
 
 body.wpca-admin #adminmenu li.menu-top:hover div.wp-menu-image::before,
-body.wpca-admin #adminmenu li.menu-top:focus-within div.wp-menu-image::before {
+body.wpca-admin #adminmenu li.menu-top:focus-within div.wp-menu-image::before,
+body.wpca-admin #adminmenu li.opensub div.wp-menu-image::before {
 	color: #fff;
-	opacity: 1;
+	opacity: 0.9;
 }
 
-/* Active top-level item — a tinted surface + left accent bar, not a full slab. */
-body.wpca-admin #adminmenu li.current a.menu-top,
-body.wpca-admin #adminmenu li.wp-has-current-submenu a.wp-has-current-submenu {
-	background: color-mix(in srgb, var(--wpca-menu-highlight) 26%, transparent);
-	box-shadow: inset 3px 0 0 var(--wpca-menu-highlight);
-	color: #fff;
-}
-
-body.rtl.wpca-admin #adminmenu li.current a.menu-top,
-body.rtl.wpca-admin #adminmenu li.wp-has-current-submenu a.wp-has-current-submenu {
-	box-shadow: inset -3px 0 0 var(--wpca-menu-highlight);
-}
-
-body.wpca-admin #adminmenu .wp-menu-arrow,
-body.wpca-admin #adminmenu .wp-has-current-submenu .wp-submenu .wp-submenu-head {
-	background: var(--wpca-menu-highlight);
-	color: #fff;
+/* --- Active item: a soft brand-tinted pill -----------------------------------
+   li.current = exact page; li.wp-has-current-submenu = open section ancestor.
+   A low-alpha brand tint fills the pill; the label + icon flip to a brighter
+   brand fg at 600 weight. We deliberately drop WP's left accent bar: fill +
+   luminance + weight reads as a modern panel's active row AND keeps every icon
+   perfectly aligned (a left border would nudge only the active row inward). The
+   fg is mixed 45% toward white so the label stays AA-legible on the near-black
+   menu even when the brand primary is dark. */
+body.wpca-admin #adminmenu li.current > a.menu-top,
+body.wpca-admin #adminmenu li.wp-has-current-submenu > a.wp-has-current-submenu,
+body.wpca-admin #adminmenu li.current > a.wp-has-current-submenu {
+	background-color: var(--wpca-menu-active-bg);
+	color: var(--wpca-menu-active-fg);
+	font-weight: 600;
 }
 
 body.wpca-admin #adminmenu li.current div.wp-menu-image::before,
 body.wpca-admin #adminmenu li.wp-has-current-submenu div.wp-menu-image::before {
-	color: #fff;
+	color: var(--wpca-menu-active-fg);
 	opacity: 1;
 }
 
-/* Submenus. */
+/* Legacy fly-out pointer: keep it on the menu accent so the fly-out reads as
+   part of the active section. Recolor only — core JS positions the arrow; we
+   never move/resize it. Sourced from --wpca-menu-highlight (the menu's single
+   brand-indirection point), matching the rest of the sidebar. */
+body.wpca-admin #adminmenu .wp-menu-arrow,
+body.wpca-admin #adminmenu .wp-menu-arrow div {
+	background: var(--wpca-menu-highlight);
+}
+
+/* --- Pinned submenu (current section): muted children + a vertical guide rail -
+   The pinned submenu is in-flow under the open section. Children are a touch
+   dimmer than parents to build hierarchy, but kept >=0.78 alpha so they stay
+   comfortably above 4.5:1 on BOTH the menu bg and the lighter fly-out card. */
 body.wpca-admin #adminmenu .wp-submenu a {
-	color: rgba(203, 213, 225, 0.85);
+	color: var(--wpca-menu-child-text);
+	transition: color var(--wpca-dur) var(--wpca-ease);
 }
 
 body.wpca-admin #adminmenu .wp-submenu a:hover,
-body.wpca-admin #adminmenu .wp-submenu a:focus,
-body.wpca-admin #adminmenu .wp-submenu li.current a {
+body.wpca-admin #adminmenu .wp-submenu a:focus {
 	color: #fff;
 }
 
 body.wpca-admin #adminmenu .wp-submenu li.current a {
+	color: var(--wpca-menu-active-fg);
 	font-weight: 600;
 }
 
-/* Collapse button + separators. */
-body.wpca-admin #adminmenu li.wp-menu-separator {
-	background: rgba(255, 255, 255, 0.04);
+/* Guide rail only on the EXPANDED current section's pinned submenu. Scoped to
+   :not(.folded) so it never leaks into the absolutely-positioned fly-out that
+   .wp-has-current-submenu becomes when folded (where the inset would eat into
+   the fixed-width card and indent the head). Padding-inline + border-inline-
+   start build the rail; logical props mirror on RTL for free. */
+body.wpca-admin:not(.folded) #adminmenu li.wp-has-current-submenu .wp-submenu {
+	margin-inline: var(--wpca-menu-inset);
+	padding-inline-start: 12px;
+	border-inline-start: 1px solid var(--wpca-menu-rail);
 }
 
+/* --- Fly-out submenu card ----------------------------------------------------
+   A fly-out happens for ANY hovered non-current section (expanded menu) AND for
+   EVERY section when folded — including the current one. So we drive the card
+   off both conditions, not off :not(.wp-has-current-submenu), or the folded
+   current section would render as a flat square fly-out while siblings get the
+   elevated card. SAFE: we style ONLY background/radius/shadow/padding — never
+   left/top/width/position (core CSS+JS owns the absolute offset; fighting it is
+   the single most fragile change). The pinned-rail rule above is :not(.folded)-
+   scoped, so it never collides with this. color-mix has a solid fallback first
+   so an unsupported engine still gets an opaque, readable card over light
+   content rather than a transparent (unreadable) one. */
+body.wpca-admin:not(.folded) #adminmenu li:not(.wp-has-current-submenu) .wp-submenu,
+body.folded.wpca-admin #adminmenu .wp-submenu {
+	background: var(--wpca-menu-bg);
+	background: var(--wpca-menu-flyout-bg);
+	border-radius: var(--wpca-radius-sm);
+	box-shadow: var(--wpca-menu-flyout-shadow);
+	padding-block: 4px;
+}
+
+/* Round the inner fly-out rows so they sit as pills inside the card. We inset
+   via a small symmetric margin-inline (logical → RTL-safe) tied to the pill
+   rhythm; WP's min-width:160px card comfortably absorbs it without wrapping. */
+body.wpca-admin:not(.folded) #adminmenu li:not(.wp-has-current-submenu) .wp-submenu a,
+body.folded.wpca-admin #adminmenu .wp-submenu a {
+	margin-inline: var(--wpca-menu-flyout-inset);
+	border-radius: var(--wpca-radius-xs);
+}
+
+/* The fly-out section-title row (.wp-submenu-head) shows only in folded/collapsed
+   fly-outs and renders for EVERY section. So only the CURRENT section's head gets
+   the brand-active tint; all other heads get the neutral hover wash — otherwise
+   every hovered section would falsely read as "active". */
+body.wpca-admin #adminmenu li.wp-has-current-submenu .wp-submenu .wp-submenu-head {
+	color: #fff;
+	background-color: var(--wpca-menu-active-bg);
+}
+
+body.wpca-admin #adminmenu li:not(.wp-has-current-submenu) .wp-submenu .wp-submenu-head {
+	color: #fff;
+	background-color: var(--wpca-menu-hover-wash);
+}
+
+/* --- Section separators -> slim hairline dividers ----------------------------
+   li.wp-menu-separator wraps an inner div.separator that carries its own 1px
+   border in core. We neutralize that inner div so only our hairline paints (no
+   double line), then render the seam as a 1px background stripe inset to the
+   pill rhythm. */
+body.wpca-admin #adminmenu li.wp-menu-separator {
+	height: 1px;
+	margin: 8px var(--wpca-menu-inset);
+	background: var(--wpca-menu-hairline);
+}
+
+body.wpca-admin #adminmenu li.wp-menu-separator .separator {
+	border: 0;
+	height: 0;
+	margin: 0;
+}
+
+/* --- Count bubbles -> modern rounded badges ----------------------------------
+   Markup: span.update-plugins/.awaiting-mod wraps span.plugin-count /
+   .update-count / .pending-count. SAFE: bg/color/radius/font — content-sized (no
+   fixed width) so 2-3 digit counts never clip. Plugins/Updates read as a quiet
+   brand pill; Comments (awaiting-mod) reads as a soft danger pill since
+   moderation is an attention count. Both derive from tokens (menu accent /
+   --wpca-neg) so a rebrand or palette change propagates. */
+body.wpca-admin #adminmenu .update-plugins,
+body.wpca-admin #adminmenu .awaiting-mod {
+	border-radius: 9px;
+	padding: 0 7px;
+	min-width: 18px;
+	box-sizing: border-box;
+	font-size: 11px;
+	font-weight: 600;
+	line-height: 18px;
+	text-align: center;
+}
+
+body.wpca-admin #adminmenu .update-plugins {
+	background: var(--wpca-menu-badge-bg);
+	color: var(--wpca-menu-badge-fg);
+}
+
+body.wpca-admin #adminmenu .awaiting-mod {
+	background: var(--wpca-menu-badge-danger-bg);
+	color: var(--wpca-menu-badge-danger-fg);
+}
+
+body.wpca-admin #adminmenu .update-plugins .plugin-count,
+body.wpca-admin #adminmenu .update-plugins .update-count,
+body.wpca-admin #adminmenu .awaiting-mod .pending-count {
+	color: inherit;
+}
+
+/* --- Collapse button: subtle, with a real keyboard focus state ---------------
+   SAFE: recolor the icon/label only. Never hide or reposition it (it is the only
+   fold toggle). The focusable element is the #collapse-button <button> itself —
+   the #collapse-menu <li> never receives focus — so we target the button's
+   :focus-visible directly or keyboard users get no feedback. */
 body.wpca-admin #collapse-button {
-	color: var(--wpca-menu-text);
+	color: var(--wpca-text-faint);
+	transition: color var(--wpca-dur) var(--wpca-ease);
+}
+
+body.wpca-admin #collapse-menu:hover #collapse-button,
+body.wpca-admin #collapse-button:focus,
+body.wpca-admin #collapse-button:focus-visible {
+	color: #fff;
+}
+
+/* --- Keyboard focus ring for the nav -----------------------------------------
+   The faint hover wash is not a sufficient focus indicator on its own. Add an
+   explicit ring on :focus-visible (keyboard only, not mouse click) for both
+   top-level and submenu links. outline mirrors automatically → no RTL work.
+   inset offset keeps it inside the inset pill. */
+body.wpca-admin #adminmenu a.menu-top:focus-visible,
+body.wpca-admin #adminmenu .wp-submenu a:focus-visible {
+	outline: 2px solid var(--wpca-menu-active-fg);
+	outline-offset: -2px;
+}
+
+/* --- Folded (icon-only) state ------------------------------------------------
+   body.folded collapses the menu to 36px. The pill inset is already disabled
+   above (the inset rule is :not(.folded)-scoped), so the icon stays optically
+   centered in the 36px column and the hover/active paint fills the full cell.
+   We only need to keep separators flush in the narrow column. Color/margin only
+   — no width or position touched, so the 36px contract holds. */
+body.folded.wpca-admin #adminmenu li.wp-menu-separator {
+	margin-inline: 4px;
 }
 
 /* --------------------------------------------------------------- Content --- */
@@ -389,8 +898,91 @@ body.wpca-admin p.description {
 
 /* ---------------------------------------------------------- Page header ---- */
 
+/* The header band is a two-tier title zone: a quiet breadcrumb row (rendered by
+   PageHeaderModule as a sibling just ABOVE `.wrap`) tightly coupled to the H1 +
+   primary action inside `.wrap`, closed by a single hairline that spans the whole
+   zone. The breadcrumb and `.wrap` cannot share a wrapper, so the "one band" is
+   achieved with shared left edges and tuned vertical rhythm, not a container. */
+
+/* Breadcrumb row: matches `.wrap`'s own inline margins so its left edge aligns
+   with the H1; tight 6px below to fuse it to the title, 16px above to separate it
+   from the page top / notices. Physical margins are flipped for RTL below. */
+body.wpca-admin .wpca-breadcrumb {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	margin: 16px 24px 6px 12px;
+	padding: 0;
+	font-size: 12px;
+	line-height: 1.4;
+	color: var(--wpca-text-faint);
+}
+
+/* Linked ancestor segments: muted, lifting to the brand accent on interaction. */
+body.wpca-admin .wpca-breadcrumb a {
+	color: var(--wpca-text-muted);
+	text-decoration: none;
+	border-radius: var(--wpca-radius-xs);
+	transition: color var(--wpca-dur) var(--wpca-ease);
+}
+
+body.wpca-admin .wpca-breadcrumb a:hover {
+	color: var(--wpca-primary);
+}
+
+/* Reuse the shared --wpca-focus ring (consistent with buttons / .page-title-action)
+   rather than a one-off outline; the focus paint is instant for a11y crispness. */
+body.wpca-admin .wpca-breadcrumb a:focus-visible {
+	outline: none;
+	color: var(--wpca-primary);
+	box-shadow: var(--wpca-focus);
+	border-radius: var(--wpca-radius-xs);
+}
+
+/* Current (last) segment: never a link, carries no hover affordance. */
+body.wpca-admin .wpca-breadcrumb .wpca-crumb-current {
+	color: var(--wpca-text);
+	font-weight: 600;
+}
+
+/* Separator is CSS-generated (kept out of the a11y tree and the echoed markup) on
+   every segment after the first. margin-inline auto-mirrors in RTL; the glyph
+   itself is flipped in the RTL block below. */
+body.wpca-admin .wpca-breadcrumb .wpca-crumb + .wpca-crumb::before {
+	content: "\203A"; /* › */
+	margin-inline: 6px;
+	color: var(--wpca-text-faint);
+}
+
+/* Collapse `.wrap`'s top margin ONLY when a breadcrumb actually precedes it — the
+   crumb now owns the gap above the title. Adjacent-sibling so screens where the
+   module renders nothing (skip screens, block editor, no-title) keep their 24px
+   top gap from the base `.wrap` rule. RTL needs no counterpart: this touches no
+   physical-direction property. */
+body.wpca-admin .wpca-breadcrumb + .wrap {
+	margin-top: 0;
+}
+
+/* Lower half of the band: the H1 (with its inline `.page-title-action`) seated as
+   a flex row, closed by ONE hairline that spans the full content width — the
+   breadcrumb + title sit above it as a single titling block. --wpca-border (the
+   visible content hairline), not --wpca-menu-hairline (the dark sidebar seam). */
 body.wpca-admin .wrap > h1.wp-heading-inline {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 10px 16px;
+	margin: 2px 0 24px;
+	padding-bottom: 14px;
+	border-bottom: 1px solid var(--wpca-border);
 	font-size: 20px;
+	color: var(--wpca-text);
+}
+
+/* Push the primary action to the end edge of the band; on narrow viewports it
+   wraps below the title (row-gap above) rather than colliding with it. */
+body.wpca-admin .wrap > h1.wp-heading-inline .page-title-action {
+	margin-inline-start: auto;
 }
 
 body.wpca-admin .page-title-action {
@@ -423,16 +1015,32 @@ body.wpca-admin #wpfooter a {
 
 /* -------------------------------------------------------------- Brand logo - */
 
-/* When a logo is configured, surface it at the top of the admin menu. */
+/* Logo header zone at the top of the menu. A fixed-height band, inset to match
+   the pill rhythm, with a single hairline bottom border (shared seam token) so
+   the brand zone reads as a distinct header. Stays display:none until a logo is
+   configured (--wpca-logo-display, emitted by Support\Assets alongside
+   --wpca-logo). */
 body.wpca-admin #adminmenuwrap::before {
 	content: "";
 	display: var(--wpca-logo-display, none);
-	height: 52px;
-	margin: 8px 12px 4px;
+	height: 30px;
+	margin: 10px var(--wpca-menu-inset);
+	padding-bottom: 14px;
+	border-bottom: 1px solid var(--wpca-menu-hairline);
 	background-image: var(--wpca-logo, none);
 	background-repeat: no-repeat;
 	background-position: left center;
 	background-size: contain;
+}
+
+/* Folded (36px) state: an 8px inset + a hairline border across a 20px stub looks
+   broken. Drop the inset and the border, and center the mark so a square/favicon-
+   style logo reads cleanly in the icon column. */
+body.folded.wpca-admin #adminmenuwrap::before {
+	margin-inline: 4px;
+	padding-bottom: 0;
+	border-bottom: 0;
+	background-position: center;
 }
 
 /* ------------------------------------------------------------------ RTL ---- */
@@ -443,8 +1051,27 @@ body.rtl.wpca-admin .wrap {
 	margin: 24px 12px 0 24px;
 }
 
+/* Breadcrumb: mirror the physical inline margins to match the RTL `.wrap` edges.
+   The H1 band uses gap / margin-inline / logical border, so it needs no flip. */
+body.rtl.wpca-admin .wpca-breadcrumb {
+	margin: 16px 12px 6px 24px;
+}
+
+/* Mirror the separator glyph (›→‹) for right-to-left reading direction. */
+body.rtl.wpca-admin .wpca-breadcrumb .wpca-crumb + .wpca-crumb::before {
+	content: "\2039"; /* ‹ */
+}
+
+/* Most sidebar directional rules use logical properties (margin-inline,
+   border-inline-start, padding-inline-start, outline) and mirror automatically
+   on RTL. The only physical directional rule left is the logo background-
+   position, flipped here for both expanded and folded states. */
 body.rtl.wpca-admin #adminmenuwrap::before {
 	background-position: right center;
+}
+
+body.rtl.folded.wpca-admin #adminmenuwrap::before {
+	background-position: center;
 }
 
 /* ------------------------------------------------------- Text & numerals --- */
@@ -470,6 +1097,288 @@ body.wpca-admin a.page-title-action:focus-visible {
 
 body.wpca-admin .button-primary:focus-visible {
 	box-shadow: var(--wpca-focus);
+}
+
+/* ----------------------------------------------------- Command palette ----- */
+
+/* A keyboard-driven quick switcher (Ctrl/Cmd K). Self-contained overlay built
+   entirely from the existing token set, so it inherits light/dark and per-client
+   rebrands automatically. Scoped under body.wpca-admin; wins by load order +
+   body-class scope, no !important. Directional rules use logical properties so the
+   whole palette mirrors under body.rtl with zero physical overrides (except the
+   active-row inset accent, which box-shadow cannot express logically). */
+
+/* Discoverable trigger button in the admin bar (keyboard/AT affordance beyond the
+   shortcut). Styled to sit quietly in #wpadminbar's secondary group. */
+body.wpca-admin .wpca-cmdk-trigger {
+	display: inline-flex;
+	align-items: center;
+	gap: 6px;
+	height: 100%;
+	margin: 0;
+	padding-inline: 12px;
+	border: 0;
+	background: transparent;
+	color: inherit;
+	font-family: var(--wpca-font);
+	font-size: 12px;
+	line-height: 1;
+	cursor: pointer;
+}
+
+body.wpca-admin .wpca-cmdk-trigger:hover,
+body.wpca-admin .wpca-cmdk-trigger:focus-visible {
+	background: color-mix(in srgb, currentColor 12%, transparent);
+	outline: 0;
+}
+
+body.wpca-admin .wpca-cmdk-trigger-glyph {
+	padding: 2px 6px;
+	border: 1px solid color-mix(in srgb, currentColor 40%, transparent);
+	border-radius: 6px;
+	font-size: 11px;
+}
+
+/* Floating fallback when there is no admin bar to host the trigger. */
+body.wpca-admin .wpca-cmdk-trigger--floating {
+	position: fixed;
+	inset-block-end: 16px;
+	inset-inline-end: 16px;
+	z-index: 99990;
+	height: auto;
+	padding: 8px 12px;
+	background: var(--wpca-card-bg);
+	border: 1px solid var(--wpca-border);
+	border-radius: var(--wpca-radius);
+	box-shadow: var(--wpca-shadow-md);
+	color: var(--wpca-text);
+}
+
+/* Lock background scroll while the palette is open (compensate for the scrollbar
+   so the layout does not shift). */
+body.wpca-admin.wpca-cmdk-lock {
+	overflow: hidden;
+	scrollbar-gutter: stable;
+}
+
+/* Scrim: above #wpadminbar (z 99999). Click-to-dismiss target + flex centering. */
+body.wpca-admin .wpca-cmdk-overlay {
+	position: fixed;
+	inset: 0;
+	z-index: 100100;
+	display: none;
+	align-items: flex-start;
+	justify-content: center;
+	padding-block-start: clamp(72px, 12vh, 160px);
+	padding-inline: 16px;
+	background: color-mix(in srgb, var(--wpca-text) 45%, transparent);
+	font-family: var(--wpca-font);
+	opacity: 0;
+}
+
+body.wpca-admin .wpca-cmdk-overlay.is-open {
+	display: flex;
+	opacity: 1;
+}
+
+@supports ( backdrop-filter: blur(2px) ) {
+	body.wpca-admin .wpca-cmdk-overlay {
+		backdrop-filter: blur(2px);
+	}
+}
+
+/* Modal card: flex column — pinned input row + scrollable results below. */
+body.wpca-admin .wpca-cmdk-card {
+	display: flex;
+	flex-direction: column;
+	width: min(640px, calc(100vw - 32px));
+	max-width: 640px;
+	background: var(--wpca-card-bg);
+	border: 1px solid var(--wpca-border);
+	border-radius: var(--wpca-radius-lg);
+	box-shadow: var(--wpca-shadow-lg);
+	overflow: hidden;
+	transform: translateY(8px) scale(0.98);
+	opacity: 0;
+}
+
+body.wpca-admin .wpca-cmdk-overlay.is-open .wpca-cmdk-card {
+	transform: translateY(0) scale(1);
+	opacity: 1;
+}
+
+/* --- search input row --- */
+body.wpca-admin .wpca-cmdk-input-row {
+	display: flex;
+	align-items: center;
+	gap: 12px;
+	min-height: 54px;
+	padding-inline: 16px;
+	border-block-end: 1px solid var(--wpca-border);
+}
+
+body.wpca-admin .wpca-cmdk-search-icon {
+	display: inline-flex;
+	flex: 0 0 auto;
+	color: var(--wpca-text-faint);
+}
+
+body.wpca-admin .wpca-cmdk-input {
+	flex: 1 1 auto;
+	min-width: 0;
+	margin: 0;
+	padding: 0;
+	border: 0;
+	background: transparent;
+	outline: 0;
+	box-shadow: none;
+	font: inherit;
+	font-size: 16px; /* >=16px avoids iOS zoom-on-focus. */
+	line-height: 1.3;
+	color: var(--wpca-text);
+	caret-color: var(--wpca-primary);
+	text-align: start;
+}
+
+body.wpca-admin .wpca-cmdk-input:focus {
+	outline: 0;
+	box-shadow: none;
+}
+
+body.wpca-admin .wpca-cmdk-input::placeholder {
+	color: var(--wpca-text-faint);
+}
+
+/* kbd hint chips (Esc, etc.) — pill, not monospace; matches the Inter/Vazirmatn UI. */
+body.wpca-admin .wpca-cmdk-kbd {
+	flex: 0 0 auto;
+	padding: 3px 6px;
+	border: 1px solid var(--wpca-border);
+	border-radius: 6px;
+	background: var(--wpca-surface-2);
+	color: var(--wpca-text-muted);
+	font-family: inherit;
+	font-size: 11px;
+	line-height: 1;
+}
+
+/* --- results listbox --- */
+body.wpca-admin .wpca-cmdk-list {
+	margin: 0;
+	padding: 6px;
+	list-style: none;
+	max-height: min(60vh, 420px);
+	overflow-y: auto;
+	overscroll-behavior: contain;
+	scrollbar-color: var(--wpca-border) transparent;
+}
+
+body.wpca-admin .wpca-cmdk-list::-webkit-scrollbar {
+	width: 10px;
+}
+
+body.wpca-admin .wpca-cmdk-list::-webkit-scrollbar-thumb {
+	background: var(--wpca-border);
+	border-radius: 8px;
+	border: 3px solid transparent;
+	background-clip: padding-box;
+}
+
+/* --- result rows --- */
+body.wpca-admin .wpca-cmdk-row {
+	display: flex;
+	align-items: center;
+	gap: 12px;
+	min-height: 44px;
+	padding-inline: 12px;
+	border: 1px solid transparent; /* reserves space so the active border adds no jump. */
+	border-radius: var(--wpca-radius-sm);
+	color: var(--wpca-text);
+	cursor: pointer;
+}
+
+body.wpca-admin .wpca-cmdk-label {
+	flex: 1 1 auto;
+	min-width: 0;
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+	text-align: start;
+}
+
+body.wpca-admin .wpca-cmdk-suffix {
+	flex: 0 0 auto;
+	color: var(--wpca-text-faint);
+	font-size: 12px;
+}
+
+body.wpca-admin .wpca-cmdk-mark {
+	background: transparent;
+	color: var(--wpca-primary);
+	font-weight: 600;
+}
+
+/* Active row: brand-tinted wash + a brand-independent 1px border + an inset leading
+   accent bar (inline-start). The border guarantees a >=3:1 non-text cue even when the
+   brand --wpca-primary is low-saturation, since selection is virtual (no focus ring on
+   the row). The tint derives from the live primary, so it reads in light AND dark. */
+body.wpca-admin .wpca-cmdk-row.is-active {
+	background: color-mix(in srgb, var(--wpca-primary) 14%, transparent);
+	border-color: var(--wpca-border-strong);
+	box-shadow: inset 3px 0 0 var(--wpca-primary);
+}
+
+body.wpca-admin .wpca-cmdk-row.is-active .wpca-cmdk-label {
+	color: var(--wpca-text);
+}
+
+body.wpca-admin .wpca-cmdk-row.is-active .wpca-cmdk-mark {
+	color: var(--wpca-primary);
+}
+
+/* --- empty state --- */
+body.wpca-admin .wpca-cmdk-empty {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	min-height: 120px;
+	padding: 16px;
+	color: var(--wpca-text-muted);
+}
+
+body.wpca-admin .wpca-cmdk-empty-text {
+	margin: 0;
+	text-align: center;
+}
+
+/* The aria-live region rides on core's .screen-reader-text; nothing extra needed. */
+
+/* RTL: logical properties mirror everything automatically. The only physical rule
+   is the active-row inset accent (box-shadow has no logical form) — flip it so the
+   bar still lands on the inline-start (right) edge. */
+body.rtl.wpca-admin .wpca-cmdk-row.is-active {
+	box-shadow: inset -3px 0 0 var(--wpca-primary);
+}
+
+/* Motion: only opacity/transform animate, and only when motion is allowed. The
+   global reduced-motion block below already neutralizes durations, but reset the
+   card transform too so reduced-motion users get an instant, untransformed
+   appearance. */
+@media ( prefers-reduced-motion: no-preference ) {
+	body.wpca-admin .wpca-cmdk-overlay {
+		transition: opacity var(--wpca-dur) var(--wpca-ease);
+	}
+
+	body.wpca-admin .wpca-cmdk-card {
+		transition: opacity var(--wpca-dur) var(--wpca-ease),
+			transform var(--wpca-dur) var(--wpca-ease);
+	}
+}
+
+@media ( prefers-reduced-motion: reduce ) {
+	body.wpca-admin .wpca-cmdk-card {
+		transform: none;
+	}
 }
 
 /* ---------------------------------------------------- Reduced motion ------- */

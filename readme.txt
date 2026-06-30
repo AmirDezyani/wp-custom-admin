@@ -4,7 +4,7 @@ Tags: admin, white-label, branding, admin-theme, login
 Requires at least: 6.5
 Tested up to: 6.5
 Requires PHP: 7.4
-Stable tag: 0.7.0
+Stable tag: 0.8.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -41,6 +41,35 @@ No. Deactivation is non-destructive. Data is only removed on uninstall, and only
 Yes. Network admin is left untouched by default; a network-level default can be set with per-site overrides.
 
 == Changelog ==
+
+= 0.8.0 =
+* Sidebar redesign — the admin menu now reads as a custom dashboard nav rather
+  than recolored WordPress: inset rounded "pill" rows, a soft brand-tinted active
+  pill (no left bar), a subtle hover wash, muted-then-brand icons, hairline
+  section dividers, a brand logo header zone, a pinned-submenu guide rail,
+  elevated rounded fly-out cards, modern count badges (brand for updates, danger
+  for moderation), a themed thin scrollbar, and a real keyboard focus ring.
+* Top bar redesign — the admin toolbar becomes a thin app header: a single bottom
+  hairline, soft rounded hover targets on both clusters, the account node as a
+  rounded avatar + name chip, count bubbles restyled as the same pill badges as
+  the sidebar, and dropdown menus as elevated rounded cards with rounded rows.
+* Page header — a new, toggleable module adds a breadcrumb trail ("Section ›
+  Page") above each screen's title and binds it with the H1 and primary action
+  into one header band closed by a hairline. Read-only and non-destructive (core's
+  H1 is untouched); skips the block editor, network admin, and the plugin's own
+  Home/Settings screens. Toggle under Settings → Branding.
+* Command palette — a new, toggleable module adds a Ctrl/Cmd+K quick switcher that
+  fuzzy-searches every admin page the current user can reach and jumps to it.
+  Vanilla JS (no build), accessible (combobox/listbox, full keyboard model, focus
+  trap), and read-only (links only — no writes). A discoverable button is added to
+  the toolbar. Toggle under Settings → Branding.
+* Persian/RTL first-class: the page-header and command-palette strings are shipped
+  translated to fa_IR, the palette folds Persian/Arabic letter and digit variants
+  for reliable search, the shortcut is matched by physical key so it works on
+  Persian keyboard layouts, and every directional rule mirrors for RTL.
+* Folded (icon-only), RTL/Persian, dark mode, and the <=782px mobile bar are all
+  handled; menu width and bar height are left untouched, so the chrome changes
+  touch color/spacing only and remain version-resilient.
 
 = 0.7.0 =
 * Cohesion across the admin: tokenized admin notices, settings form tables, the

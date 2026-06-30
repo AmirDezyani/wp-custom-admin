@@ -209,6 +209,8 @@ final class Settings {
 			'dashboard_enabled'      => true,
 			'dashboard_landing'      => true,
 			'dashboard_chart'        => true,
+			'pageheader_enabled'     => true,
+			'palette_enabled'        => true,
 
 			// Brand identity.
 			'product_name'           => '',

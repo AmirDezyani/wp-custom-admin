@@ -63,3 +63,42 @@ msgstr ""
 
 msgid "Import failed. Please upload a valid brand.json file."
 msgstr ""
+
+msgid "Command palette (Ctrl/Cmd K)"
+msgstr ""
+
+msgid "A keyboard-driven quick switcher to jump to any admin page."
+msgstr ""
+
+msgid "Command palette"
+msgstr ""
+
+msgid "Search admin pages…"
+msgstr ""
+
+msgid "Search"
+msgstr ""
+
+msgid "Results"
+msgstr ""
+
+msgid "No results found"
+msgstr ""
+
+msgid "Open command palette"
+msgstr ""
+
+msgid "%s results available"
+msgstr ""
+
+msgid "Esc"
+msgstr ""
+
+msgid "Page header breadcrumbs"
+msgstr ""
+
+msgid "Adds a breadcrumb trail above each admin page title."
+msgstr ""
+
+msgid "Breadcrumb"
+msgstr ""

@@ -31,6 +31,8 @@ final class Sanitizer {
 		'dashboard_enabled',
 		'dashboard_landing',
 		'dashboard_chart',
+		'pageheader_enabled',
+		'palette_enabled',
 		'hide_wp_logo',
 		'replace_howdy',
 		'hide_welcome_panel',

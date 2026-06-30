@@ -224,3 +224,42 @@ msgstr "شما اجازهٔ دسترسی به این صفحه را ندارید.
 
 msgid "You do not have permission to do this."
 msgstr "شما اجازهٔ انجام این کار را ندارید."
+
+msgid "Command palette (Ctrl/Cmd K)"
+msgstr "پنل دستور (Ctrl/Cmd K)"
+
+msgid "A keyboard-driven quick switcher to jump to any admin page."
+msgstr "جابه‌جاگر سریع و مبتنی بر صفحه‌کلید برای پرش به هر صفحهٔ مدیریت."
+
+msgid "Command palette"
+msgstr "پنل دستور"
+
+msgid "Search admin pages…"
+msgstr "جستجوی صفحه‌های مدیریت…"
+
+msgid "Search"
+msgstr "جستجو"
+
+msgid "Results"
+msgstr "نتایج"
+
+msgid "No results found"
+msgstr "نتیجه‌ای یافت نشد"
+
+msgid "Open command palette"
+msgstr "باز کردن پنل دستور"
+
+msgid "%s results available"
+msgstr "%s نتیجه در دسترس است"
+
+msgid "Esc"
+msgstr "Esc"
+
+msgid "Page header breadcrumbs"
+msgstr "مسیر راهنمای سربرگ صفحه"
+
+msgid "Adds a breadcrumb trail above each admin page title."
+msgstr "یک مسیر راهنما بالای عنوان هر صفحهٔ مدیریت اضافه می‌کند."
+
+msgid "Breadcrumb"
+msgstr "مسیر راهنما"

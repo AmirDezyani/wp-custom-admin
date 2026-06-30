@@ -13,9 +13,11 @@ use WPCustomAdmin\Admin\NetworkSettings;
 use WPCustomAdmin\Admin\SettingsPage;
 use WPCustomAdmin\Contracts\Module;
 use WPCustomAdmin\Modules\Branding\BrandingModule;
+use WPCustomAdmin\Modules\CommandPalette\CommandPaletteModule;
 use WPCustomAdmin\Modules\Dashboard\DashboardModule;
 use WPCustomAdmin\Modules\Login\LoginModule;
 use WPCustomAdmin\Modules\Menu\MenuModule;
+use WPCustomAdmin\Modules\PageHeader\PageHeaderModule;
 use WPCustomAdmin\Modules\WhiteLabel\WhiteLabelModule;
 use WPCustomAdmin\Support\Assets;
 use WPCustomAdmin\Support\Settings;
@@ -114,6 +116,8 @@ final class Plugin {
 			new DashboardModule( $this->settings, $this->assets ),
 			new LoginModule( $this->settings, $this->assets ),
 			new MenuModule( $this->settings, $this->assets ),
+			new PageHeaderModule( $this->settings, $this->assets ),
+			new CommandPaletteModule( $this->settings, $this->assets ),
 			new WhiteLabelModule( $this->settings, $this->assets ),
 		);
 	}
