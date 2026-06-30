@@ -89,12 +89,16 @@ body.wpca-admin #wpbody-content {
 	background: var(--wpca-content-bg);
 }
 
-body.wpca-admin a {
+/* Brand only genuine text links — never anchors styled as buttons (WP's own
+   .button*, Elementor's .e-button/.elementor-button, etc. all carry "button" in
+   their class). Recoloring those paints brand text onto a plugin's own button
+   background, which can vanish (e.g. indigo-on-indigo). */
+body.wpca-admin a:not([class*="button"]) {
 	color: var(--wpca-primary);
 }
 
-body.wpca-admin a:hover,
-body.wpca-admin a:focus {
+body.wpca-admin a:not([class*="button"]):hover,
+body.wpca-admin a:not([class*="button"]):focus {
 	color: var(--wpca-primary-hover);
 }
 
@@ -128,6 +132,11 @@ body.wpca-admin #wpadminbar .ab-top-menu > li.hover > .ab-item {
 
 /* -------------------------------------------------------------- Sidebar ---- */
 
+/* The reskin treats the menu as a column of rounded "pills" inside a dark rail:
+   each item is inset, the current screen gets a solid brand-colored pill, and a
+   soft translucent wash appears on hover. Width is left at WordPress' own value
+   so the folded and small-screen layouts keep working (version-resilience). */
+
 body.wpca-admin #adminmenuback,
 body.wpca-admin #adminmenuwrap,
 body.wpca-admin #adminmenu,
@@ -139,15 +148,34 @@ body.wpca-admin #adminmenu a {
 	color: var(--wpca-menu-text);
 }
 
-body.wpca-admin #adminmenu div.wp-menu-image::before {
-	color: var(--wpca-menu-text);
-	opacity: 0.85;
+/* Inset each top-level item, with breathing room between rows, so its hover and
+   active backgrounds read as discrete pills rather than a dense stacked list. */
+body.wpca-admin #adminmenu li.menu-top {
+	margin: 3px 8px;
 }
 
-body.wpca-admin #adminmenu li.menu-top:hover,
+body.wpca-admin #adminmenu li.menu-top > a.menu-top {
+	border-radius: 10px;
+	transition: background var(--wpca-dur) var(--wpca-ease), color var(--wpca-dur) var(--wpca-ease), box-shadow var(--wpca-dur) var(--wpca-ease);
+}
+
+body.wpca-admin #adminmenu .wp-menu-name {
+	font-weight: 500;
+}
+
+/* Dim inactive icons so the solid active pill carries the visual weight. */
+body.wpca-admin #adminmenu div.wp-menu-image::before {
+	color: var(--wpca-menu-text);
+	opacity: 0.7;
+}
+
+/* Hover: wash only the pill (the <a>), never the full row — the gaps stay dark.
+   Targeting a.menu-top:hover keeps this below the active rule's specificity so a
+   hovered current item stays a solid pill. */
+body.wpca-admin #adminmenu a.menu-top:hover,
 body.wpca-admin #adminmenu li.opensub > a.menu-top,
-body.wpca-admin #adminmenu li > a.menu-top:focus {
-	background: rgba(255, 255, 255, 0.06);
+body.wpca-admin #adminmenu a.menu-top:focus {
+	background: rgba(255, 255, 255, 0.07);
 	color: #fff;
 }
 
@@ -157,17 +185,13 @@ body.wpca-admin #adminmenu li.menu-top:focus-within div.wp-menu-image::before {
 	opacity: 1;
 }
 
-/* Active top-level item — a tinted surface + left accent bar, not a full slab. */
-body.wpca-admin #adminmenu li.current a.menu-top,
-body.wpca-admin #adminmenu li.wp-has-current-submenu a.wp-has-current-submenu {
-	background: color-mix(in srgb, var(--wpca-menu-highlight) 26%, transparent);
-	box-shadow: inset 3px 0 0 var(--wpca-menu-highlight);
+/* Active top-level item — a solid brand-colored pill, not a left accent bar.
+   Placed after the hover rule so it wins for the current item at equal specificity. */
+body.wpca-admin #adminmenu li.current > a.menu-top,
+body.wpca-admin #adminmenu li.wp-has-current-submenu > a.wp-has-current-submenu {
+	background: var(--wpca-menu-highlight);
 	color: #fff;
-}
-
-body.rtl.wpca-admin #adminmenu li.current a.menu-top,
-body.rtl.wpca-admin #adminmenu li.wp-has-current-submenu a.wp-has-current-submenu {
-	box-shadow: inset -3px 0 0 var(--wpca-menu-highlight);
+	box-shadow: 0 8px 16px -8px color-mix(in srgb, var(--wpca-menu-highlight) 75%, transparent);
 }
 
 body.wpca-admin #adminmenu .wp-menu-arrow,
@@ -197,9 +221,12 @@ body.wpca-admin #adminmenu .wp-submenu li.current a {
 	font-weight: 600;
 }
 
-/* Collapse button + separators. */
+/* Separators read as a short hairline rather than a full-width slab. */
 body.wpca-admin #adminmenu li.wp-menu-separator {
-	background: rgba(255, 255, 255, 0.04);
+	height: 0;
+	margin: 7px 16px;
+	border-top: 1px solid rgba(255, 255, 255, 0.08);
+	background: transparent;
 }
 
 body.wpca-admin #collapse-button {
@@ -285,8 +312,27 @@ body.wpca-admin select,
 body.wpca-admin textarea {
 	border-radius: var(--wpca-radius-sm);
 	border-color: var(--wpca-border-strong);
-	background: var(--wpca-card-bg);
+	/* background-color (not the shorthand) so a select keeps its arrow image. */
+	background-color: var(--wpca-card-bg);
 	color: var(--wpca-text);
+}
+
+/* Give selects a neutral, mode-agnostic dropdown arrow. The shorthand reset above
+   used to wipe WordPress' arrow; this n-400 chevron stays visible on both light
+   and dark surfaces, and flips side under RTL. */
+body.wpca-admin select:not([multiple]) {
+	appearance: none;
+	-webkit-appearance: none;
+	background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' fill='none' stroke='%2394a3b8' stroke-width='1.7' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 8l4 4 4-4'/%3E%3C/svg%3E");
+	background-repeat: no-repeat;
+	background-position: right 8px center;
+	padding-right: 28px;
+}
+
+body.rtl.wpca-admin select:not([multiple]) {
+	background-position: left 8px center;
+	padding-right: 8px;
+	padding-left: 28px;
 }
 
 body.wpca-admin input[type="text"]:focus,
@@ -332,6 +378,40 @@ body.wpca-admin .wp-list-table tfoot th {
 
 body.wpca-admin .wp-list-table tbody tr:hover {
 	background: var(--wpca-surface-2);
+}
+
+/* Bind WordPress-core admin text/tables that ship a hardcoded light-mode color to
+   the themed tokens, so they follow the dark-mode flip instead of leaving dark
+   text on a darkened surface. In light mode the tokens already match WP's own ink
+   and surfaces, so these are no-ops there; in dark mode they stay readable. */
+body.wpca-admin .wrap h2,
+body.wpca-admin .wrap h3,
+body.wpca-admin .wrap h4,
+body.wpca-admin .postbox-header h2,
+body.wpca-admin .postbox-header h3,
+body.wpca-admin .postbox .hndle,
+body.wpca-admin .postbox h2,
+body.wpca-admin .postbox h3,
+body.wpca-admin .metabox-holder h2,
+body.wpca-admin .metabox-holder h3,
+body.wpca-admin .form-wrap label {
+	color: var(--wpca-text);
+}
+
+/* Secondary core tables (settings, menu editor, plugin tables) carry their own
+   fixed surface — flip both background and text together so they never invert. */
+body.wpca-admin .widefat {
+	background: var(--wpca-card-bg);
+	border-color: var(--wpca-border);
+	color: var(--wpca-text);
+}
+
+body.wpca-admin .widefat thead th,
+body.wpca-admin .widefat thead td,
+body.wpca-admin .widefat tfoot th,
+body.wpca-admin .widefat tfoot td {
+	background: var(--wpca-surface-2);
+	color: var(--wpca-text-muted);
 }
 
 /* --------------------------------------------------------------- Notices --- */
@@ -421,18 +501,111 @@ body.wpca-admin #wpfooter a {
 	color: var(--wpca-primary);
 }
 
-/* -------------------------------------------------------------- Brand logo - */
+/* ------------------------------------------------------- Brand header ------ */
 
-/* When a logo is configured, surface it at the top of the admin menu. */
-body.wpca-admin #adminmenuwrap::before {
-	content: "";
-	display: var(--wpca-logo-display, none);
-	height: 52px;
-	margin: 8px 12px 4px;
-	background-image: var(--wpca-logo, none);
-	background-repeat: no-repeat;
-	background-position: left center;
-	background-size: contain;
+/* Injected by assets/js/admin.js at the top of the menu rail: the client logo,
+   or a brand-colored monogram tile + product name when no logo is configured.
+   The monogram is always present so the folded rail still shows the brand. */
+body.wpca-admin .wpca-brand {
+	display: flex;
+	align-items: center;
+	gap: 11px;
+	min-height: 38px;
+	box-sizing: border-box;
+	padding: 14px 8px 12px;
+	margin-bottom: 4px;
+}
+
+body.wpca-admin .wpca-brand-mark {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	flex: none;
+	width: 34px;
+	height: 34px;
+	border-radius: 10px;
+	/* Flat fill first as a fallback if color-mix / gradients are unsupported. */
+	background: var(--wpca-primary);
+	background: linear-gradient(135deg, var(--wpca-primary), color-mix(in srgb, var(--wpca-primary) 68%, #000));
+	box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.18);
+	color: #fff;
+	font-size: 15px;
+	font-weight: 700;
+	line-height: 1;
+}
+
+body.wpca-admin .wpca-brand-name {
+	min-width: 0;
+	overflow: hidden;
+	font-size: 15px;
+	font-weight: 600;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+	color: #fff;
+}
+
+body.wpca-admin .wpca-brand-logo {
+	display: block;
+	width: auto;
+	height: auto;
+	max-width: 100%;
+	max-height: 30px;
+}
+
+/* With a logo, the monogram steps aside (it returns only when the rail folds). */
+body.wpca-admin .wpca-brand.has-logo .wpca-brand-mark {
+	display: none;
+}
+
+/* Collapsed icon rail. WordPress narrows the menu to a 36px icon column in two
+   cases, and the header + pills must follow only then:
+     - body.folded     — user collapsed it manually; applies at every desktop width.
+     - body.auto-fold  — present at all widths, but core only narrows the rail in the
+                          783–960px squeeze (above 960 the rail is full; below 783 it
+                          becomes a full-width overlay). So scope auto-fold to 783–960
+                          or the header would wrongly collapse on wide desktops.
+   The rail does not widen on hover (core shows submenu fly-outs instead), so the
+   header simply drops to the centered monogram and the pills lose their inset. */
+@media only screen and (min-width: 783px) {
+	body.folded.wpca-admin .wpca-brand {
+		justify-content: center;
+		gap: 0;
+		padding-inline: 0;
+	}
+
+	body.folded.wpca-admin .wpca-brand-name,
+	body.folded.wpca-admin .wpca-brand-logo {
+		display: none;
+	}
+
+	body.folded.wpca-admin .wpca-brand.has-logo .wpca-brand-mark {
+		display: inline-flex;
+	}
+
+	body.folded.wpca-admin #adminmenu li.menu-top {
+		margin-inline: 0;
+	}
+}
+
+@media only screen and (min-width: 783px) and (max-width: 960px) {
+	body.auto-fold.wpca-admin .wpca-brand {
+		justify-content: center;
+		gap: 0;
+		padding-inline: 0;
+	}
+
+	body.auto-fold.wpca-admin .wpca-brand-name,
+	body.auto-fold.wpca-admin .wpca-brand-logo {
+		display: none;
+	}
+
+	body.auto-fold.wpca-admin .wpca-brand.has-logo .wpca-brand-mark {
+		display: inline-flex;
+	}
+
+	body.auto-fold.wpca-admin #adminmenu li.menu-top {
+		margin-inline: 0;
+	}
 }
 
 /* ------------------------------------------------------------------ RTL ---- */
@@ -441,10 +614,6 @@ body.wpca-admin #adminmenuwrap::before {
    need to flip the few directional rules this stylesheet adds. */
 body.rtl.wpca-admin .wrap {
 	margin: 24px 12px 0 24px;
-}
-
-body.rtl.wpca-admin #adminmenuwrap::before {
-	background-position: right center;
 }
 
 /* ------------------------------------------------------- Text & numerals --- */

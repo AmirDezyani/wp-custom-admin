@@ -4,7 +4,7 @@ Tags: admin, white-label, branding, admin-theme, login
 Requires at least: 6.5
 Tested up to: 6.5
 Requires PHP: 7.4
-Stable tag: 0.7.0
+Stable tag: 0.8.3
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -41,6 +41,38 @@ No. Deactivation is non-destructive. Data is only removed on uninstall, and only
 Yes. Network admin is left untouched by default; a network-level default can be set with per-site overrides.
 
 == Changelog ==
+
+= 0.8.3 =
+* Fix: brand link coloring no longer applies to anchors styled as buttons (WP's
+  `.button*`, Elementor's `.e-button`, etc.), so the theme can't paint
+  brand-colored text onto a plugin's own button background and make it vanish.
+* Fix: select / dropdown controls regained their arrow — the reskin's background
+  shorthand had wiped WordPress's. Selects now show a crisp, RTL-aware chevron
+  that stays visible in both light and dark schemes.
+
+= 0.8.2 =
+* Persian (fa_IR) translation completed: the branded Home dashboard, admin menu
+  labels, activity statuses, and the newer settings (color scheme, dashboard
+  options, network defaults) are now fully translated — nothing falls back to
+  English on Persian sites. The .pot template now lists the full string set.
+* Settings-page media-picker labels localize through PHP, so they translate
+  without a build-step script-translation JSON.
+
+= 0.8.1 =
+* Dark mode: WordPress-core admin text that ships with a fixed light-mode color
+  (section and meta-box headings, form labels) now follows the theme tokens, and
+  secondary core tables flip surface and text together — so nothing renders
+  dark-on-dark or light-on-light when the dark scheme is active.
+
+= 0.8.0 =
+* Sidebar redesigned to a branded navigation rail: rounded "pill" menu items, a
+  solid brand-colored pill for the current screen (replacing the WordPress accent
+  bar), and a header with the client logo — or a monogram tile plus product name.
+* The admin-menu logo now renders in that header (with a folded/collapsed state)
+  instead of as a background image.
+* The redundant stock "Dashboard" menu item is removed when the branded Home is the
+  landing page, so the rail shows a single "Home" at the top. Core updates remain
+  reachable via the toolbar and update notices.
 
 = 0.7.0 =
 * Cohesion across the admin: tokenized admin notices, settings form tables, the

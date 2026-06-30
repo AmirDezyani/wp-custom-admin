@@ -46,6 +46,10 @@ final class Assets {
 		wp_enqueue_style( 'wpca-fonts', WPCA_URL . 'assets/css/fonts.css', array(), WPCA_VERSION );
 		wp_enqueue_style( 'wpca-admin', WPCA_URL . 'assets/css/admin.css', array( 'wpca-fonts' ), WPCA_VERSION );
 		wp_add_inline_style( 'wpca-admin', $this->root_css( false ) );
+
+		// Builds the branded header at the top of the menu rail from server-sanitized data.
+		wp_enqueue_script( 'wpca-admin', WPCA_URL . 'assets/js/admin.js', array(), WPCA_VERSION, true );
+		wp_localize_script( 'wpca-admin', 'wpcaAdmin', $this->brand_data() );
 	}
 
 	/**
@@ -100,13 +104,8 @@ final class Assets {
 
 		$lines[] = '--wpca-font:' . $this->font_stack( (string) $settings->get( 'font_family', 'system' ) );
 
-		$logo = $login ? $settings->login_logo_url( 'medium' ) : $settings->logo_url( 'medium' );
-
-		if ( ! $login && '' !== $logo ) {
-			// Reveal the admin-menu logo block (see assets/css/admin.css).
-			$lines[] = "--wpca-logo:url('" . esc_url( $logo ) . "')";
-			$lines[] = '--wpca-logo-display:block';
-		}
+		// The admin-menu logo is rendered by assets/js/admin.js; only login needs a CSS URL.
+		$logo = $login ? $settings->login_logo_url( 'medium' ) : '';
 
 		$css = ':root{' . implode( ';', $lines ) . ';}';
 
@@ -116,6 +115,43 @@ final class Assets {
 		}
 
 		return $css;
+	}
+
+	/**
+	 * Brand payload for the menu header injected by assets/js/admin.js.
+	 *
+	 * @return array<string,string>
+	 */
+	private function brand_data(): array {
+		$name = $this->settings->product_name();
+		$logo = $this->settings->logo_url( 'medium' );
+
+		return array(
+			'brandName' => $name,
+			'logoUrl'   => '' !== $logo ? esc_url_raw( $logo ) : '',
+			'initial'   => $this->brand_initial( $name ),
+		);
+	}
+
+	/**
+	 * First letter of the brand name, uppercased, for the monogram fallback.
+	 *
+	 * @param string $name Brand/product name.
+	 */
+	private function brand_initial( string $name ): string {
+		$name = trim( $name );
+
+		if ( '' === $name ) {
+			return 'W';
+		}
+
+		// Keep both mbstring calls on one guard: splitting them could feed a
+		// multibyte glyph to substr()/strtoupper() and mangle a Persian initial.
+		if ( function_exists( 'mb_substr' ) ) {
+			return mb_strtoupper( mb_substr( $name, 0, 1 ) );
+		}
+
+		return strtoupper( $name[0] );
 	}
 
 	/**

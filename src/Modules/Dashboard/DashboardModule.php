@@ -39,6 +39,10 @@ final class DashboardModule extends AbstractModule {
 
 		if ( $this->settings->flag( 'dashboard_landing' ) ) {
 			add_action( 'load-index.php', array( $this, 'redirect_to_home' ) );
+			// With the stock dashboard redirecting to the branded Home, its menu item
+			// is a dead duplicate — drop it so the rail shows a single "Home" entry.
+			// Priority 999: after core and other plugins have registered their menus.
+			add_action( 'admin_menu', array( $this, 'remove_stock_dashboard' ), 999 );
 		}
 
 		// Keep the cached trend metrics fresh without querying on every page load.
@@ -75,6 +79,17 @@ final class DashboardModule extends AbstractModule {
 	public function redirect_to_home(): void {
 		wp_safe_redirect( admin_url( 'admin.php?page=' . self::MENU_SLUG ) );
 		exit;
+	}
+
+	/**
+	 * Remove the redundant stock Dashboard menu item.
+	 *
+	 * Only registered when the landing redirect is active, so the item would merely
+	 * bounce to Home. Core updates stay reachable via the toolbar badge and update
+	 * notices, so this removes a duplicate link rather than gating maintenance.
+	 */
+	public function remove_stock_dashboard(): void {
+		remove_menu_page( 'index.php' );
 	}
 
 	/**

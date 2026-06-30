@@ -166,6 +166,13 @@ Run **Plugin Check (PCP)** + `phpcs` (WordPress-Extra) before shipping.
   (that looks for a *descendant* `.wp-core-ui` and matches nothing). Use `body.wpca-admin .button-primary`.
   A primary button also carries `.button`, so any `.button` rule must be `.button:not(.button-primary)` or it
   clobbers primaries.
+- **Sidebar collapse is media-gated — never key menu restyles on `body.auto-fold` alone.** WP keeps
+  `auto-fold` on `<body>` at *all* widths but only narrows the rail to 36px via `@media (max-width: 960px)`
+  (783–960px); `body.folded` (manual collapse) narrows at every desktop width; below 783px the menu is a
+  full-width `wp-responsive-open` overlay. The rail does **not** widen on hover (core shows submenu fly-outs).
+  So any "collapsed rail" rule (centering a brand header, dropping menu-item insets) must be scoped to
+  `@media (min-width:783px)` for `.folded` and `@media (min-width:783px) and (max-width:960px)` for `.auto-fold`,
+  or it wrongly collapses on wide desktops and in the mobile overlay.
 - **Recolor accents by overriding WP's own variable.** Modern WP (7.0) colors buttons, links, focus rings,
   and checkboxes via `--wp-admin-theme-color` (+ `-darker-10/-20`). Set these to the brand primary under
   `body.wpca-admin` so every core accent element follows — more robust than fighting individual selectors.

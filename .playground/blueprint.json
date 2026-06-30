@@ -1,18 +1,32 @@
 {
 	"$schema": "https://playground.wordpress.net/blueprint-schema.json",
-	"landingPage": "/wp-admin/index.php",
+	"landingPage": "/wp-admin/admin.php?page=wpca-home",
 	"preferredVersions": { "php": "8.2", "wp": "latest" },
 	"login": true,
-	"siteOptions": { "blogname": "Acme Studio" },
+	"siteOptions": {
+		"blogname": "Acme Studio",
+		"blogdescription": "Studio control panel"
+	},
 	"steps": [
 		{
 			"step": "installPlugin",
 			"pluginData": {
 				"resource": "url",
-				"url": "https://github-proxy.com/proxy/?repo=AmirDezyani/wp-custom-admin&branch=main",
-				"caption": "Installing WP Custom Admin"
+				"url": "https://github-proxy.com/proxy/?repo=AmirDezyani/wp-custom-admin&branch=playground-demo",
+				"caption": "Installing WP Custom Admin (v0.8.0)"
 			},
 			"options": { "activate": true }
-		}
+		},
+		{
+			"step": "runPHP",
+			"code": "<?php require_once '/wordpress/wp-load.php'; update_option( 'wpca_settings', array( 'product_name' => 'Acme Studio', 'color_scheme' => 'light', 'menu_enabled' => true, 'full_access_capability' => '', 'menu_hidden' => array( 'edit-comments.php', 'themes.php', 'plugins.php', 'tools.php', 'wpca-settings' ) ) );"
+		},
+		{ "step": "wp-cli", "command": "wp post generate --count=24 --post_status=publish" },
+		{ "step": "wp-cli", "command": "wp post generate --count=6 --post_type=page --post_status=publish" },
+		{ "step": "wp-cli", "command": "wp user generate --count=12" },
+		{ "step": "wp-cli", "command": "wp comment generate --count=8 --post_id=1" },
+		{ "step": "wp-cli", "command": "wp post create --post_status=draft --post_title='Autumn lookbook'" },
+		{ "step": "wp-cli", "command": "wp post create --post_type=page --post_status=draft --post_title='Pricing page rewrite'" },
+		{ "step": "wp-cli", "command": "wp post create --post_status=publish --post_title='Summer collection launch'" }
 	]
 }
