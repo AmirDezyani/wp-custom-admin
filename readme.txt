@@ -4,7 +4,7 @@ Tags: admin, white-label, branding, admin-theme, login
 Requires at least: 6.5
 Tested up to: 6.5
 Requires PHP: 7.4
-Stable tag: 0.8.0
+Stable tag: 0.8.1
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -41,6 +41,12 @@ No. Deactivation is non-destructive. Data is only removed on uninstall, and only
 Yes. Network admin is left untouched by default; a network-level default can be set with per-site overrides.
 
 == Changelog ==
+
+= 0.8.1 =
+* Dark mode: WordPress-core admin text that ships with a fixed light-mode color
+  (section and meta-box headings, form labels) now follows the theme tokens, and
+  secondary core tables flip surface and text together — so nothing renders
+  dark-on-dark or light-on-light when the dark scheme is active.
 
 = 0.8.0 =
 * Sidebar redesigned to a branded navigation rail: rounded "pill" menu items, a

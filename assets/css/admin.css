@@ -357,6 +357,40 @@ body.wpca-admin .wp-list-table tbody tr:hover {
 	background: var(--wpca-surface-2);
 }
 
+/* Bind WordPress-core admin text/tables that ship a hardcoded light-mode color to
+   the themed tokens, so they follow the dark-mode flip instead of leaving dark
+   text on a darkened surface. In light mode the tokens already match WP's own ink
+   and surfaces, so these are no-ops there; in dark mode they stay readable. */
+body.wpca-admin .wrap h2,
+body.wpca-admin .wrap h3,
+body.wpca-admin .wrap h4,
+body.wpca-admin .postbox-header h2,
+body.wpca-admin .postbox-header h3,
+body.wpca-admin .postbox .hndle,
+body.wpca-admin .postbox h2,
+body.wpca-admin .postbox h3,
+body.wpca-admin .metabox-holder h2,
+body.wpca-admin .metabox-holder h3,
+body.wpca-admin .form-wrap label {
+	color: var(--wpca-text);
+}
+
+/* Secondary core tables (settings, menu editor, plugin tables) carry their own
+   fixed surface — flip both background and text together so they never invert. */
+body.wpca-admin .widefat {
+	background: var(--wpca-card-bg);
+	border-color: var(--wpca-border);
+	color: var(--wpca-text);
+}
+
+body.wpca-admin .widefat thead th,
+body.wpca-admin .widefat thead td,
+body.wpca-admin .widefat tfoot th,
+body.wpca-admin .widefat tfoot td {
+	background: var(--wpca-surface-2);
+	color: var(--wpca-text-muted);
+}
+
 /* --------------------------------------------------------------- Notices --- */
 
 body.wpca-admin .notice,
