@@ -89,6 +89,18 @@
 	--wpca-menu-badge-danger-fg: color-mix(in srgb, var(--wpca-neg) 55%, #ffffff);
 	--wpca-menu-scrollbar: rgba(255, 255, 255, 0.15);
 	--wpca-menu-scrollbar-hover: rgba(255, 255, 255, 0.25);
+
+	/* List-table status chips: fg darkens the status hue toward text for AA on
+	   the tint; bg mixes over the card so it self-darkens in dark mode (the fg
+	   tokens are re-flipped lighter in the dark blocks below). */
+	--wpca-pos-chip-fg: color-mix(in srgb, var(--wpca-pos) 65%, var(--wpca-text));
+	--wpca-neg-chip-fg: color-mix(in srgb, var(--wpca-neg) 65%, var(--wpca-text));
+	--wpca-warn-chip-fg: color-mix(in srgb, var(--wpca-warn) 65%, var(--wpca-text));
+	--wpca-info-chip-fg: color-mix(in srgb, var(--wpca-primary) 65%, var(--wpca-text));
+	--wpca-pos-chip-bg: color-mix(in srgb, var(--wpca-pos) 12%, var(--wpca-card-bg));
+	--wpca-neg-chip-bg: color-mix(in srgb, var(--wpca-neg) 12%, var(--wpca-card-bg));
+	--wpca-warn-chip-bg: color-mix(in srgb, var(--wpca-warn) 14%, var(--wpca-card-bg));
+	--wpca-info-chip-bg: color-mix(in srgb, var(--wpca-primary) 12%, var(--wpca-card-bg));
 }
 
 /* Persian/Arabic UI font on RTL locales. */
@@ -820,27 +832,611 @@ body.wpca-admin input[type="radio"]:checked {
 	border-color: var(--wpca-primary);
 }
 
-/* --------------------------------------------------------------- Tables ---- */
+/* --------------------------------------------------------------- Tables ----
+   Drop-in reskin of every core WP list table (.wp-list-table) into a modern,
+   Linear/Stripe/Retool-grade data table. RECOLOR-ONLY contract (CLAUDE.md §7 +
+   the SAFE DOM map): we win by body.wpca-admin scope + load order and touch only
+   background/border/color/padding/typography. We NEVER change display, width,
+   position, float, overflow, or border-collapse on the table, rows,
+   .column-primary, .check-column, .toggle-row, .row-actions hide/show, or
+   .sorting-indicator geometry — those drive core's column alignment, the
+   <=782px stacked card view, Quick Edit / Bulk Edit colspan rows, select-all JS,
+   and the asc/desc toggle. border-collapse stays at core's default (collapse):
+   the rounded-corner + hairline look is achieved with border + radius +
+   overflow:hidden, exactly as the prior block did, so the inline-edit colspan
+   rows and fixed column widths core computes are untouched. Sticky thead is
+   deliberately SKIPPED: the PAGE (not an inner container) scrolls under the
+   fixed 32px/46px admin bar, and the overflow:hidden the rounded card needs
+   would itself cancel position:sticky. All tints flow through --wpca-* tokens
+   via color-mix, so a rebrand and the dark blocks (admin.css:1400/1418)
+   propagate with zero table-specific dark rules EXCEPT the chip foreground
+   tokens, which must be re-flipped in those dark blocks (see the dark-block
+   additions appended after this section). Transitions are neutralized by the
+   global prefers-reduced-motion block (admin.css:1386).
 
-body.wpca-admin .wp-list-table {
+   NOTE ON MERGE: this block REPLACES the old Tables rules at admin.css:823-844
+   AND the tabular-nums rule at admin.css:1084-1087 — delete both so this is the
+   single source (no duplicate/contradictory cascade). */
+
+/* --- T1: container ---------------------------------------------------------
+   Card border + radius + overflow:hidden clip + card-bg ground. overflow:hidden
+   lets body rows and the header bg meet the rounded corners cleanly (and is the
+   single reason sticky thead is off the table). -xs shadow for a flatter,
+   contained-sheet read. Collapse model retained. */
+body.wpca-admin .wp-list-table,
+body.wpca-admin .wp-list-table.widefat {
 	border: 1px solid var(--wpca-border);
 	border-radius: var(--wpca-radius);
 	overflow: hidden;
-	box-shadow: var(--wpca-shadow);
+	box-shadow: var(--wpca-shadow-xs);
 	background: var(--wpca-card-bg);
 	color: var(--wpca-text);
+	font-size: 13px;
+	line-height: 1.45;
 }
 
-body.wpca-admin .wp-list-table thead th,
-body.wpca-admin .wp-list-table tfoot th {
+/* --- T1: header row --------------------------------------------------------
+   UPPERCASE micro-labels — the dominant modern-admin convention; text-faint so
+   headers recede. .manage-column is the class core puts on every header th;
+   tfoot mirrors thead. The bottom hairline uses -border-strong (one shade firmer
+   than the body separators) so the header/body boundary reads as the firmest
+   line in the table. text-align:start is RTL-safe (start = left LTR, right RTL).
+   The check-column is ALSO a th.manage-column but core sizes it tight and
+   centers its select-all checkbox, so it is excluded from this padding/align
+   and handled by its own rule below. */
+body.wpca-admin .wp-list-table thead th:not(.check-column),
+body.wpca-admin .wp-list-table thead td,
+body.wpca-admin .wp-list-table tfoot th:not(.check-column),
+body.wpca-admin .wp-list-table tfoot td,
+body.wpca-admin .wp-list-table th.manage-column:not(.check-column) {
 	background: var(--wpca-surface-2);
+	border-bottom: 1px solid var(--wpca-border-strong);
+	color: var(--wpca-text-faint);
+	font-size: 11px;
+	font-weight: 600;
+	letter-spacing: 0.04em;
+	text-transform: uppercase;
+	text-align: start;
+	vertical-align: middle;
+	padding: 10px 16px;
+}
+
+/* Header check-column: keep core's tight checkbox column — recolor ground only,
+   preserve core's narrow padding + centered checkbox (do NOT widen it). */
+body.wpca-admin .wp-list-table thead th.check-column,
+body.wpca-admin .wp-list-table tfoot th.check-column {
+	background: var(--wpca-surface-2);
+	border-bottom: 1px solid var(--wpca-border-strong);
+	vertical-align: middle;
+}
+
+/* --- T1: body cells, rhythm & hairline separators --------------------------
+   Hairline separators on a flat ground — NO zebra striping. ~44px row height via
+   padding. tabular-nums keeps figures aligned for vertical scanning. */
+body.wpca-admin .wp-list-table td,
+body.wpca-admin .wp-list-table tbody th {
 	border-bottom: 1px solid var(--wpca-border);
 	color: var(--wpca-text-muted);
+	padding: 11px 16px;
+	vertical-align: middle;
+	line-height: 1.4;
+	font-variant-numeric: tabular-nums;
+}
+
+/* The last data row's separator is redundant against the card edge. */
+body.wpca-admin .wp-list-table tbody tr:last-child td,
+body.wpca-admin .wp-list-table tbody tr:last-child th {
+	border-bottom: 0;
+}
+
+/* Primary/title column carries full text strength + weight; everything else
+   stays muted (set above). .column-primary / .row-title are core's stable hooks;
+   recolor only — .column-primary drives the stacked mobile view, never re-laid. */
+body.wpca-admin .wp-list-table td.column-primary,
+body.wpca-admin .wp-list-table .row-title,
+body.wpca-admin .wp-list-table .row-title strong,
+body.wpca-admin .wp-list-table .column-author strong,
+body.wpca-admin #the-comment-list .comment-author {
+	color: var(--wpca-text);
 	font-weight: 600;
 }
 
-body.wpca-admin .wp-list-table tbody tr:hover {
+body.wpca-admin .wp-list-table .row-title:hover,
+body.wpca-admin .wp-list-table .row-title strong:hover {
+	color: var(--wpca-primary);
+}
+
+/* Date column: muted + tabular so dates line up when scanning. */
+body.wpca-admin .wp-list-table .column-date,
+body.wpca-admin .wp-list-table .column-date .post-date {
+	color: var(--wpca-text-muted);
+	font-variant-numeric: tabular-nums;
+}
+
+/* End-align genuinely numeric columns so decimals stack. NOTE: core only adds
+   .num on a few screens (plugins/updates counts); the common post/page/comment
+   tables do NOT use it, so this is opt-in and harmless where absent. */
+body.wpca-admin .wp-list-table td.num,
+body.wpca-admin .wp-list-table th.num {
+	text-align: end;
+	font-variant-numeric: tabular-nums;
+}
+
+/* --- T1: row hover & selected state ----------------------------------------
+   Soft surface-2 wash — also the cue that core has revealed .row-actions.
+   focus-within keeps keyboard users in parity. We tint the row ONLY; core owns
+   row-actions visibility. */
+body.wpca-admin .wp-list-table tbody tr {
+	transition: background-color var(--wpca-dur-fast) var(--wpca-ease);
+}
+
+body.wpca-admin .wp-list-table tbody tr:hover,
+body.wpca-admin .wp-list-table tbody tr:focus-within {
+	background: color-mix(in srgb, var(--wpca-surface-2) 60%, var(--wpca-card-bg));
+}
+
+/* Selected row: tinted ground + a left accent rendered via inset box-shadow
+   (NOT a border) so cell layout never shifts. box-shadow has NO logical form, so
+   the inline-start (RTL) counterpart is added explicitly below. */
+body.wpca-admin .wp-list-table tbody tr.selected > td,
+body.wpca-admin .wp-list-table tbody tr.selected > th,
+body.wpca-admin .wp-list-table tbody tr.wp-list-table-row-selected > td {
+	background: color-mix(in srgb, var(--wpca-primary) 7%, var(--wpca-card-bg));
+	color: var(--wpca-text);
+	box-shadow: inset 3px 0 0 0 var(--wpca-primary);
+}
+
+body.wpca-admin .wp-list-table tbody tr.selected:hover > td,
+body.wpca-admin .wp-list-table tbody tr.selected:hover > th {
+	background: color-mix(in srgb, var(--wpca-primary) 11%, var(--wpca-card-bg));
+}
+
+/* Brand the check-column checkboxes; recolor ground only — never width/display. */
+body.wpca-admin .wp-list-table .check-column {
+	vertical-align: middle;
+}
+
+body.wpca-admin .wp-list-table .check-column input[type="checkbox"] {
+	accent-color: var(--wpca-primary);
+}
+
+/* --- T5: sortable column headers -------------------------------------------
+   The whole label is an <a> when sortable; .sorted marks the active column; core
+   flips asc/desc via .asc/.desc and owns the .sorting-indicator glyph box. We
+   recolor + add a quiet hover wash ONLY. Default indicators stay near-invisible
+   so the table isn't peppered with arrows; the hovered or active column reveals
+   one. We do NOT touch the indicator's size, position, or ::before content
+   (FRAGILE — core toggles direction through it). */
+body.wpca-admin .wp-list-table th.sortable,
+body.wpca-admin .wp-list-table th.sorted {
+	cursor: pointer;
+	transition: background-color var(--wpca-dur-fast) var(--wpca-ease);
+}
+
+body.wpca-admin .wp-list-table th.sortable:hover,
+body.wpca-admin .wp-list-table th.sorted:hover {
+	background: color-mix(in srgb, var(--wpca-surface-2) 70%, var(--wpca-card-bg));
+}
+
+body.wpca-admin .wp-list-table th.sortable a,
+body.wpca-admin .wp-list-table th.sorted a {
+	color: var(--wpca-text-faint);
+	text-decoration: none;
+	transition: color var(--wpca-dur-fast) var(--wpca-ease);
+}
+
+body.wpca-admin .wp-list-table th.sortable:hover a,
+body.wpca-admin .wp-list-table th.sortable a:focus {
+	color: var(--wpca-text);
+}
+
+/* Active-sort column: label at full strength. */
+body.wpca-admin .wp-list-table th.sorted a,
+body.wpca-admin .wp-list-table th.sorted a:focus {
+	color: var(--wpca-text);
+}
+
+/* Keyboard focus ring on the sortable link — a color delta alone is not a
+   sufficient focus indicator (WCAG 2.4.7). Matches the rest of the file. */
+body.wpca-admin .wp-list-table th.sortable a:focus-visible,
+body.wpca-admin .wp-list-table th.sorted a:focus-visible {
+	outline: none;
+	box-shadow: var(--wpca-focus);
+	border-radius: var(--wpca-radius-xs);
+}
+
+/* Resting indicator: faint, near-hidden. Color/opacity ONLY — geometry is core's. */
+body.wpca-admin .wp-list-table th.sortable .sorting-indicator {
+	color: var(--wpca-text-faint);
+	opacity: 0;
+	transition: opacity var(--wpca-dur-fast) var(--wpca-ease);
+}
+
+body.wpca-admin .wp-list-table th.sortable:hover .sorting-indicator,
+body.wpca-admin .wp-list-table th.sortable a:focus .sorting-indicator {
+	opacity: 0.5;
+}
+
+/* Active column's indicator: brand-tinted and fully shown. */
+body.wpca-admin .wp-list-table th.sorted .sorting-indicator {
+	color: var(--wpca-primary);
+	opacity: 1;
+}
+
+/* The dashicon glyph (::before content) inherits color via currentColor. */
+body.wpca-admin .wp-list-table th.sorted .sorting-indicator::before {
+	color: currentColor;
+}
+
+/* --- T2: status pill chips -------------------------------------------------
+   Shared chip shape on the title .post-state suffix (— Draft, etc.). A
+   slightly-squared rect (radius-xs), NOT a full pill — the Stripe/Linear status
+   look. inline-block (NOT inline-flex) so core's leading "— " em-dash separator
+   keeps its baseline and is not orphaned before the box. The chip text/border/
+   dot all ride one foreground token per tier (set below); the dot and border
+   derive from currentColor so a single var changes per status. CRITICAL: the
+   chip FOREGROUND is a derived -chip-fg token (status hue darkened toward text),
+   NOT the raw saturated status hue, so 11px text clears WCAG AA on the tinted
+   fill in BOTH schemes (raw-hue-on-same-hue-tint failed AA). .post-state is
+   cosmetic with no layout dependency — safe to box. */
+body.wpca-admin .wp-list-table .post-state {
+	display: inline-block;
+	margin-inline-start: 6px;
+	padding: 2px 8px;
+	border-radius: var(--wpca-radius-xs);
+	font-size: 11px;
+	font-weight: 600;
+	line-height: 1.6;
+	letter-spacing: 0.01em;
+	white-space: nowrap;
+	vertical-align: baseline;
+	/* Neutral/draft default: a non-state stays gray, never colored. Uses the
+	   firm -border-strong edge so even an uncategorized state shows a defined
+	   chip outline (a 22%-of-muted hairline was nearly invisible). */
+	color: var(--wpca-text-muted);
 	background: var(--wpca-surface-2);
+	border: 1px solid var(--wpca-border-strong);
+}
+
+/* Leading status dot — inherits the chip's current foreground. */
+body.wpca-admin .wp-list-table .post-state::before {
+	content: "";
+	display: inline-block;
+	width: 6px;
+	height: 6px;
+	margin-inline-end: 5px;
+	border-radius: 50%;
+	background: currentColor;
+	vertical-align: middle;
+}
+
+/* T2: status color mapping — post statuses → the four semantic tiers. Each rule
+   sets fg (color) + bg + border only; the dot rides currentColor. ONLY the
+   tr.status-* selectors are used: core puts status-* on the <tr>, NOT on the
+   .post-state span, and published posts have no .post-state at all (the dead
+   `.post-state.status-*` variants are dropped). */
+
+/* PENDING (review) → warning. */
+body.wpca-admin .wp-list-table tr.status-pending .post-state {
+	color: var(--wpca-warn-chip-fg);
+	background: var(--wpca-warn-chip-bg);
+	border-color: color-mix(in srgb, var(--wpca-warn) 30%, transparent);
+}
+
+/* SCHEDULED / FUTURE → info (synthesized from primary, with its own legible fg). */
+body.wpca-admin .wp-list-table tr.status-future .post-state {
+	color: var(--wpca-info-chip-fg);
+	background: var(--wpca-info-chip-bg);
+	border-color: color-mix(in srgb, var(--wpca-primary) 30%, transparent);
+}
+
+/* TRASH → negative. */
+body.wpca-admin .wp-list-table tr.status-trash .post-state {
+	color: var(--wpca-neg-chip-fg);
+	background: var(--wpca-neg-chip-bg);
+	border-color: color-mix(in srgb, var(--wpca-neg) 30%, transparent);
+}
+
+/* DRAFT and PRIVATE → neutral gray (explicit; pins the firm gray border). */
+body.wpca-admin .wp-list-table tr.status-draft .post-state,
+body.wpca-admin .wp-list-table tr.status-private .post-state {
+	color: var(--wpca-text-muted);
+	background: var(--wpca-surface-2);
+	border-color: var(--wpca-border-strong);
+}
+
+/* Some core/plugin spans DO carry a publish marker; tint it positive when present
+   (published rows usually have no .post-state, so this only fires when one exists). */
+body.wpca-admin .wp-list-table tr.status-publish .post-state {
+	color: var(--wpca-pos-chip-fg);
+	background: var(--wpca-pos-chip-bg);
+	border-color: color-mix(in srgb, var(--wpca-pos) 30%, transparent);
+}
+
+/* T2: comment status rows — color/bg only; core CSS hooks, never restructured.
+   Pending → warn wash + left accent; spam/trash → negative wash with reduced
+   text emphasis. The accent uses inset box-shadow on the LEFT edge; its RTL
+   inline-start counterpart is added explicitly below. */
+body.wpca-admin #the-comment-list tr.unapproved > td,
+body.wpca-admin #the-comment-list tr.unapproved > th {
+	background: color-mix(in srgb, var(--wpca-warn) 7%, var(--wpca-card-bg));
+	box-shadow: inset 3px 0 0 0 var(--wpca-warn);
+}
+
+body.wpca-admin #the-comment-list tr.unapproved .comment-author {
+	color: var(--wpca-warn-chip-fg);
+}
+
+body.wpca-admin #the-comment-list tr.spam > td,
+body.wpca-admin #the-comment-list tr.spam > th,
+body.wpca-admin #the-comment-list tr.trash > td,
+body.wpca-admin #the-comment-list tr.trash > th {
+	background: color-mix(in srgb, var(--wpca-neg) 6%, var(--wpca-card-bg));
+	color: var(--wpca-text-faint);
+}
+
+/* Generic inline comment-status pills get the chip shape + neutral tier color. */
+body.wpca-admin .wp-list-table .comment-status,
+body.wpca-admin .wp-list-table span.status-label {
+	display: inline-block;
+	padding: 2px 8px;
+	border-radius: var(--wpca-radius-xs);
+	border: 1px solid var(--wpca-border-strong);
+	font-size: 11px;
+	font-weight: 600;
+	line-height: 1.6;
+	letter-spacing: 0.01em;
+	white-space: nowrap;
+	color: var(--wpca-text-muted);
+	background: var(--wpca-surface-2);
+}
+
+/* --- T3: inline row actions (hover-revealed by core) -----------------------
+   Core hides .row-actions off-screen and reveals on tr:hover / .has-row-actions
+   and force-shows on touch — we DO NOT override its hide/show mechanics. We also
+   keep core's native " | " separators (they are literal text nodes emitted
+   INSIDE each <span class='$action'> by row_actions(); CSS cannot target a text
+   node, so any attempt to hide them and inject our own divider produces DOUBLED
+   separators). RECOLOR ONLY. */
+body.wpca-admin .wp-list-table .row-actions {
+	color: var(--wpca-text-faint);
+	font-size: 11px;
+}
+
+body.wpca-admin .wp-list-table .row-actions span a,
+body.wpca-admin .wp-list-table .row-actions a {
+	color: var(--wpca-text-muted);
+	text-decoration: none;
+	transition: color var(--wpca-dur-fast) var(--wpca-ease);
+}
+
+body.wpca-admin .wp-list-table .row-actions span a:hover,
+body.wpca-admin .wp-list-table .row-actions a:hover {
+	color: var(--wpca-primary);
+}
+
+body.wpca-admin .wp-list-table .row-actions a:focus-visible {
+	outline: none;
+	box-shadow: var(--wpca-focus);
+	border-radius: var(--wpca-radius-xs);
+}
+
+/* Destructive actions tint negative on hover for affordance. */
+body.wpca-admin .wp-list-table .row-actions .trash a,
+body.wpca-admin .wp-list-table .row-actions span.trash a,
+body.wpca-admin .wp-list-table .row-actions .delete a,
+body.wpca-admin .wp-list-table .row-actions span.delete a,
+body.wpca-admin .wp-list-table .row-actions .spam a {
+	color: var(--wpca-text-muted);
+}
+
+body.wpca-admin .wp-list-table .row-actions .trash a:hover,
+body.wpca-admin .wp-list-table .row-actions span.trash a:hover,
+body.wpca-admin .wp-list-table .row-actions .delete a:hover,
+body.wpca-admin .wp-list-table .row-actions span.delete a:hover,
+body.wpca-admin .wp-list-table .row-actions .spam a:hover {
+	color: var(--wpca-neg);
+}
+
+/* --- T4: tablenav toolbar (above/below the table) --------------------------
+   Style background/color/spacing ONLY. We keep core's float/inline-block layout
+   model and clearfix — forcing flex/grid or fixed heights misaligns Apply +
+   pagination and breaks the responsive toolbar (core hides one .actions block at
+   narrow widths). */
+body.wpca-admin .tablenav {
+	color: var(--wpca-text-muted);
+}
+
+body.wpca-admin .tablenav.bottom {
+	/* Read the bottom toolbar as the table's footer: a hairline above, card
+	   ground beneath. */
+	border-top: 1px solid var(--wpca-border);
+	background: var(--wpca-card-bg);
+	border-radius: 0 0 var(--wpca-radius) var(--wpca-radius);
+}
+
+/* T4: bulk-action controls. select + Apply inherit global form/.button chrome —
+   we tint radius only. Do NOT change layout/width; core JS reads the select on
+   Apply. */
+body.wpca-admin .bulkactions select {
+	height: 32px;
+	border-radius: var(--wpca-radius-sm);
+}
+
+body.wpca-admin .bulkactions .button.action {
+	border-radius: var(--wpca-radius-sm);
+}
+
+/* T4: status filter links (.subsubsub). Core builds this strip with
+   implode(" |</li>\n", $views), so the "|" is a literal TEXT NODE at the end of
+   each <li>, NOT a generated ::after — CSS cannot remove it. We therefore do NOT
+   convert .subsubsub to an inline-flex segmented trough (the pipes would render
+   inside each pill). RECOLOR + spacing only, keeping core's inline text-pipe
+   layout. */
+body.wpca-admin .subsubsub {
+	margin: 0 0 12px;
+	color: var(--wpca-text-faint);
+	font-size: 13px;
+}
+
+body.wpca-admin .subsubsub li {
+	color: var(--wpca-text-faint);
+}
+
+body.wpca-admin .subsubsub a {
+	color: var(--wpca-text-muted);
+	text-decoration: none;
+	transition: color var(--wpca-dur-fast) var(--wpca-ease);
+}
+
+body.wpca-admin .subsubsub a:hover {
+	color: var(--wpca-text);
+}
+
+body.wpca-admin .subsubsub a:focus-visible {
+	outline: none;
+	box-shadow: var(--wpca-focus);
+	border-radius: var(--wpca-radius-xs);
+}
+
+/* Active filter = brand-tinted, full strength. */
+body.wpca-admin .subsubsub a.current,
+body.wpca-admin .subsubsub a.current strong {
+	color: var(--wpca-primary);
+	font-weight: 600;
+}
+
+/* Per-filter count, quiet + tabular. */
+body.wpca-admin .subsubsub .count {
+	color: var(--wpca-text-faint);
+	font-variant-numeric: tabular-nums;
+}
+
+/* T4: search box. Field + submit inherit the global input/.button chrome
+   (radius, border-strong, brand focus ring). RECOLOR-ONLY: .search-box is a
+   GLOBAL admin selector (also on plugins/media/settings), so we only size the
+   field. No forced flex layout, and no magnifier hack (a token-tinted glyph on
+   the input is not reliably expressible without a pseudo-element). */
+body.wpca-admin .search-box input[type="search"] {
+	height: 32px;
+	min-width: 240px;
+	font-size: 13px;
+}
+body.wpca-admin .search-box input[type="search"]::placeholder {
+	color: var(--wpca-text-faint);
+}
+
+/* T4: pagination (.tablenav-pages). Recolor + radius on prev/next/first/last and
+   the current-page indicator; keep them inline-block as core sizes them. */
+body.wpca-admin .tablenav-pages {
+	color: var(--wpca-text-muted);
+	font-size: 12px;
+}
+
+body.wpca-admin .tablenav-pages .displaying-num,
+body.wpca-admin .displaying-num {
+	color: var(--wpca-text-muted);
+	font-size: 12px;
+	font-variant-numeric: tabular-nums;
+}
+
+body.wpca-admin .tablenav-pages a.page-numbers,
+body.wpca-admin .tablenav-pages a.button,
+body.wpca-admin .tablenav-pages span.tablenav-pages-navspan {
+	border: 1px solid var(--wpca-border);
+	border-radius: var(--wpca-radius-xs);
+	background: var(--wpca-card-bg);
+	color: var(--wpca-text-muted);
+	box-shadow: none;
+	transition: color var(--wpca-dur-fast) var(--wpca-ease),
+		border-color var(--wpca-dur-fast) var(--wpca-ease);
+}
+
+body.wpca-admin .tablenav-pages a.page-numbers:hover,
+body.wpca-admin .tablenav-pages a.button:hover,
+body.wpca-admin .tablenav-pages a.page-numbers:focus,
+body.wpca-admin .tablenav-pages a.button:focus {
+	border-color: var(--wpca-primary);
+	color: var(--wpca-primary);
+}
+
+body.wpca-admin .tablenav-pages a:focus-visible {
+	outline: none;
+	box-shadow: var(--wpca-focus);
+}
+
+/* Disabled end buttons: dimmed but the arrow shape must stay discernible — these
+   are the primary directional affordance, so opacity floors at 0.55 (not 0.4). */
+body.wpca-admin .tablenav-pages span.tablenav-pages-navspan.button.disabled,
+body.wpca-admin .tablenav-pages .page-numbers.disabled {
+	opacity: 0.55;
+	color: var(--wpca-text-faint);
+	border-color: var(--wpca-border);
+	cursor: default;
+}
+
+/* Current page: brand-tinted. */
+body.wpca-admin .tablenav-pages span.current,
+body.wpca-admin .tablenav-pages .page-numbers.current {
+	color: var(--wpca-primary);
+	font-weight: 600;
+}
+
+body.wpca-admin .tablenav-pages input.current-page {
+	text-align: center;
+	font-variant-numeric: tabular-nums;
+	border-radius: var(--wpca-radius-xs);
+}
+
+body.wpca-admin .tablenav-pages .total-pages {
+	color: var(--wpca-text-faint);
+	font-variant-numeric: tabular-nums;
+}
+
+body.wpca-admin .page-numbers.dots {
+	color: var(--wpca-text-faint);
+	border: 0;
+	background: transparent;
+}
+
+/* --- RTL: inset accents have no logical form -------------------------------
+   box-shadow:inset 3px lands on the physical LEFT edge regardless of direction.
+   In fa_IR (body.rtl) the accent must sit on the inline-start (right) edge — flip
+   each one, mirroring the established cmdk pattern at admin.css:1359. */
+body.rtl.wpca-admin .wp-list-table tbody tr.selected > td,
+body.rtl.wpca-admin .wp-list-table tbody tr.selected > th,
+body.rtl.wpca-admin .wp-list-table tbody tr.wp-list-table-row-selected > td {
+	box-shadow: inset -3px 0 0 0 var(--wpca-primary);
+}
+
+body.rtl.wpca-admin #the-comment-list tr.unapproved > td,
+body.rtl.wpca-admin #the-comment-list tr.unapproved > th {
+	box-shadow: inset -3px 0 0 0 var(--wpca-warn);
+}
+
+/* --- Stacked mobile view (<=782px) — color/typography ONLY -----------------
+   Below 782px core owns the stacked card layout (.column-primary + .toggle-row +
+   data-colname ::before labels) and the admin bar is 46px. Color only — never
+   touch display/overflow/width/position on the table, rows, columns,
+   .check-column, or .toggle-row, or the expand/collapse JS breaks. */
+@media screen and (max-width: 782px) {
+	/* Coarse pointers can't hover-reveal row-actions; core force-shows them, so
+	   keep the link color readable. */
+	body.wpca-admin .wp-list-table .row-actions a {
+		color: var(--wpca-text-muted);
+	}
+
+	/* The mobile column labels core injects via ::before stay quiet. */
+	body.wpca-admin .wp-list-table td.column-primary::before,
+	body.wpca-admin .wp-list-table td::before {
+		color: var(--wpca-text-faint);
+		font-weight: 600;
+	}
+
+	/* The toggle-row chevron: recolor its glyph ONLY (geometry is core's). */
+	body.wpca-admin .wp-list-table .toggle-row::before {
+		color: var(--wpca-text-muted);
+	}
 }
 
 /* --------------------------------------------------------------- Notices --- */
@@ -1413,6 +2009,11 @@ body.wpca-admin.wpca-scheme-dark {
 	--wpca-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.45);
 	--wpca-shadow: 0 1px 2px rgba(0, 0, 0, 0.45);
 	--wpca-shadow-md: 0 6px 16px -6px rgba(0, 0, 0, 0.6);
+	/* Status-chip text lightens on the dark card (re-flip of the :root values). */
+	--wpca-pos-chip-fg: color-mix(in srgb, var(--wpca-pos) 55%, #ffffff);
+	--wpca-neg-chip-fg: color-mix(in srgb, var(--wpca-neg) 55%, #ffffff);
+	--wpca-warn-chip-fg: color-mix(in srgb, var(--wpca-warn) 55%, #ffffff);
+	--wpca-info-chip-fg: color-mix(in srgb, var(--wpca-primary) 55%, #ffffff);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -1432,5 +2033,10 @@ body.wpca-admin.wpca-scheme-dark {
 		--wpca-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.45);
 		--wpca-shadow: 0 1px 2px rgba(0, 0, 0, 0.45);
 		--wpca-shadow-md: 0 6px 16px -6px rgba(0, 0, 0, 0.6);
+		/* Status-chip text lightens on the dark card (re-flip of the :root values). */
+		--wpca-pos-chip-fg: color-mix(in srgb, var(--wpca-pos) 55%, #ffffff);
+		--wpca-neg-chip-fg: color-mix(in srgb, var(--wpca-neg) 55%, #ffffff);
+		--wpca-warn-chip-fg: color-mix(in srgb, var(--wpca-warn) 55%, #ffffff);
+		--wpca-info-chip-fg: color-mix(in srgb, var(--wpca-primary) 55%, #ffffff);
 	}
 }

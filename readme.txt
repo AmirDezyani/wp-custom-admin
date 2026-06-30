@@ -63,6 +63,12 @@ Yes. Network admin is left untouched by default; a network-level default can be 
   Vanilla JS (no build), accessible (combobox/listbox, full keyboard model, focus
   trap), and read-only (links only — no writes). A discoverable button is added to
   the toolbar. Toggle under Settings → Branding.
+* List tables — every core list table (posts, pages, comments, users, plugins)
+  becomes a modern data table: a themed uppercase header, hairline rows with a soft
+  hover wash, status pill chips (published / draft / pending / scheduled / trash
+  mapped to the semantic colors), hover-revealed row actions, brand-tinted active
+  sort column / current filter / current page, and tabular numerals. Recolor-only —
+  core's responsive stacked view, Quick Edit, and column sorting are untouched.
 * Persian/RTL first-class: the page-header and command-palette strings are shipped
   translated to fa_IR, the palette folds Persian/Arabic letter and digit variants
   for reliable search, the shortcut is matched by physical key so it works on
