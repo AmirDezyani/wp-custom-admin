@@ -126,6 +126,17 @@ final class SettingsPage {
 		);
 
 		wp_set_script_translations( 'wpca-settings', 'wp-custom-admin' );
+
+		// Pass the wp.media frame labels through PHP gettext so they localize without
+		// a build-step script-translation JSON (this plugin ships no build artifacts).
+		wp_localize_script(
+			'wpca-settings',
+			'wpcaSettingsL10n',
+			array(
+				'selectImage' => __( 'Select image', 'wp-custom-admin' ),
+				'useImage'    => __( 'Use image', 'wp-custom-admin' ),
+			)
+		);
 	}
 
 	/**

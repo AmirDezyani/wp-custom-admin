@@ -4,7 +4,7 @@ Tags: admin, white-label, branding, admin-theme, login
 Requires at least: 6.5
 Tested up to: 6.5
 Requires PHP: 7.4
-Stable tag: 0.8.1
+Stable tag: 0.8.2
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -41,6 +41,14 @@ No. Deactivation is non-destructive. Data is only removed on uninstall, and only
 Yes. Network admin is left untouched by default; a network-level default can be set with per-site overrides.
 
 == Changelog ==
+
+= 0.8.2 =
+* Persian (fa_IR) translation completed: the branded Home dashboard, admin menu
+  labels, activity statuses, and the newer settings (color scheme, dashboard
+  options, network defaults) are now fully translated — nothing falls back to
+  English on Persian sites. The .pot template now lists the full string set.
+* Settings-page media-picker labels localize through PHP, so they translate
+  without a build-step script-translation JSON.
 
 = 0.8.1 =
 * Dark mode: WordPress-core admin text that ships with a fixed light-mode color

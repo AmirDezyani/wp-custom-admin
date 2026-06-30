@@ -8,6 +8,9 @@
 ( function ( $ ) {
 	'use strict';
 
+	// Server-translated strings (see SettingsPage::enqueue) keep the wp.media frame
+	// localized without shipping a build-step script-translation JSON.
+	var l10n = window.wpcaSettingsL10n || {};
 	var __ = ( window.wp && wp.i18n && wp.i18n.__ )
 		? wp.i18n.__
 		: function ( text ) { return text; };
@@ -104,8 +107,8 @@
 				}
 
 				frame = wp.media( {
-					title: __( 'Select image', 'wp-custom-admin' ),
-					button: { text: __( 'Use image', 'wp-custom-admin' ) },
+					title: l10n.selectImage || __( 'Select image', 'wp-custom-admin' ),
+					button: { text: l10n.useImage || __( 'Use image', 'wp-custom-admin' ) },
 					library: { type: 'image' },
 					multiple: false,
 				} );

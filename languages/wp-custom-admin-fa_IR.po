@@ -3,7 +3,7 @@
 # This file is distributed under the GPL-2.0-or-later license.
 msgid ""
 msgstr ""
-"Project-Id-Version: WP Custom Admin 0.3.0\n"
+"Project-Id-Version: WP Custom Admin 0.8.1\n"
 "Report-Msgid-Bugs-To: https://github.com/AmirDezyani/wp-custom-admin/issues\n"
 "Language: fa_IR\n"
 "MIME-Version: 1.0\n"
@@ -12,6 +12,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Domain: wp-custom-admin\n"
 
+#. Settings — tabs & section headings.
 msgid "Branding"
 msgstr "برندسازی"
 
@@ -51,6 +52,7 @@ msgstr "درون‌ریزی"
 msgid "Brand control panel"
 msgstr "پنل کنترل برند"
 
+#. Settings — Branding tab.
 msgid "Enable the custom admin theme"
 msgstr "فعال‌سازی پوستهٔ اختصاصی مدیریت"
 
@@ -78,6 +80,40 @@ msgstr "پیش‌فرض سیستم"
 msgid "Monospace"
 msgstr "تک‌فاصله"
 
+msgid "Custom Home dashboard"
+msgstr "پیشخوان خانهٔ اختصاصی"
+
+msgid "Adds a branded Home screen in place of the default WordPress dashboard."
+msgstr "یک صفحهٔ خانهٔ برندشده به‌جای پیشخوان پیش‌فرض وردپرس اضافه می‌کند."
+
+msgid "Land on Home after login"
+msgstr "نمایش صفحهٔ خانه پس از ورود"
+
+msgid "Redirect the default dashboard to the branded Home screen."
+msgstr "پیشخوان پیش‌فرض را به صفحهٔ خانهٔ برندشده هدایت می‌کند."
+
+msgid "Color scheme"
+msgstr "طرح رنگ"
+
+msgid "Auto (match the system)"
+msgstr "خودکار (هماهنگ با سیستم)"
+
+msgid "Light"
+msgstr "روشن"
+
+msgid "Dark"
+msgstr "تیره"
+
+msgid "Applies a dark theme to the admin content and the Home dashboard."
+msgstr "یک پوستهٔ تیره به محتوای مدیریت و پیشخوان خانه اعمال می‌کند."
+
+msgid "Activity chart in the dashboard header"
+msgstr "نمودار فعالیت در سربرگ پیشخوان"
+
+msgid "Shows a 14-day activity trend chart when there is recent data."
+msgstr "هنگام وجود دادهٔ اخیر، نمودار روند فعالیت ۱۴ روزه را نشان می‌دهد."
+
+#. Settings — Colors tab.
 msgid "Primary"
 msgstr "اصلی"
 
@@ -102,6 +138,7 @@ msgstr "آیتم فعال نوار کناری"
 msgid "Top bar background"
 msgstr "پس‌زمینهٔ نوار بالا"
 
+#. Settings — Login tab.
 msgid "Brand the login screen"
 msgstr "برندسازی صفحهٔ ورود"
 
@@ -120,6 +157,7 @@ msgstr "نشانی پیوند لوگو"
 msgid "Where the login logo links to. Defaults to the site home."
 msgstr "لوگوی ورود به کجا پیوند می‌خورد. پیش‌فرض: خانهٔ سایت."
 
+#. Settings — Menu tab.
 msgid "Customize the admin menu"
 msgstr "سفارشی‌سازی منوی مدیریت"
 
@@ -150,6 +188,7 @@ msgstr "تغییر نام به"
 msgid "No admin menu items were detected."
 msgstr "هیچ آیتم منوی مدیریتی یافت نشد."
 
+#. Settings — White-label tab.
 msgid "Enable white-labeling"
 msgstr "فعال‌سازی وایت‌لیبل"
 
@@ -186,6 +225,7 @@ msgstr "متن پاورقی"
 msgid "Replaces the WordPress footer credit. Basic links allowed. Blank uses the product name."
 msgstr "جایگزین اعتبار پاورقی وردپرس می‌شود. پیوندهای ساده مجاز است. خالی، نام محصول را نشان می‌دهد."
 
+#. Settings — Tools tab.
 msgid "Delete all settings when the plugin is uninstalled"
 msgstr "حذف همهٔ تنظیمات هنگام حذف افزونه"
 
@@ -210,6 +250,7 @@ msgstr "تنظیمات برند با موفقیت درون‌ریزی شد."
 msgid "Import failed. Please upload a valid brand.json file."
 msgstr "درون‌ریزی ناموفق بود. لطفاً یک فایل brand.json معتبر بارگذاری کنید."
 
+#. Media picker & permission notices.
 msgid "Select image"
 msgstr "انتخاب تصویر"
 
@@ -224,3 +265,80 @@ msgstr "شما اجازهٔ دسترسی به این صفحه را ندارید.
 
 msgid "You do not have permission to do this."
 msgstr "شما اجازهٔ انجام این کار را ندارید."
+
+#. Home dashboard — menu, KPI labels & quick actions.
+msgid "Home"
+msgstr "خانه"
+
+msgid "Posts"
+msgstr "نوشته‌ها"
+
+msgid "Pages"
+msgstr "برگه‌ها"
+
+msgid "Comments"
+msgstr "دیدگاه‌ها"
+
+msgid "Users"
+msgstr "کاربران"
+
+msgid "New post"
+msgstr "نوشتهٔ جدید"
+
+msgid "New page"
+msgstr "برگهٔ جدید"
+
+msgid "Media library"
+msgstr "کتابخانهٔ رسانه"
+
+msgid "Brand settings"
+msgstr "تنظیمات برند"
+
+#. Home dashboard — hero greeting. %s is the user display name.
+msgid "Welcome back, %s"
+msgstr "خوش آمدید، %s"
+
+#. Home dashboard — hero subtitle. %s is the product / site name.
+msgid "Here's what's happening on %s today."
+msgstr "امروز در %s چه خبر است."
+
+msgid "View site"
+msgstr "نمایش سایت"
+
+msgid "Recent activity"
+msgstr "فعالیت‌های اخیر"
+
+msgid "Quick actions"
+msgstr "اقدامات سریع"
+
+msgid "Nothing here yet"
+msgstr "هنوز چیزی اینجا نیست"
+
+msgid "Your latest posts and pages will show up here."
+msgstr "آخرین نوشته‌ها و برگه‌های شما اینجا نمایش داده می‌شوند."
+
+msgid "Write your first post"
+msgstr "اولین نوشتهٔ خود را بنویسید"
+
+#. Home dashboard — activity timestamp. %s is a human-readable time, e.g. "2 hours".
+msgid "%s ago"
+msgstr "%s پیش"
+
+msgid "Published"
+msgstr "منتشرشده"
+
+msgid "Scheduled"
+msgstr "زمان‌بندی‌شده"
+
+msgid "Draft"
+msgstr "پیش‌نویس"
+
+msgid "Pending"
+msgstr "در انتظار بازبینی"
+
+#. Multisite — network admin defaults page.
+msgid "Network-wide brand defaults. Individual sites can override these in their own settings."
+msgstr "پیش‌فرض‌های برند در سطح شبکه. هر سایت می‌تواند آن‌ها را در تنظیمات خود بازنویسی کند."
+
+msgid "Network defaults saved."
+msgstr "پیش‌فرض‌های شبکه ذخیره شد."
