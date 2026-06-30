@@ -4,7 +4,7 @@ Tags: admin, white-label, branding, admin-theme, login
 Requires at least: 6.5
 Tested up to: 6.5
 Requires PHP: 7.4
-Stable tag: 0.7.0
+Stable tag: 0.8.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -41,6 +41,16 @@ No. Deactivation is non-destructive. Data is only removed on uninstall, and only
 Yes. Network admin is left untouched by default; a network-level default can be set with per-site overrides.
 
 == Changelog ==
+
+= 0.8.0 =
+* Sidebar redesigned to a branded navigation rail: rounded "pill" menu items, a
+  solid brand-colored pill for the current screen (replacing the WordPress accent
+  bar), and a header with the client logo — or a monogram tile plus product name.
+* The admin-menu logo now renders in that header (with a folded/collapsed state)
+  instead of as a background image.
+* The redundant stock "Dashboard" menu item is removed when the branded Home is the
+  landing page, so the rail shows a single "Home" at the top. Core updates remain
+  reachable via the toolbar and update notices.
 
 = 0.7.0 =
 * Cohesion across the admin: tokenized admin notices, settings form tables, the
