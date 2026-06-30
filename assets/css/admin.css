@@ -89,12 +89,16 @@ body.wpca-admin #wpbody-content {
 	background: var(--wpca-content-bg);
 }
 
-body.wpca-admin a {
+/* Brand only genuine text links — never anchors styled as buttons (WP's own
+   .button*, Elementor's .e-button/.elementor-button, etc. all carry "button" in
+   their class). Recoloring those paints brand text onto a plugin's own button
+   background, which can vanish (e.g. indigo-on-indigo). */
+body.wpca-admin a:not([class*="button"]) {
 	color: var(--wpca-primary);
 }
 
-body.wpca-admin a:hover,
-body.wpca-admin a:focus {
+body.wpca-admin a:not([class*="button"]):hover,
+body.wpca-admin a:not([class*="button"]):focus {
 	color: var(--wpca-primary-hover);
 }
 
@@ -308,8 +312,27 @@ body.wpca-admin select,
 body.wpca-admin textarea {
 	border-radius: var(--wpca-radius-sm);
 	border-color: var(--wpca-border-strong);
-	background: var(--wpca-card-bg);
+	/* background-color (not the shorthand) so a select keeps its arrow image. */
+	background-color: var(--wpca-card-bg);
 	color: var(--wpca-text);
+}
+
+/* Give selects a neutral, mode-agnostic dropdown arrow. The shorthand reset above
+   used to wipe WordPress' arrow; this n-400 chevron stays visible on both light
+   and dark surfaces, and flips side under RTL. */
+body.wpca-admin select:not([multiple]) {
+	appearance: none;
+	-webkit-appearance: none;
+	background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' fill='none' stroke='%2394a3b8' stroke-width='1.7' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 8l4 4 4-4'/%3E%3C/svg%3E");
+	background-repeat: no-repeat;
+	background-position: right 8px center;
+	padding-right: 28px;
+}
+
+body.rtl.wpca-admin select:not([multiple]) {
+	background-position: left 8px center;
+	padding-right: 8px;
+	padding-left: 28px;
 }
 
 body.wpca-admin input[type="text"]:focus,

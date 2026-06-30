@@ -4,7 +4,7 @@ Tags: admin, white-label, branding, admin-theme, login
 Requires at least: 6.5
 Tested up to: 6.5
 Requires PHP: 7.4
-Stable tag: 0.8.2
+Stable tag: 0.8.3
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -41,6 +41,14 @@ No. Deactivation is non-destructive. Data is only removed on uninstall, and only
 Yes. Network admin is left untouched by default; a network-level default can be set with per-site overrides.
 
 == Changelog ==
+
+= 0.8.3 =
+* Fix: brand link coloring no longer applies to anchors styled as buttons (WP's
+  `.button*`, Elementor's `.e-button`, etc.), so the theme can't paint
+  brand-colored text onto a plugin's own button background and make it vanish.
+* Fix: select / dropdown controls regained their arrow — the reskin's background
+  shorthand had wiped WordPress's. Selects now show a crisp, RTL-aware chevron
+  that stays visible in both light and dark schemes.
 
 = 0.8.2 =
 * Persian (fa_IR) translation completed: the branded Home dashboard, admin menu

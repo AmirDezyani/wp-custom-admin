@@ -10,7 +10,7 @@
 declare( strict_types=1 );
 
 define( 'ABSPATH', __DIR__ . '/' );
-define( 'WPCA_VERSION', '0.8.2' );
+define( 'WPCA_VERSION', '0.8.3' );
 define( 'WPCA_PATH', dirname( __DIR__ ) . '/' );
 define( 'WPCA_URL', 'http://example.test/wp-content/plugins/wp-custom-admin/' );
 define( 'WPCA_BASENAME', 'wp-custom-admin/wp-custom-admin.php' );
