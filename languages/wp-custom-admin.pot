@@ -102,3 +102,111 @@ msgstr ""
 
 msgid "Breadcrumb"
 msgstr ""
+
+msgid "Home"
+msgstr ""
+
+msgid "Posts"
+msgstr ""
+
+msgid "Pages"
+msgstr ""
+
+msgid "Comments"
+msgstr ""
+
+msgid "Users"
+msgstr ""
+
+msgid "New post"
+msgstr ""
+
+msgid "New page"
+msgstr ""
+
+msgid "Media library"
+msgstr ""
+
+msgid "Brand settings"
+msgstr ""
+
+msgid "%s ago"
+msgstr ""
+
+msgid "Published"
+msgstr ""
+
+msgid "Scheduled"
+msgstr ""
+
+msgid "Draft"
+msgstr ""
+
+msgid "Pending"
+msgstr ""
+
+msgid "Welcome back, %s"
+msgstr ""
+
+msgid "Here's what's happening on %s today."
+msgstr ""
+
+msgid "View site"
+msgstr ""
+
+msgid "Recent activity"
+msgstr ""
+
+msgid "Nothing here yet"
+msgstr ""
+
+msgid "Your latest posts and pages will show up here."
+msgstr ""
+
+msgid "Write your first post"
+msgstr ""
+
+msgid "Quick actions"
+msgstr ""
+
+msgid "Custom Home dashboard"
+msgstr ""
+
+msgid "Adds a branded Home screen in place of the default WordPress dashboard."
+msgstr ""
+
+msgid "Land on Home after login"
+msgstr ""
+
+msgid "Redirect the default dashboard to the branded Home screen."
+msgstr ""
+
+msgid "Color scheme"
+msgstr ""
+
+msgid "Auto (match the system)"
+msgstr ""
+
+msgid "Light"
+msgstr ""
+
+msgid "Dark"
+msgstr ""
+
+msgid "Applies a dark theme to the admin content and the Home dashboard."
+msgstr ""
+
+msgid "Activity chart in the dashboard header"
+msgstr ""
+
+msgid "Shows a 14-day activity trend chart when there is recent data."
+msgstr ""
+
+msgid "WP Custom Admin"
+msgstr ""
+
+msgid "Network-wide brand defaults. Individual sites can override these in their own settings."
+msgstr ""
+
+msgid "Network defaults saved."
+msgstr ""
